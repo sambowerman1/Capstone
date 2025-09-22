@@ -29,6 +29,13 @@ VAR_MEDIAN_HOME_VALUE = "DP04_0089E"  # ACS DP04 (profile)
 VAR_ED_HSPLUS = "S1501_C02_015E"      # % High school graduate or higher (25 years+)
 VAR_ED_BACHPLUS = "S1501_C02_014E"    # % Bachelor's degree or higher (25 years+)
 
+# Unemployment Rate:
+VAR_UNEMPLOYMENT_RATE = "S2301_C04_001E"
+
+#Poverty Rate:
+VAR_POVERTY_RATE = "S1701_C03_001E"
+
+
 # Race / Ethnicity (percent). You can choose either "alone" or "alone or in combination".
 # Here we use "alone" categories from DP05 (% of total population).
 # NOTE: Verify codes for your chosen YEAR at:
@@ -60,6 +67,7 @@ def pull(endpoint, vars_):
     df["GEOID"] = df["state"] + df["county"]
     return df
 
+
 def main():
     # Profile: median age + home value + race/ethnicity percents
     prof_vars = [
@@ -69,7 +77,8 @@ def main():
     df_profile = pull(PROFILE, prof_vars)
 
     # Subject: income + education
-    subj_vars = [VAR_MEDIAN_HH_INC, VAR_ED_HSPLUS, VAR_ED_BACHPLUS]
+    subj_vars = [VAR_MEDIAN_HH_INC, VAR_ED_HSPLUS, VAR_ED_BACHPLUS, VAR_UNEMPLOYMENT_RATE,
+    VAR_POVERTY_RATE]
     df_subject = pull(SUBJECT, subj_vars)
 
     # Merge
@@ -91,6 +100,8 @@ def main():
         VAR_PCT_HISP: "Pct_Hispanic",
         VAR_ED_HSPLUS: "HS_Grad_or_Higher",
         VAR_ED_BACHPLUS: "Bachelors_or_Higher",
+        VAR_UNEMPLOYMENT_RATE: "Unemployment_Rate",
+        VAR_POVERTY_RATE: "Pct_Below_Poverty_Level"
     }
     df = df.rename(columns=rename_map)
 
@@ -98,7 +109,7 @@ def main():
     keep = ["GEOID", "state", "county", "County",
             "Median_Age", "Median_Household_Income", "Median_Home_Value",
             "Pct_White_Alone","Pct_Black_Alone","Pct_Asian_Alone","Pct_AIAN_Alone","Pct_NHPI_Alone","Pct_SomeOther_Alone","Pct_TwoOrMore","Pct_Hispanic",
-            "HS_Grad_or_Higher","Bachelors_or_Higher"]
+            "HS_Grad_or_Higher","Bachelors_or_Higher","Unemployment_Rate","Pct_Below_Poverty_Level"]
     df = df[keep].copy()
     df = df.assign(
         StateFIPS=df["state"],
@@ -117,6 +128,48 @@ def main():
     out_path = "florida_counties_demographics.csv"
     df.to_csv(out_path, index=False)
     print(f"Wrote {out_path} with {len(df)} rows.")
+
+    df_acs = pd.read_csv("florida_counties_demographics.csv")
+
+    # --- Load Florida voter registration spreadsheet ---
+    df_reg = pd.read_excel("party-affiliation-by-county-2024.xlsx", skiprows=3)
+
+    # Clean up columns
+    df_reg = df_reg.rename(columns={
+        "County": "County",
+        "Republican Party Of Florida": "Registered_Republican",
+        "Florida Democratic Party": "Registered_Democrat",
+        "Minor Party": "Registered_Minor",
+        "No Party Affiliation": "Registered_NPA",
+        "Totals": "Registered_Total"
+    })
+
+
+    # Standardize county names to match ACS dataset
+    df_reg["County"] = df_reg["County"].str.title().str.strip() + " County, Florida"
+
+    df_reg.at[12, "County"] = "DeSoto County, Florida"
+
+    # --- Merge on county name ---
+    df_merged = df_acs.merge(df_reg, on="County", how="left")
+
+    # Read in election data
+    election_df = pd.read_excel("florida_2024_presidential_votes_full.xlsx")
+
+    # Select the first three columns (county names, trump votes, harris votes)
+    election_subset = election_df.iloc[:, :3]  # First three columns
+
+    #rename counties to match other dataset
+    election_subset["County"] = df_reg["County"].str.title().str.strip()
+
+    election_subset.at[12, "County"] = "DeSoto County, Florida"
+    # Merge
+    df_merged_election = df_merged.merge(election_subset, on='County', how='left')
+
+    # --- Save merged dataset ---
+    df_merged_election.to_csv("florida_counties_demographics_with_voterreg.csv", index=False)
+
+    print(f"Wrote merged dataset with {len(df_merged)} rows")
 
 if __name__ == "__main__":
     try:
