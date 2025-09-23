@@ -50,6 +50,30 @@ class PersonSummarizer:
         
         return bool(re.match(wikipedia_pattern, url) or re.match(findagrave_pattern, url))
     
+    def _clean_markdown(self, text: str) -> str:
+        """
+        Remove markdown formatting from text.
+        
+        Args:
+            text: Text that may contain markdown formatting
+            
+        Returns:
+            Clean text without markdown formatting
+        """
+        # Remove bold formatting
+        text = re.sub(r'\*\*(.*?)\*\*', r'\1', text)
+        
+        # Remove italic formatting
+        text = re.sub(r'\*(.*?)\*', r'\1', text)
+        
+        # Remove any remaining asterisks
+        text = re.sub(r'\*', '', text)
+        
+        # Clean up any double spaces that might result
+        text = re.sub(r'\s+', ' ', text)
+        
+        return text.strip()
+    
     async def _extract_content(self, url: str) -> str:
         """
         Extract content from the URL and convert to markdown.
@@ -108,6 +132,8 @@ Requirements:
 - Focus on biographical facts
 - Include birth/death information if available
 - Highlight major achievements or significance
+- Use PLAIN TEXT ONLY - no markdown formatting, no bold (**), no italics (*), no special formatting
+- Write in simple, clean prose without any markup
 """
 
             messages = [
@@ -115,13 +141,16 @@ Requirements:
             ]
             
             response = self.mistral_client.chat.complete(
-                model="mistral-medium",
+                model="mistral-medium-latest",
                 messages=messages,
                 max_tokens=200,
                 temperature=0.3
             )
             
             summary = response.choices[0].message.content.strip()
+            
+            # Remove any remaining markdown formatting as backup
+            summary = self._clean_markdown(summary)
             return summary
             
         except Exception as e:
@@ -161,6 +190,83 @@ Requirements:
             
         except Exception as e:
             raise Exception(f"Failed to process {url}: {str(e)}")
+
+
+# Person class for object-oriented usage
+class Person:
+    """A class representing a person from Wikipedia or Find a Grave with summarization capabilities."""
+    
+    def __init__(self, url: str, mistral_api_key: Optional[str] = None):
+        """
+        Initialize a Person object with a URL.
+        
+        Args:
+            url: Wikipedia or Find a Grave URL
+            mistral_api_key: Mistral API key (optional if set as environment variable)
+            
+        Raises:
+            ValueError: If URL is not from Wikipedia or Find a Grave
+        """
+        self.url = url
+        self.summary = None
+        self._summarizer = PersonSummarizer(mistral_api_key)
+        
+        # Validate URL immediately
+        if not self._summarizer._is_valid_url(url):
+            raise ValueError("URL must be from Wikipedia or Find a Grave")
+    
+    async def summarize(self) -> str:
+        """
+        Generate and return a 4-sentence summary of the person.
+        
+        Returns:
+            A 4-sentence summary of the person
+            
+        Note:
+            The summary is cached after the first call for efficiency.
+        """
+        if self.summary is None:
+            self.summary = await self._summarizer.summarize_person(self.url)
+        return self.summary
+    
+    def summarize_sync(self) -> str:
+        """
+        Synchronous version of summarize() for easier usage.
+        
+        Returns:
+            A 4-sentence summary of the person
+            
+        Note:
+            This method handles the async/await internally using asyncio.run()
+            The summary is cached after the first call for efficiency.
+        """
+        import asyncio
+        
+        if self.summary is None:
+            # Run the async summarize method
+            self.summary = asyncio.run(self._summarizer.summarize_person(self.url))
+        return self.summary
+    
+    def get_cached_summary(self) -> Optional[str]:
+        """
+        Get the cached summary without making a new API call.
+        
+        Returns:
+            The cached summary if available, None otherwise
+        """
+        return self.summary
+    
+    def clear_cache(self):
+        """Clear the cached summary to force regeneration on next summarize() call."""
+        self.summary = None
+    
+    def __str__(self) -> str:
+        """String representation of the Person object."""
+        return f"Person(url='{self.url}', summary_cached={self.summary is not None})"
+    
+    def __repr__(self) -> str:
+        """Detailed representation of the Person object."""
+        return self.__str__()
 
 
 # Convenience function for easy usage
