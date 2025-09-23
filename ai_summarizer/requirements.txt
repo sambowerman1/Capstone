@@ -1,0 +1,4 @@
+# Requirements for Person Summarizer Script
+crawl4ai>=0.3.74
+mistralai>=1.2.0
+aiohttp>=3.8.0
