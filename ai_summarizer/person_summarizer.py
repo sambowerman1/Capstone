@@ -8,7 +8,8 @@ and generates 4-sentence summaries using the Mistral API.
 
 import re
 import os
-from typing import Optional
+import json
+from typing import Optional, Dict, Any
 import asyncio
 from crawl4ai import AsyncWebCrawler
 from mistralai import Mistral
@@ -17,18 +18,18 @@ from mistralai import Mistral
 class PersonSummarizer:
     """A class to handle web scraping and summarization of person profiles."""
     
-    def __init__(self, mistral_api_key: Optional[str] = None):
+    def __init__(self, MistralAPIKey: Optional[str] = None):
         """
         Initialize the PersonSummarizer.
         
         Args:
-            mistral_api_key: Mistral API key. If not provided, will look for MistralAPIKey env var.
+            MistralAPIKey: Mistral API key. If not provided, will look for MistralAPIKey env var.
         """
-        self.mistral_api_key = mistral_api_key or os.getenv('MistralAPIKey')
-        if not self.mistral_api_key:
+        self.MistralAPIKey = MistralAPIKey or os.getenv('MistralAPIKey')
+        if not self.MistralAPIKey:
             raise ValueError("Mistral API key must be provided or set as MistralAPIKey environment variable")
         
-        self.mistral_client = Mistral(api_key=self.mistral_api_key)
+        self.mistral_client = Mistral(api_key=self.MistralAPIKey)
     
     def _is_valid_url(self, url: str) -> bool:
         """
@@ -156,6 +157,97 @@ Requirements:
         except Exception as e:
             raise Exception(f"Error generating summary: {str(e)}")
     
+    def _extract_complete_data(self, markdown_content: str) -> Dict[str, Any]:
+        """
+        Extract both summary and structured biographical data in a single API call.
+        
+        Args:
+            markdown_content: The markdown content to analyze
+            
+        Returns:
+            Dictionary containing summary and structured biographical data
+            
+        Raises:
+            Exception: If data extraction fails
+        """
+        try:
+            prompt = f"""
+Please analyze the following biographical content and return a complete JSON object with both a summary and structured data.
+
+Content:
+{markdown_content[:4000]}
+
+Return ONLY a valid JSON object in this EXACT format:
+{{
+    "summary": "A concise 4-sentence biographical summary focusing on birth/death dates, notable achievements, profession, and historical significance. Use PLAIN TEXT ONLY - no markdown formatting.",
+    "education": ["institution1", "degree1", "institution2"],
+    "date_of_birth": "YYYY-MM-DD",
+    "date_of_death": "YYYY-MM-DD"
+}}
+
+Requirements:
+- summary: Exactly 4 sentences, plain text, include birth/death info if available
+- education: Array of educational institutions/degrees, empty array [] if none found
+- date_of_birth: Date in YYYY-MM-DD format (or YYYY if only year known), null if not found
+- date_of_death: Date in YYYY-MM-DD format (or YYYY if only year known), null if not found or still alive
+
+Return ONLY the JSON object, no other text.
+"""
+
+            messages = [
+                {"role": "user", "content": prompt}
+            ]
+            
+            response = self.mistral_client.chat.complete(
+                model="mistral-medium-latest",
+                messages=messages,
+                max_tokens=500,
+                temperature=0.1  # Lower temperature for more consistent JSON output
+            )
+            
+            json_text = response.choices[0].message.content.strip()
+            
+            # Clean up potential markdown formatting around JSON
+            if json_text.startswith("```json"):
+                json_text = json_text.replace("```json", "").replace("```", "").strip()
+            elif json_text.startswith("```"):
+                json_text = json_text.replace("```", "").strip()
+            
+            # Try to parse the JSON response
+            try:
+                complete_data = json.loads(json_text)
+                
+                # Validate and ensure all required keys exist
+                required_keys = {"summary", "education", "date_of_birth", "date_of_death"}
+                for key in required_keys:
+                    if key not in complete_data:
+                        if key == "summary":
+                            complete_data[key] = "Summary not available."
+                        elif key == "education":
+                            complete_data[key] = []
+                        else:
+                            complete_data[key] = None
+                
+                # Clean summary of any markdown formatting
+                if complete_data["summary"]:
+                    complete_data["summary"] = self._clean_markdown(complete_data["summary"])
+                
+                return complete_data
+                
+            except json.JSONDecodeError as e:
+                # If JSON parsing fails, return default structure
+                print(f"Warning: Failed to parse JSON response: {e}")
+                print(f"Raw response: {json_text[:200]}...")
+                return {
+                    "summary": "Summary extraction failed.",
+                    "education": [],
+                    "date_of_birth": None,
+                    "date_of_death": None
+                }
+            
+        except Exception as e:
+            raise Exception(f"Error extracting complete data: {str(e)}")
+    
     async def summarize_person(self, url: str) -> str:
         """
         Main function to process a URL and return a summary.
@@ -190,30 +282,86 @@ Requirements:
             
         except Exception as e:
             raise Exception(f"Failed to process {url}: {str(e)}")
+    
+    async def extract_person_data(self, url: str) -> Dict[str, Any]:
+        """
+        Extract both summary and structured data for a person in a single API call.
+        
+        Args:
+            url: Wikipedia or Find a Grave URL
+            
+        Returns:
+            Dictionary containing summary and structured biographical data
+            
+        Raises:
+            ValueError: If URL is not from Wikipedia or Find a Grave
+            Exception: If processing fails
+        """
+        # Validate URL
+        if not self._is_valid_url(url):
+            raise ValueError("URL must be from Wikipedia or Find a Grave")
+        
+        try:
+            # Extract content
+            print(f"Extracting content from: {url}")
+            markdown_content = await self._extract_content(url)
+            
+            if not markdown_content or len(markdown_content.strip()) < 100:
+                raise Exception("Insufficient content extracted from the page")
+            
+            # Extract all data in a single API call
+            print("Extracting complete biographical data...")
+            complete_data = self._extract_complete_data(markdown_content)
+            
+            # Restructure to match expected format
+            return {
+                "summary": complete_data["summary"],
+                "structured_data": {
+                    "education": complete_data["education"],
+                    "date_of_birth": complete_data["date_of_birth"],
+                    "date_of_death": complete_data["date_of_death"]
+                }
+            }
+            
+        except Exception as e:
+            raise Exception(f"Failed to process {url}: {str(e)}")
 
 
 # Person class for object-oriented usage
 class Person:
     """A class representing a person from Wikipedia or Find a Grave with summarization capabilities."""
     
-    def __init__(self, url: str, mistral_api_key: Optional[str] = None):
+    def __init__(self, url: str, MistralAPIKey: Optional[str] = None):
         """
         Initialize a Person object with a URL.
         
         Args:
             url: Wikipedia or Find a Grave URL
-            mistral_api_key: Mistral API key (optional if set as environment variable)
+            MistralAPIKey: Mistral API key (optional if set as environment variable)
             
         Raises:
             ValueError: If URL is not from Wikipedia or Find a Grave
         """
         self.url = url
         self.summary = None
-        self._summarizer = PersonSummarizer(mistral_api_key)
+        self._structured_data = None
+        self._data_extracted = False
+        self._summarizer = PersonSummarizer(MistralAPIKey)
         
         # Validate URL immediately
         if not self._summarizer._is_valid_url(url):
             raise ValueError("URL must be from Wikipedia or Find a Grave")
+    
+    async def _extract_all_data(self):
+        """
+        Internal method to extract both summary and structured data.
+        This is called automatically when any data is requested.
+        """
+        if not self._data_extracted:
+            data = await self._summarizer.extract_person_data(self.url)
+            self.summary = data["summary"]
+            self._structured_data = data["structured_data"]
+            self._data_extracted = True
     
     async def summarize(self) -> str:
         """
@@ -225,8 +373,7 @@ class Person:
         Note:
             The summary is cached after the first call for efficiency.
         """
-        if self.summary is None:
-            self.summary = await self._summarizer.summarize_person(self.url)
+        await self._extract_all_data()
         return self.summary
     
     def summarize_sync(self) -> str:
@@ -242,9 +389,9 @@ class Person:
         """
         import asyncio
         
-        if self.summary is None:
-            # Run the async summarize method
-            self.summary = asyncio.run(self._summarizer.summarize_person(self.url))
+        if not self._data_extracted:
+            # Run the async data extraction method
+            asyncio.run(self._extract_all_data())
         return self.summary
     
     def get_cached_summary(self) -> Optional[str]:
@@ -256,13 +403,89 @@ class Person:
         """
         return self.summary
     
+    def getSummary(self) -> Optional[str]:
+        """
+        Get the person's 4-sentence biographical summary.
+        
+        Returns:
+            4-sentence summary as string, or None if not available
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        return self.summary
+    
+    def getEducation(self) -> Optional[list]:
+        """
+        Get the person's education information.
+        
+        Returns:
+            List of educational institutions/degrees, or None if not available
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("education")
+        return None
+    
+    def getDOB(self) -> Optional[str]:
+        """
+        Get the person's date of birth.
+        
+        Returns:
+            Date of birth as string (YYYY-MM-DD or YYYY format), or None if not available
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("date_of_birth")
+        return None
+    
+    def getDOD(self) -> Optional[str]:
+        """
+        Get the person's date of death.
+        
+        Returns:
+            Date of death as string (YYYY-MM-DD or YYYY format), or None if not available/still alive
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("date_of_death")
+        return None
+    
     def clear_cache(self):
-        """Clear the cached summary to force regeneration on next summarize() call."""
+        """Clear the cached summary and structured data to force regeneration on next call."""
         self.summary = None
+        self._structured_data = None
+        self._data_extracted = False
     
     def __str__(self) -> str:
         """String representation of the Person object."""
-        return f"Person(url='{self.url}', summary_cached={self.summary is not None})"
+        return f"Person(url='{self.url}', data_extracted={self._data_extracted})"
     
     def __repr__(self) -> str:
         """Detailed representation of the Person object."""
@@ -270,18 +493,18 @@ class Person:
 
 
 # Convenience function for easy usage
-async def summarize_person_from_url(url: str, mistral_api_key: Optional[str] = None) -> str:
+async def summarize_person_from_url(url: str, MistralAPIKey: Optional[str] = None) -> str:
     """
     Convenience function to summarize a person from a Wikipedia or Find a Grave URL.
     
     Args:
         url: Wikipedia or Find a Grave URL
-        mistral_api_key: Mistral API key (optional if set as environment variable)
+        MistralAPIKey: Mistral API key (optional if set as environment variable)
         
     Returns:
         A 4-sentence summary of the person
     """
-    summarizer = PersonSummarizer(mistral_api_key)
+    summarizer = PersonSummarizer(MistralAPIKey)
     return await summarizer.summarize_person(url)
 
 
