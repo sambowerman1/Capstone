@@ -1,12 +1,19 @@
 #!/usr/bin/env python3
 """
-Example demonstrating the new structured data extraction features.
+Example demonstrating the structured data extraction features.
 
 This example shows how to use the enhanced Person class to extract:
+- Summary (4-sentence biographical summary)
 - Education information
 - Date of birth (DOB)
 - Date of death (DOD)
-- Summary (existing functionality)
+- Place of birth
+- Place of death
+- Gender
+- Involvement in sports (yes/no)
+- Involvement in politics (yes/no)
+- Involvement in military (yes/no)
+- Involvement in music (yes/no)
 """
 
 from person_summarizer import Person
@@ -58,7 +65,30 @@ def main():
         else:
             print("Date of Death: Not available (person may be alive)")
         
-        print(f"\n5. Person object status: {person}")
+        # Get new biographical fields
+        print("\n5. Getting place of birth...")
+        place_of_birth = person.getPlaceOfBirth()
+        print(f"Place of Birth: {place_of_birth}")
+        
+        print("\n6. Getting place of death...")
+        place_of_death = person.getPlaceOfDeath()
+        print(f"Place of Death: {place_of_death}")
+        
+        print("\n7. Getting gender...")
+        gender = person.getGender()
+        print(f"Gender: {gender}")
+        
+        print("\n8. Getting involvement fields...")
+        sports = person.getInvolvedInSports()
+        politics = person.getInvolvedInPolitics()
+        military = person.getInvolvedInMilitary()
+        music = person.getInvolvedInMusic()
+        print(f"Involved in Sports: {sports}")
+        print(f"Involved in Politics: {politics}")
+        print(f"Involved in Military: {military}")
+        print(f"Involved in Music: {music}")
+        
+        print(f"\n9. Person object status: {person}")
         
         print("\n" + "="*60)
         print("DEMONSTRATING CACHING")
@@ -69,6 +99,9 @@ def main():
         print(f"Education (cached): {person.getEducation()}")
         print(f"DOB (cached): {person.getDOB()}")
         print(f"DOD (cached): {person.getDOD()}")
+        print(f"Place of Birth (cached): {person.getPlaceOfBirth()}")
+        print(f"Gender (cached): {person.getGender()}")
+        print(f"Sports (cached): {person.getInvolvedInSports()}")
         
         # Clear cache and show status change
         print("\nClearing cache...")
@@ -108,11 +141,18 @@ def demo_multiple_people():
             education = person.getEducation()
             dob = person.getDOB()
             dod = person.getDOD()
+            place_of_birth = person.getPlaceOfBirth()
+            gender = person.getGender()
+            sports = person.getInvolvedInSports()
+            politics = person.getInvolvedInPolitics()
             
             print(f"Summary: {summary[:100]}...")
             print(f"Education: {education if education else 'Not available'}")
             print(f"DOB: {dob if dob else 'Not available'}")
             print(f"DOD: {dod if dod else 'Not available/Still alive'}")
+            print(f"Place of Birth: {place_of_birth}")
+            print(f"Gender: {gender}")
+            print(f"Sports: {sports} | Politics: {politics}")
             
         except Exception as e:
             print(f"Error processing {url}: {e}")
@@ -121,10 +161,18 @@ def demo_multiple_people():
 if __name__ == "__main__":
     print("Structured Data Extraction Example")
     print("=" * 60)
-    print("This example demonstrates the new Person class methods:")
+    print("This example demonstrates the Person class methods:")
+    print("- person.getSummary() - Returns 4-sentence biographical summary")
     print("- person.getEducation() - Returns list of education info")
     print("- person.getDOB() - Returns date of birth")
     print("- person.getDOD() - Returns date of death")
+    print("- person.getPlaceOfBirth() - Returns place of birth")
+    print("- person.getPlaceOfDeath() - Returns place of death")
+    print("- person.getGender() - Returns gender")
+    print("- person.getInvolvedInSports() - Returns yes/no for sports involvement")
+    print("- person.getInvolvedInPolitics() - Returns yes/no for politics involvement")
+    print("- person.getInvolvedInMilitary() - Returns yes/no for military involvement")
+    print("- person.getInvolvedInMusic() - Returns yes/no for music involvement")
     print("=" * 60)
     
     # Run main example

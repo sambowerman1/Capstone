@@ -182,7 +182,14 @@ Return ONLY a valid JSON object in this EXACT format:
     "summary": "A concise 4-sentence biographical summary focusing on birth/death dates, notable achievements, profession, and historical significance. Use PLAIN TEXT ONLY - no markdown formatting.",
     "education": ["institution1", "degree1", "institution2"],
     "date_of_birth": "YYYY-MM-DD",
-    "date_of_death": "YYYY-MM-DD"
+    "date_of_death": "YYYY-MM-DD",
+    "place_of_birth": "City, State, Country",
+    "place_of_death": "City, State, Country",
+    "involved_in_sports": "yes",
+    "involved_in_politics": "yes",
+    "involved_in_military": "yes", 
+    "involved_in_music": "yes",
+    "gender": "male"
 }}
 
 Requirements:
@@ -190,6 +197,13 @@ Requirements:
 - education: Array of educational institutions/degrees, empty array [] if none found
 - date_of_birth: Date in YYYY-MM-DD format (or YYYY if only year known), null if not found
 - date_of_death: Date in YYYY-MM-DD format (or YYYY if only year known), null if not found or still alive
+- place_of_birth: Birth location as "City, State, Country" format, "not found" if not available
+- place_of_death: Death location as "City, State, Country" format, "not found" if not available
+- involved_in_sports: "yes" if person was involved in sports, "no" if not found or no involvement
+- involved_in_politics: "yes" if person was involved in politics, "no" if not found or no involvement
+- involved_in_military: "yes" if person was involved in military, "no" if not found or no involvement
+- involved_in_music: "yes" if person was involved in music, "no" if not found or no involvement
+- gender: "male", "female", or "not found" if cannot be determined
 
 Return ONLY the JSON object, no other text.
 """
@@ -218,13 +232,19 @@ Return ONLY the JSON object, no other text.
                 complete_data = json.loads(json_text)
                 
                 # Validate and ensure all required keys exist
-                required_keys = {"summary", "education", "date_of_birth", "date_of_death"}
+                required_keys = {"summary", "education", "date_of_birth", "date_of_death", 
+                               "place_of_birth", "place_of_death", "involved_in_sports", 
+                               "involved_in_politics", "involved_in_military", "involved_in_music", "gender"}
                 for key in required_keys:
                     if key not in complete_data:
                         if key == "summary":
                             complete_data[key] = "Summary not available."
                         elif key == "education":
                             complete_data[key] = []
+                        elif key in ["involved_in_sports", "involved_in_politics", "involved_in_military", "involved_in_music"]:
+                            complete_data[key] = "no"
+                        elif key in ["place_of_birth", "place_of_death", "gender"]:
+                            complete_data[key] = "not found"
                         else:
                             complete_data[key] = None
                 
@@ -242,7 +262,14 @@ Return ONLY the JSON object, no other text.
                     "summary": "Summary extraction failed.",
                     "education": [],
                     "date_of_birth": None,
-                    "date_of_death": None
+                    "date_of_death": None,
+                    "place_of_birth": "not found",
+                    "place_of_death": "not found",
+                    "involved_in_sports": "no",
+                    "involved_in_politics": "no",
+                    "involved_in_military": "no",
+                    "involved_in_music": "no",
+                    "gender": "not found"
                 }
             
         except Exception as e:
@@ -319,7 +346,14 @@ Return ONLY the JSON object, no other text.
                 "structured_data": {
                     "education": complete_data["education"],
                     "date_of_birth": complete_data["date_of_birth"],
-                    "date_of_death": complete_data["date_of_death"]
+                    "date_of_death": complete_data["date_of_death"],
+                    "place_of_birth": complete_data["place_of_birth"],
+                    "place_of_death": complete_data["place_of_death"],
+                    "involved_in_sports": complete_data["involved_in_sports"],
+                    "involved_in_politics": complete_data["involved_in_politics"],
+                    "involved_in_military": complete_data["involved_in_military"],
+                    "involved_in_music": complete_data["involved_in_music"],
+                    "gender": complete_data["gender"]
                 }
             }
             
@@ -475,6 +509,139 @@ class Person:
         
         if self._structured_data:
             return self._structured_data.get("date_of_death")
+        return None
+    
+    def getPlaceOfBirth(self) -> Optional[str]:
+        """
+        Get the person's place of birth.
+        
+        Returns:
+            Place of birth as string, "not found" if not available, or None if data not extracted
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("place_of_birth")
+        return None
+    
+    def getPlaceOfDeath(self) -> Optional[str]:
+        """
+        Get the person's place of death.
+        
+        Returns:
+            Place of death as string, "not found" if not available, or None if data not extracted
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("place_of_death")
+        return None
+    
+    def getInvolvedInSports(self) -> Optional[str]:
+        """
+        Get whether the person was involved in sports.
+        
+        Returns:
+            "yes" if involved in sports, "no" if not involved or not found, or None if data not extracted
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("involved_in_sports")
+        return None
+    
+    def getInvolvedInPolitics(self) -> Optional[str]:
+        """
+        Get whether the person was involved in politics.
+        
+        Returns:
+            "yes" if involved in politics, "no" if not involved or not found, or None if data not extracted
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("involved_in_politics")
+        return None
+    
+    def getInvolvedInMilitary(self) -> Optional[str]:
+        """
+        Get whether the person was involved in military.
+        
+        Returns:
+            "yes" if involved in military, "no" if not involved or not found, or None if data not extracted
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("involved_in_military")
+        return None
+    
+    def getInvolvedInMusic(self) -> Optional[str]:
+        """
+        Get whether the person was involved in music.
+        
+        Returns:
+            "yes" if involved in music, "no" if not involved or not found, or None if data not extracted
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("involved_in_music")
+        return None
+    
+    def getGender(self) -> Optional[str]:
+        """
+        Get the person's gender.
+        
+        Returns:
+            "male", "female", "not found" if cannot be determined, or None if data not extracted
+            
+        Note:
+            This method will automatically extract data if not already done.
+        """
+        import asyncio
+        
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+        
+        if self._structured_data:
+            return self._structured_data.get("gender")
         return None
     
     def clear_cache(self):
