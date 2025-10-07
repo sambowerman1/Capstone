@@ -3,7 +3,21 @@
 Enhanced Memorial Data with Rate Limit Handling
 
 This script is an improved version that handles API rate limits gracefully
-with exponential backoff and retry logic.
+with exponential backoff and retry logic. It extracts comprehensive 
+biographical data including all new fields.
+
+New columns added:
+- Summary (4-sentence biographical summary)
+- DOB (Date of Birth)
+- DOD (Date of Death)
+- Education
+- Place of Birth
+- Place of Death
+- Gender
+- Involved in Sports (yes/no)
+- Involved in Politics (yes/no)
+- Involved in Military (yes/no)
+- Involved in Music (yes/no)
 """
 
 import csv
@@ -13,8 +27,8 @@ import time
 import random
 from typing import Dict, List, Optional
 
-# Add the ai_summarizer directory to the path
-sys.path.append(os.path.join(os.path.dirname(__file__), 'ai_summarizer'))
+# Add the parent directory to the path so we can import the Person class
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from person_summarizer import Person
 
@@ -69,20 +83,27 @@ class ImprovedMemorialEnhancer:
     
     def process_person_with_retry(self, wikipedia_url: str, name: str) -> Dict[str, Optional[str]]:
         """
-        Process a person with retry logic for rate limits.
+        Process a person with retry logic for rate limits and extract all biographical fields.
         
         Args:
             wikipedia_url: Wikipedia URL to process
             name: Person's name for logging
             
         Returns:
-            Dictionary with biographical data
+            Dictionary with all biographical data
         """
         result = {
-            'summary': None,
-            'education': None,
-            'dob': None,
-            'dod': None
+            'summary': "",
+            'education': "",
+            'dob': "",
+            'dod': "",
+            'place_of_birth': "",
+            'place_of_death': "",
+            'gender': "",
+            'involved_in_sports': "",
+            'involved_in_politics': "",
+            'involved_in_military': "",
+            'involved_in_music': ""
         }
         
         for attempt in range(self.rate_limiter.max_retries + 1):
@@ -90,19 +111,33 @@ class ImprovedMemorialEnhancer:
                 # Wait before making request
                 self.rate_limiter.wait_before_request()
                 
-                # Create Person object and extract data
+                # Create Person object and extract all biographical data
                 person = Person(wikipedia_url)
                 
                 summary = person.getSummary()
                 education = person.getEducation()
                 dob = person.getDOB()
                 dod = person.getDOD()
+                place_of_birth = person.getPlaceOfBirth()
+                place_of_death = person.getPlaceOfDeath()
+                gender = person.getGender()
+                sports = person.getInvolvedInSports()
+                politics = person.getInvolvedInPolitics()
+                military = person.getInvolvedInMilitary()
+                music = person.getInvolvedInMusic()
                 
-                # Format results
+                # Format all results
                 result['summary'] = summary if summary else ""
                 result['education'] = str(education) if education else ""
                 result['dob'] = dob if dob else ""
                 result['dod'] = dod if dod else ""
+                result['place_of_birth'] = place_of_birth if place_of_birth else ""
+                result['place_of_death'] = place_of_death if place_of_death else ""
+                result['gender'] = gender if gender else ""
+                result['involved_in_sports'] = sports if sports else ""
+                result['involved_in_politics'] = politics if politics else ""
+                result['involved_in_military'] = military if military else ""
+                result['involved_in_music'] = music if music else ""
                 
                 self.success_count += 1
                 return result
@@ -152,12 +187,19 @@ class ImprovedMemorialEnhancer:
         enhanced_rows = []
         
         for i, row in enumerate(rows, 1):
-            # Create enhanced row with new columns
+            # Create enhanced row with all new columns
             enhanced_row = row.copy()
             enhanced_row['summary'] = ""
             enhanced_row['education'] = ""
             enhanced_row['dob'] = ""
             enhanced_row['dod'] = ""
+            enhanced_row['place_of_birth'] = ""
+            enhanced_row['place_of_death'] = ""
+            enhanced_row['gender'] = ""
+            enhanced_row['involved_in_sports'] = ""
+            enhanced_row['involved_in_politics'] = ""
+            enhanced_row['involved_in_military'] = ""
+            enhanced_row['involved_in_music'] = ""
             
             # Only process if we have a Wikipedia URL
             if row.get('status') == 'Found' and row.get('wikipedia_url') != 'Not Found':
@@ -173,11 +215,18 @@ class ImprovedMemorialEnhancer:
                 # Process with retry logic
                 bio_data = self.process_person_with_retry(wikipedia_url, name)
                 
-                # Add to enhanced row
+                # Add all biographical data to enhanced row
                 enhanced_row['summary'] = bio_data['summary']
                 enhanced_row['education'] = bio_data['education']
                 enhanced_row['dob'] = bio_data['dob']
                 enhanced_row['dod'] = bio_data['dod']
+                enhanced_row['place_of_birth'] = bio_data['place_of_birth']
+                enhanced_row['place_of_death'] = bio_data['place_of_death']
+                enhanced_row['gender'] = bio_data['gender']
+                enhanced_row['involved_in_sports'] = bio_data['involved_in_sports']
+                enhanced_row['involved_in_politics'] = bio_data['involved_in_politics']
+                enhanced_row['involved_in_military'] = bio_data['involved_in_military']
+                enhanced_row['involved_in_music'] = bio_data['involved_in_music']
                 
                 self.processed_count += 1
                 
@@ -195,7 +244,9 @@ class ImprovedMemorialEnhancer:
         with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
             if enhanced_rows:
                 fieldnames = ['name', 'original_designation', 'county', 'wikipedia_url', 'status', 
-                            'summary', 'education', 'dob', 'dod']
+                            'summary', 'education', 'dob', 'dod', 'place_of_birth', 'place_of_death',
+                            'gender', 'involved_in_sports', 'involved_in_politics', 'involved_in_military', 
+                            'involved_in_music']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(enhanced_rows)
@@ -216,29 +267,34 @@ class ImprovedMemorialEnhancer:
 
 
 def main():
-    """Main function with improved rate limit handling."""
-    input_file = "memorial_names_with_wikipedia_links.csv"
+    """Main function with improved rate limit handling and all new biographical fields."""
+    input_file = "memorial_enhanced_retry_full.csv"
     
-    print("Improved Memorial Data Enhancer")
-    print("=" * 50)
-    print("Features:")
+    print("Improved Memorial Data Enhancer - With All New Fields")
+    print("=" * 60)
+    print("This script adds comprehensive biographical columns with robust error handling:")
+    print("- Summary, DOB, DOD, Education, Place of Birth/Death")
+    print("- Gender, Sports/Politics/Military/Music involvement")
+    print("\nFeatures:")
     print("✅ Rate limit detection and handling")
     print("✅ Exponential backoff retry logic")
     print("✅ Detailed progress tracking")
-    print("✅ Graceful error recovery\n")
+    print("✅ Graceful error recovery")
+    print("✅ All 11 new biographical fields\n")
     
     # Ask user for processing mode
     choice = input("Run demo (10 entries) or full processing? (demo/full): ").lower().strip()
     
     if choice == 'demo':
-        output_file = "memorial_enhanced_retry_demo.csv"
+        output_file = "memorial_enhanced_retry_new_fields_demo.csv"
         max_entries = 10
-        print("Running demo with rate limit handling...")
+        print("Running demo with rate limit handling and all new fields...")
     else:
-        output_file = "memorial_enhanced_retry_full.csv"
+        output_file = "memorial_enhanced_retry_new_fields_full.csv"
         max_entries = None
-        print("Running full processing with rate limit handling...")
-        print("⚠️  This will take longer due to rate limit protections")
+        print("Running full processing with rate limit handling and all new fields...")
+        print("⚠️  This will process all ~306 Wikipedia entries with comprehensive data")
+        print("⚠️  Rate limiting will be applied to respect API limits")
         confirm = input("Continue? (y/n): ").lower().strip()
         if confirm != 'y':
             print("Cancelled.")
