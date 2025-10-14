@@ -2,7 +2,7 @@ import requests
 
 WIKIDATA_API = "https://www.wikidata.org/w/api.php"
 WIKIDATA_ENTITY_URL = "https://www.wikidata.org/wiki/Special:EntityData/{}.json"
-HEADERS = {"User-Agent": "MemorialLookupBot/1.0 (your_email@example.com)"}
+HEADERS = {"User-Agent": "MemorialLookupBot/1.0 (nbarnes4@slu.edu)"}
 
 def wbsearch_entity(name, language="en", limit=5):
     """Search Wikidata entities for a given name."""
