@@ -66,26 +66,15 @@ RAW_ENTRIES = [
 
 # -------- Helpers --------
 def normalize_counties_to_names(val: str):
-    """
-    Turn strings like:
-      'Hillsborough and Pinellas Counties' or
-      'Seminole County and Brevard County'
-    into ['Hillsborough','Pinellas'] (NO 'County' word).
-    Keeps hyphens (e.g., 'Miami-Dade').
-    """
     if not isinstance(val, str) or not val.strip():
-        return [""]  # empty county allowed if unknown
-    s = val.strip()
-    s = s.replace("Counties", "County")
-    # Split on 'and', commas, or semicolons
+        return [""]
+    s = val.strip().replace("Counties", "County")
     s = re.sub(r"\s+and\s+", ",", s)
     parts = [p.strip() for p in re.split(r",|;", s) if p.strip()]
     names = []
     for p in parts:
-        # remove trailing ' County' if present
         if p.endswith(" County"):
             p = p[:-7]
-        # collapse internal whitespace
         p = " ".join(p.split())
         names.append(p)
     return names or [""]
@@ -105,12 +94,10 @@ required_cols = ["OBJECTID","COUNTY","COUNTY_ID","DESIGNATIO","DESCRIPTIO","HWY_
                  "CreationDa","Creator","EditDate","Editor","MemId","Shape_Leng",
                  "LOCAL_RES","GlobalID","Shape__Length"]
 
-# Ensure all required columns exist
 for c in required_cols:
     if c not in df.columns:
         df[c] = ""
 
-# Determine next OBJECTID (preserve existing)
 def to_int_safe(v):
     try: return int(float(v))
     except: return None
@@ -120,37 +107,21 @@ next_obj = (max_obj or 0) + 1
 
 today = datetime.today().strftime("%Y-%m-%d")
 
-# -------- Build new rows (expand multi-county, county names only) --------
 new_rows = []
 for name, county_field in RAW_ENTRIES:
     for county_name in normalize_counties_to_names(county_field):
         row = {c: "" for c in required_cols}
         row["OBJECTID"]   = str(next_obj); next_obj += 1
-        row["COUNTY"]     = clean_text(county_name)           # <-- JUST the county name (no 'County')
-        row["COUNTY_ID"]  = ""
-        row["DESIGNATIO"] = ""
+        row["COUNTY"]     = clean_text(county_name)
         row["DESCRIPTIO"] = clean_text(name)
-        row["HWY_NAME"]   = ""
-        row["BILL"]       = ""
-        row["DEDICATED"]  = ""
-        row["EFFECTIVE_"] = ""
-        row["District"]   = ""
         row["Local_Name"] = clean_text(name)
-        row["BILL_URL"]   = ""
         row["CreationDa"] = today
         row["Creator"]    = "append_memorials.py"
         row["EditDate"]   = today
         row["Editor"]     = "append_memorials.py"
-        row["MemId"]      = ""
-        row["Shape_Leng"] = ""
-        row["LOCAL_RES"]  = ""
-        row["GlobalID"]   = ""
-        row["Shape__Length"] = ""
         new_rows.append(row)
 
 new_df = pd.DataFrame(new_rows, columns=required_cols)
-
-# -------- Append & dedupe (by COUNTY + Local_Name) --------
 combo = pd.concat([df[required_cols], new_df], ignore_index=True)
 
 for col in ["COUNTY", "Local_Name", "DESCRIPTIO"]:
@@ -158,8 +129,6 @@ for col in ["COUNTY", "Local_Name", "DESCRIPTIO"]:
 
 combo = combo.drop_duplicates(subset=["COUNTY","Local_Name"], keep="first")
 
-# Save back
 combo.to_csv(CSV_PATH, index=False)
 print(f"✅ Added {len(new_df)} new rows (expanded by county name only).")
-print(f"📦 Backup saved: {BACKUP_PATH}")
 print(f"💾 Updated: {CSV_PATH}")
