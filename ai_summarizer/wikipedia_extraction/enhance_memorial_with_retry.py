@@ -31,6 +31,7 @@ from typing import Dict, List, Optional
 sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 from person_summarizer import Person
+from person_summarizer import PersonSummarizer
 
 
 class RateLimitHandler:
@@ -238,7 +239,7 @@ class ImprovedMemorialEnhancer:
             
             enhanced_rows.append(enhanced_row)
         
-        # Write enhanced CSV
+        # Write enhanced CSV (ensure final DOB/DOD normalization before write)
         print(f"\nWriting enhanced data to {output_file}...")
         
         with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
@@ -249,6 +250,11 @@ class ImprovedMemorialEnhancer:
                             'involved_in_music']
                 writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                 writer.writeheader()
+                # Final normalization pass for dates to catch any remaining edge-cases
+                normalizer = PersonSummarizer(MistralAPIKey=os.getenv('MistralAPIKey'))
+                for row in enhanced_rows:
+                    row['dob'] = normalizer._normalize_date(row.get('dob')) if row.get('dob') else None
+                    row['dod'] = normalizer._normalize_date(row.get('dod')) if row.get('dod') else None
                 writer.writerows(enhanced_rows)
         
         # Print final summary
@@ -268,7 +274,15 @@ class ImprovedMemorialEnhancer:
 
 def main():
     """Main function with improved rate limit handling and all new biographical fields."""
-    input_file = "memorial_enhanced_retry_full.csv"
+    base_dir = os.path.dirname(__file__)
+    input_file = os.path.join(base_dir, "memorial_enhanced_retry_full.csv")
+    
+    if not os.path.exists(input_file):
+        print("\n[ERROR] Input CSV not found.")
+        print(f"Expected at: {input_file}")
+        print("Run this script from anywhere; paths are now resolved relative to the script.")
+        print("If the file name differs, update it in this script or place it alongside the script.")
+        return
     
     print("Improved Memorial Data Enhancer - With All New Fields")
     print("=" * 60)
@@ -286,11 +300,11 @@ def main():
     choice = input("Run demo (10 entries) or full processing? (demo/full): ").lower().strip()
     
     if choice == 'demo':
-        output_file = "memorial_enhanced_retry_new_fields_demo.csv"
+        output_file = os.path.join(base_dir, "memorial_enhanced_retry_new_fields_demo.csv")
         max_entries = 10
         print("Running demo with rate limit handling and all new fields...")
     else:
-        output_file = "memorial_enhanced_retry_new_fields_full.csv"
+        output_file = os.path.join(base_dir, "memorial_enhanced_retry_new_fields_full.csv")
         max_entries = None
         print("Running full processing with rate limit handling and all new fields...")
         print("⚠️  This will process all ~306 Wikipedia entries with comprehensive data")

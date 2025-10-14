@@ -75,6 +75,68 @@ class PersonSummarizer:
         
         return text.strip()
     
+    def _normalize_date(self, date_str: Optional[str]) -> Optional[str]:
+        """
+        Normalize date to YYYY-MM-DD.
+        Handles: YYYY, YYYY-MM, YYYY-MM-DD, common natural formats (e.g., 'Jan 5, 1980', 'March 1980').
+        Returns None if invalid/empty.
+        """
+        if not date_str:
+            return None
+        s = str(date_str).strip()
+        if s.lower() in {"null", "none", "not found", "unknown", "n/a", "na"}:
+            return None
+
+        # ISO forms
+        m = re.match(r'^(\d{4})-(\d{2})-(\d{2})$', s)
+        if m:
+            return f"{m.group(1)}-{m.group(2)}-{m.group(3)}"
+        m = re.match(r'^(\d{4})-(\d{2})$', s)
+        if m:
+            return f"{m.group(1)}-{m.group(2)}-01"
+        m = re.match(r'^(\d{4})$', s)
+        if m:
+            return f"{m.group(1)}-01-01"
+
+        # Natural language months
+        month_map = {
+            'jan': '01', 'january': '01',
+            'feb': '02', 'february': '02',
+            'mar': '03', 'march': '03',
+            'apr': '04', 'april': '04',
+            'may': '05',
+            'jun': '06', 'june': '06',
+            'jul': '07', 'july': '07',
+            'aug': '08', 'august': '08',
+            'sep': '09', 'sept': '09', 'september': '09',
+            'oct': '10', 'october': '10',
+            'nov': '11', 'november': '11',
+            'dec': '12', 'december': '12',
+        }
+        s_clean = re.sub(r'[,\.]', '', s).lower()
+        # Patterns: "jan 5 1980", "january 1980", "5 january 1980"
+        m = re.match(r'^(\d{1,2})\s+([a-z]+)\s+(\d{4})$', s_clean)
+        if m and m.group(2) in month_map:
+            day = int(m.group(1))
+            mon = month_map[m.group(2)]
+            return f"{m.group(3)}-{mon}-{day:02d}"
+        m = re.match(r'^([a-z]+)\s+(\d{1,2})\s+(\d{4})$', s_clean)
+        if m and m.group(1) in month_map:
+            day = int(m.group(2))
+            mon = month_map[m.group(1)]
+            return f"{m.group(3)}-{mon}-{day:02d}"
+        m = re.match(r'^([a-z]+)\s+(\d{4})$', s_clean)
+        if m and m.group(1) in month_map:
+            mon = month_map[m.group(1)]
+            return f"{m.group(2)}-{mon}-01"
+
+        # Fallback: extract a 4-digit year if present
+        m = re.search(r'(\d{4})', s_clean)
+        if m:
+            return f"{m.group(1)}-01-01"
+
+        return None
+    
     async def _extract_content(self, url: str) -> str:
         """
         Extract content from the URL and convert to markdown.
@@ -195,8 +257,8 @@ Return ONLY a valid JSON object in this EXACT format:
 Requirements:
 - summary: Exactly 4 sentences, plain text, include birth/death info if available
 - education: Array of educational institutions/degrees, empty array [] if none found
-- date_of_birth: Date in YYYY-MM-DD format (or YYYY if only year known), null if not found
-- date_of_death: Date in YYYY-MM-DD format (or YYYY if only year known), null if not found or still alive
+- date_of_birth: STRICTLY use YYYY-MM-DD format. If only year known, use YYYY-01-01. If year and month known, use YYYY-MM-01. Use null if not found.
+- date_of_death: STRICTLY use YYYY-MM-DD format. If only year known, use YYYY-01-01. If year and month known, use YYYY-MM-01. Use null if not found or still alive.
 - place_of_birth: Birth location as "City, State, Country" format, "not found" if not available
 - place_of_death: Death location as "City, State, Country" format, "not found" if not available
 - involved_in_sports: "yes" if person was involved in sports, "no" if not found or no involvement
@@ -204,6 +266,8 @@ Requirements:
 - involved_in_military: "yes" if person was involved in military, "no" if not found or no involvement
 - involved_in_music: "yes" if person was involved in music, "no" if not found or no involvement
 - gender: "male", "female", or "not found" if cannot be determined
+
+IMPORTANT: All dates MUST be in YYYY-MM-DD format. Never return just YYYY or YYYY-MM.
 
 Return ONLY the JSON object, no other text.
 """
@@ -251,6 +315,10 @@ Return ONLY the JSON object, no other text.
                 # Clean summary of any markdown formatting
                 if complete_data["summary"]:
                     complete_data["summary"] = self._clean_markdown(complete_data["summary"])
+                
+                # Normalize dates to ensure consistent YYYY-MM-DD format
+                complete_data["date_of_birth"] = self._normalize_date(complete_data.get("date_of_birth"))
+                complete_data["date_of_death"] = self._normalize_date(complete_data.get("date_of_death"))
                 
                 return complete_data
                 
