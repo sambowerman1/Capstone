@@ -271,8 +271,6 @@ def main():
 
             # polite randomized delay
             time.sleep(random.uniform(1.5, 3.5))
-        if i == 1:
-            break
 
     driver.quit()
     print("\n✅ Done! Data saved to:", os.path.abspath(output_file))
