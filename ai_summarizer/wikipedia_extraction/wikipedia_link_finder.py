@@ -12,6 +12,7 @@ import requests
 import time
 from urllib.parse import quote
 from typing import List, Dict, Optional, Tuple
+from difflib import SequenceMatcher
 
 
 class WikipediaLinkFinder:
@@ -235,6 +236,401 @@ class WikipediaLinkFinder:
         except Exception as e:
             print(f"Error searching for {name}: {e}")
             return None
+
+    def _extract_context_from_designation(self, designation: str) -> Dict[str, bool]:
+        """Derive expected roles from a roadway designation string."""
+        text = designation.lower()
+        ctx = {
+            'expect_military': any(k in text for k in [
+                'u.s. army', 'us army', 'marine', 'air force', 'navy', 'sgt', 'sergeant', 'cpl', 'corporal',
+                'pfc', 'trooper', 'lance corporal', 'ssgt', 'staff sergeant', 'colonel', 'major', 'private'
+            ]),
+            'expect_law_enforcement': any(k in text for k in [
+                'deputy', 'sheriff', 'officer', 'patrolman', 'police', 'trooper'
+            ]),
+            'expect_politician': any(k in text for k in [
+                'senator', 'representative', 'congress', 'governor', 'mayor', 'commissioner', 'speaker'
+            ]),
+            'expect_religious': any(k in text for k in [
+                'rev', 'reverend', 'pastor', 'bishop', 'rabbi', 'priest'
+            ]),
+            'expect_musician': any(k in text for k in [
+                'musician', 'singer', 'songwriter', 'band', 'composer'
+            ]),
+            'expect_athlete': any(k in text for k in [
+                'coach', 'olympian', 'athlete', 'football', 'basketball', 'baseball', 'soccer', 'track', 'runner'
+            ]),
+        }
+        return ctx
+
+    def _name_similarity(self, a: str, b: str) -> float:
+        """Compute a normalized similarity between two names (0..1), nickname-aware."""
+        def clean(n: str) -> str:
+            return re.sub(r"[^a-zA-Z\s]", "", n.lower()).strip()
+        def split_first_last(n: str) -> tuple:
+            parts = [p for p in clean(n).split() if p]
+            if not parts:
+                return ("", "")
+            if len(parts) == 1:
+                return (parts[0], "")
+            return (parts[0], parts[-1])
+        nick_map = {
+            'william': {'bill', 'billy', 'will', 'wills', 'liam'},
+            'robert': {'bob', 'bobby', 'rob', 'robbie', 'bert'},
+            'john': {'jon', 'jack'},
+            'margaret': {'peggy', 'maggie', 'meg', 'marge'},
+            'elizabeth': {'liz', 'lizzie', 'beth', 'betty', 'eliza', 'liza'},
+            'james': {'jim', 'jimmy', 'jamie'},
+            'michael': {'mike', 'mikey'},
+            'charles': {'charlie', 'chuck'},
+            'richard': {'rick', 'ricky', 'rich', 'dick'},
+            'thomas': {'tom', 'tommy'},
+            'stephen': {'steve', 'steven'},
+            'joseph': {'joe', 'joey'},
+            'andrew': {'andy', 'drew'},
+            'alexander': {'alex', 'sandy'},
+            'katherine': {'kate', 'kathy', 'katie', 'cathy', 'kat'},
+            'edward': {'ed', 'eddie', 'ted', 'teddy', 'ned'},
+            'francis': {'frank', 'frankie'},
+        }
+        a_clean = clean(a)
+        b_clean = clean(b)
+        base = SequenceMatcher(None, a_clean, b_clean).ratio()
+        af, al = split_first_last(a)
+        bf, bl = split_first_last(b)
+        # last name mismatch reduces ceiling
+        if al and bl and al != bl and al not in b_clean and bl not in a_clean:
+            base = min(base, 0.6)
+        # try nickname substitutions
+        def variants(first: str) -> set:
+            v = {first}
+            if first in nick_map:
+                v |= nick_map[first]
+            return v
+        best = base
+        for av in variants(af):
+            for bv in variants(bf):
+                a_try = (av + ' ' + al).strip()
+                b_try = (bv + ' ' + bl).strip()
+                r = SequenceMatcher(None, a_try, b_try).ratio()
+                if r > best:
+                    best = r
+        return best
+
+    def _fetch_page_summary(self, title: str) -> Dict[str, Optional[str]]:
+        """Fetch REST summary for a page title."""
+        try:
+            url = f"https://en.wikipedia.org/api/rest_v1/page/summary/{quote(title.replace(' ', '_'))}"
+            resp = self.session.get(url)
+            if resp.status_code == 200:
+                j = resp.json()
+                return {
+                    'extract': j.get('extract') or '',
+                    'description': (j.get('description') or ''),
+                    'type': j.get('type') or '',
+                    'wikibase_item': (j.get('wikibase_item') or j.get('titles', {}).get('wikibase_item') or j.get('pageprops', {}).get('wikibase_item'))
+                }
+        except Exception:
+            pass
+        return {'extract': '', 'description': '', 'type': '', 'wikibase_item': None}
+
+    def _fetch_wikidata_traits(self, qid: str) -> Dict[str, any]:
+        """Fetch minimal traits from Wikidata: is_human, occupation labels, place labels, country."""
+        traits: Dict[str, any] = {
+            'is_human': False,
+            'occupations': [],
+            'place_labels': [],
+            'countries': []
+        }
+        try:
+            url = f"https://www.wikidata.org/wiki/Special:EntityData/{qid}.json"
+            resp = self.session.get(url)
+            if resp.status_code != 200:
+                return traits
+            data = resp.json()
+            entity = data.get('entities', {}).get(qid, {})
+            claims = entity.get('claims', {})
+
+            def _ids(prop: str) -> List[str]:
+                ids = []
+                for c in claims.get(prop, []):
+                    v = c.get('mainsnak', {}).get('datavalue', {}).get('value')
+                    if isinstance(v, dict) and 'id' in v:
+                        ids.append(v['id'])
+                return ids
+
+            # instance of (P31) human Q5
+            if 'Q5' in _ids('P31'):
+                traits['is_human'] = True
+
+            occ_ids = _ids('P106')
+            place_ids = _ids('P19') + _ids('P20')
+            country_ids = _ids('P27')
+
+            # Resolve labels (batch resolution is simpler via multiple calls kept minimal here)
+            def _labels_for(qids: List[str]) -> List[str]:
+                labels: List[str] = []
+                for _qid in qids[:6]:  # limit to avoid excess calls
+                    try:
+                        u = f"https://www.wikidata.org/wiki/Special:EntityData/{_qid}.json"
+                        r = self.session.get(u)
+                        if r.status_code == 200:
+                            ed = r.json().get('entities', {}).get(_qid, {})
+                            lab = ed.get('labels', {}).get('en', {}).get('value')
+                            if lab:
+                                labels.append(lab)
+                    except Exception:
+                        continue
+                return labels
+
+            traits['occupations'] = _labels_for(occ_ids)
+            traits['place_labels'] = _labels_for(place_ids)
+            traits['countries'] = _labels_for(country_ids)
+
+            return traits
+        except Exception:
+            return traits
+
+    def _score_candidate(self, title: str, original_name: str, designation: str, county: str) -> Tuple[int, str]:
+        """Score a candidate page by multiple signals and return (score, notes)."""
+        notes: List[str] = []
+        score = 0
+
+        # Quick title/person checks
+        if '(disambiguation)' in title.lower():
+            notes.append('disambiguation-title')
+            score -= 30
+
+        if not self._is_likely_person_page(title, original_name):
+            score -= 10
+
+        # Strong penalties for nobility/royalty patterns or territorial titles (e.g., "Lord of Mecklenburg")
+        title_l = title.lower()
+        nobility_terms = [' lord ', ' duke ', ' duchess ', ' count ', ' earl ', ' prince ', ' princess ', ' marquess ', ' baron ', ' baroness ', ' king ', ' queen ']
+        if any(term in f" {title_l} " for term in nobility_terms):
+            score -= 40
+            notes.append('nobility-title')
+        if ' of mecklenburg' in title_l or ', lord of' in title_l or ' of ' in title_l and 'mecklenburg' in title_l:
+            score -= 30
+            notes.append('territorial-title')
+        # Roman numeral immediately after first name usually indicates nobility/numbered rulers
+        if re.search(r"^[a-z]+\s+[ivxlcdm]+\b", title_l):
+            score -= 25
+            notes.append('roman-numeral-after-first-name')
+
+        # Name similarity
+        sim = self._name_similarity(original_name, title)
+        score += int(sim * 20)
+        notes.append(f"name-sim:{sim:.2f}")
+
+        # Wikipedia summary
+        summary = self._fetch_page_summary(title)
+        extract = (summary.get('extract') or '').lower()
+        description = (summary.get('description') or '').lower()
+        page_type = (summary.get('type') or '').lower()
+        if page_type == 'disambiguation':
+            notes.append('disambiguation-summary')
+            score -= 30
+
+        # Wikidata traits
+        traits = {}
+        qid = summary.get('wikibase_item')
+        if qid:
+            traits = self._fetch_wikidata_traits(qid)
+            if traits.get('is_human'):
+                score += 40
+                notes.append('is-human')
+            else:
+                notes.append('not-human')
+
+        # Context from designation
+        ctx = self._extract_context_from_designation(designation)
+        occ_text = ' '.join(traits.get('occupations', [])).lower()
+        places_text = ' '.join(traits.get('place_labels', [])).lower()
+
+        def add_if(cond: bool, val: int, tag: str):
+            nonlocal score
+            if cond:
+                score += val
+                notes.append(tag)
+
+        # Role matches and gating
+        military_hit = any(k in (extract + ' ' + description + ' ' + occ_text) for k in [
+            'soldier', 'marine', 'air force', 'navy', 'army', 'military'
+        ])
+        law_hit = any(k in (extract + ' ' + description + ' ' + occ_text) for k in [
+            'police', 'sheriff', 'deputy', 'state trooper', 'law enforcement'
+        ])
+        add_if(ctx['expect_military'] and military_hit, 15, 'role-military')
+        add_if(ctx['expect_law_enforcement'] and law_hit, 15, 'role-law')
+
+        add_if(ctx['expect_politician'] and any(k in (extract + ' ' + description + ' ' + occ_text) for k in [
+            'politician', 'senator', 'representative', 'governor', 'mayor', 'legislator'
+        ]), 15, 'role-politics')
+
+        add_if(ctx['expect_religious'] and any(k in (extract + ' ' + description + ' ' + occ_text) for k in [
+            'pastor', 'priest', 'bishop', 'minister', 'rabbi'
+        ]), 15, 'role-religion')
+
+        add_if(ctx['expect_musician'] and any(k in (extract + ' ' + description + ' ' + occ_text) for k in [
+            'musician', 'singer', 'songwriter', 'composer'
+        ]), 10, 'role-music')
+
+        add_if(ctx['expect_athlete'] and any(k in (extract + ' ' + description + ' ' + occ_text) for k in [
+            'football', 'basketball', 'baseball', 'soccer', 'athlete', 'coach', 'olymp'
+        ]), 10, 'role-sport')
+
+        # If designation implies modern law enforcement/military, penalize clearly historical figures
+        expect_modern_service = ctx['expect_law_enforcement'] or ctx['expect_military']
+        if expect_modern_service:
+            # Look for years in summary/extract; penalize if pre-1900 context dominates
+            years = re.findall(r"(1[5-9]\d{2}|20\d{2}|19\d{2})", extract)
+            # If any years exist and max year < 1900, likely historical figure
+            try:
+                if years:
+                    max_year = max(int(y) for y in years)
+                    if max_year < 1900:
+                        score -= 35
+                        notes.append('historical-pre1900')
+            except Exception:
+                pass
+
+        # Tighten name structure: middle initial mismatches and roman numerals vs middle initials
+        # Extract simple first/middle-initial/last from original name
+        parts = re.findall(r"[A-Za-z]+|[A-Za-z]\.", original_name)
+        if len(parts) >= 2:
+            first = parts[0].lower()
+            last = parts[-1].lower()
+            if last not in title_l:
+                score -= 10
+                notes.append('last-name-missing')
+            if first not in title_l:
+                # allow common variants like 'william' vs 'bill' not handled; small penalty
+                score -= 5
+                notes.append('first-name-missing')
+            # If original includes a middle initial, prefer the same letter near the first name
+            if len(parts) >= 3 and re.match(r"^[a-zA-Z]\.$", parts[1]):
+                mid_initial = parts[1][0].lower()
+                # penalize if title shows a different roman numeral right after first name
+                if re.search(rf"^{first}\s+[ivxlcdm]+\b", title_l):
+                    score -= 30
+                    notes.append('roman-vs-middle-initial')
+                # penalize if a different single-letter initial appears near first name
+                nearby = re.search(rf"{first}\s+([a-z])\.", title_l)
+                if nearby and nearby.group(1) != mid_initial:
+                    score -= 10
+                    notes.append('middle-initial-mismatch')
+
+        # Florida / locality signals
+        combined_text = extract + ' ' + description + ' ' + places_text
+        add_if('florida' in combined_text, 10, 'mentions-florida')
+        add_if(county and county.lower() in combined_text, 8, 'mentions-county')
+        # Penalize when Florida/county context is missing (Florida dataset)
+        if 'florida' not in combined_text:
+            score -= 10
+            notes.append('no-florida-penalty')
+        if county and county.lower() not in combined_text:
+            score -= 8
+            notes.append('no-county-penalty')
+        add_if('united states' in combined_text or 'american' in combined_text, 5, 'mentions-us')
+
+        # Penalize obvious non-person indicators in summary/description
+        non_person_indicators = [
+            'highway', 'road', 'bridge', 'building', 'school', 'hospital', 'company', 'organization',
+            'band', 'album', 'song', 'movie', 'book', 'tv series', 'park', 'city', 'county', 'river'
+        ]
+        if any(k in (title.lower() + ' ' + combined_text) for k in non_person_indicators):
+            score -= 15
+            notes.append('non-person-hint')
+
+        # Enforce role gating: if designation expects LE/military but no hit, apply strong penalty
+        if ctx['expect_law_enforcement'] and not law_hit:
+            score -= 50
+            notes.append('law-gate-fail')
+        if ctx['expect_military'] and not military_hit:
+            score -= 50
+            notes.append('military-gate-fail')
+
+        return score, ','.join(notes)
+
+    def search_wikipedia_with_validation(self, name: str, designation: str, county: str) -> Tuple[Optional[str], int, str, Optional[str]]:
+        """Search Wikipedia and validate candidates, returning best URL, confidence, and notes."""
+        try:
+            candidates: List[str] = []
+
+            # Try direct title
+            direct_url = self.search_wikipedia(name)
+            if direct_url:
+                candidates.append(direct_url)
+
+            # Also enumerate search results for broader scoring
+            search_api_url = "https://en.wikipedia.org/w/api.php"
+            # Build context-aware query variants
+            ctx = self._extract_context_from_designation(designation)
+            query_variants: List[str] = [name]
+            # Add role/context boosters
+            if ctx['expect_law_enforcement']:
+                query_variants.extend([
+                    f'"{name}" deputy', f'"{name}" sheriff', f'"{name}" trooper',
+                    f'"{name}" law enforcement'
+                ])
+            if ctx['expect_military']:
+                query_variants.extend([f'"{name}" soldier', f'"{name}" marine', f'"{name}" army'])
+            if county:
+                query_variants.append(f'"{name}" {county}')
+            query_variants.append(f'"{name}" Florida')
+
+            seen_titles_for_query: set = set()
+            for q in query_variants:
+                params = {
+                    'action': 'query',
+                    'format': 'json',
+                    'list': 'search',
+                    'srsearch': q,
+                    'srlimit': 10,
+                    'srwhat': 'text',
+                }
+                time.sleep(self.delay_between_requests)
+                response = self.session.get(search_api_url, params=params)
+                if response.status_code == 200:
+                    data = response.json()
+                    for result in data.get('query', {}).get('search', []):
+                        title = result.get('title')
+                        if title and title not in seen_titles_for_query:
+                            seen_titles_for_query.add(title)
+                            candidates.append(f"https://en.wikipedia.org/wiki/{quote(title.replace(' ', '_'))}")
+
+            best_url = None
+            best_score = -999
+            best_notes = ''
+            best_title: Optional[str] = None
+            seen_titles = set()
+            for url in candidates:
+                try:
+                    title = url.split('/wiki/', 1)[1].replace('_', ' ')
+                except Exception:
+                    continue
+                if title in seen_titles:
+                    continue
+                seen_titles.add(title)
+
+                score, notes = self._score_candidate(title, name, designation, county)
+                if score > best_score:
+                    best_score = score
+                    best_notes = notes
+                    best_url = url
+
+            # Raise acceptance threshold to reduce false positives
+            accepted_url = best_url if best_score >= 75 else None
+            # Keep best title for review
+            if best_url:
+                try:
+                    best_title = best_url.split('/wiki/', 1)[1].replace('_', ' ')
+                except Exception:
+                    best_title = None
+            return accepted_url, max(best_score, 0), best_notes, best_title
+        except Exception as e:
+            return None, 0, f"error:{e}", None
     
     def _is_likely_person_page(self, title: str, original_name: str) -> bool:
         """
@@ -294,6 +690,7 @@ class WikipediaLinkFinder:
             print(f"Found {len(rows)} memorial designations")
             print("Extracting names and searching Wikipedia...")
             
+            review_results = []
             for row in rows:
                 designation = str(row.get('DESIGNATIO', ''))
                 county = str(row.get('COUNTY', ''))
@@ -309,19 +706,33 @@ class WikipediaLinkFinder:
                         continue  # Skip if we've already processed this name
                     
                     processed_names.add(name)
-                    
                     print(f"Searching for: {name}")
-                    wikipedia_url = self.search_wikipedia(name)
-                    
+                    wikipedia_url, conf, notes, best_title = self.search_wikipedia_with_validation(name, designation, county)
+                    validated = 'yes' if wikipedia_url else 'no'
+
                     result = {
                         'name': name,
                         'original_designation': designation,
                         'county': county,
                         'wikipedia_url': wikipedia_url if wikipedia_url else 'Not Found',
-                        'status': 'Found' if wikipedia_url else 'Not Found'
+                        'status': 'Found' if wikipedia_url else 'Not Found',
+                        'match_confidence': conf,
+                        'validated': validated,
+                        'validation_notes': notes
                     }
                     
                     results.append(result)
+                    # Collect low-confidence or rejected candidates for review
+                    if (not wikipedia_url and conf > 0) or (wikipedia_url and conf < 85):
+                        review_results.append({
+                            'name': name,
+                            'original_designation': designation,
+                            'county': county,
+                            'candidate_title': best_title or '',
+                            'candidate_url': f"https://en.wikipedia.org/wiki/{quote(best_title.replace(' ', '_'))}" if best_title else '',
+                            'match_confidence': conf,
+                            'validation_notes': notes
+                        })
                     
                     # Progress indicator
                     if len(results) % 10 == 0:
@@ -330,10 +741,25 @@ class WikipediaLinkFinder:
             # Write output CSV using standard library
             with open(output_file, 'w', newline='', encoding='utf-8') as csvfile:
                 if results:
-                    fieldnames = ['name', 'original_designation', 'county', 'wikipedia_url', 'status']
+                    fieldnames = [
+                        'name', 'original_designation', 'county', 'wikipedia_url', 'status',
+                        'match_confidence', 'validated', 'validation_notes'
+                    ]
                     writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
                     writer.writeheader()
                     writer.writerows(results)
+
+            # Write review CSV for manual curation
+            if review_results:
+                review_file = output_file.replace('.csv', '_review.csv')
+                with open(review_file, 'w', newline='', encoding='utf-8') as csvfile:
+                    fieldnames = [
+                        'name', 'original_designation', 'county', 'candidate_title', 'candidate_url',
+                        'match_confidence', 'validation_notes'
+                    ]
+                    writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+                    writer.writeheader()
+                    writer.writerows(review_results)
             
             # Print summary
             found_count = len([r for r in results if r['status'] == 'Found'])
