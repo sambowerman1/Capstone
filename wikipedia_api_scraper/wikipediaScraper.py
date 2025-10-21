@@ -4,6 +4,7 @@ WIKIDATA_API = "https://www.wikidata.org/w/api.php"
 WIKIDATA_ENTITY_URL = "https://www.wikidata.org/wiki/Special:EntityData/{}.json"
 HEADERS = {"User-Agent": "MemorialLookupBot/1.0 (nbarnes4@slu.edu)"}
 
+
 def wbsearch_entity(name, language="en", limit=5):
     """Search Wikidata entities for a given name."""
     params = {
@@ -17,11 +18,13 @@ def wbsearch_entity(name, language="en", limit=5):
     r.raise_for_status()
     return r.json().get("search", [])
 
+
 def fetch_entity(entity_id):
     """Fetch full entity JSON for a Wikidata entity ID (e.g. Q937)."""
     r = requests.get(WIKIDATA_ENTITY_URL.format(entity_id), headers=HEADERS, timeout=20)
     r.raise_for_status()
     return r.json()
+
 
 def get_claim_values(entity_json, pid):
     """Return Q-ids (or times/strings) for a property PID."""
@@ -35,10 +38,11 @@ def get_claim_values(entity_json, pid):
         if isinstance(dv, dict) and "id" in dv:
             results.append(dv["id"])
         elif isinstance(dv, dict) and "time" in dv:
-            results.append(dv["time"].lstrip("+"))
+            results.append(dv["time"].lstrip("+"))  # ISO time like +1900-01-01T00:00:00Z
         elif isinstance(dv, str):
             results.append(dv)
     return results
+
 
 def resolve_qids(qids):
     """Resolve Q-ids to English labels."""
@@ -57,16 +61,26 @@ def resolve_qids(qids):
     data = r.json().get("entities", {})
     return {qid: ent.get("labels", {}).get("en", {}).get("value", qid) for qid, ent in data.items()}
 
+
 def get_person_info(name):
     """Look up a person in Wikidata and return structured info."""
     search_results = wbsearch_entity(name, limit=5)
     if not search_results:
-        return {"Name": name, "Primary Occupation": None, "Race": None, "Sex": None, "Age at Death": None}
+        return {
+            "Name": name,
+            "Primary Occupation": None,
+            "Race": None,
+            "Sex": None,
+            "Birth Date": None,
+            "Death Date": None,
+            "Wikipedia Link": None
+        }
 
     entity_id = search_results[0]["id"]  # best match
     entity_json = fetch_entity(entity_id)
+    ent = next(iter(entity_json["entities"].values()))
 
-    # Get raw values
+    # Get raw property values
     occupations = get_claim_values(entity_json, "P106")
     citizenships = get_claim_values(entity_json, "P27")
     genders = get_claim_values(entity_json, "P21")
@@ -74,7 +88,7 @@ def get_person_info(name):
     birth = get_claim_values(entity_json, "P569")
     death = get_claim_values(entity_json, "P570")
 
-    # Resolve labels
+    # Resolve Q-ids to English labels
     all_qids = set(occupations + citizenships + genders + ethnicities)
     qid_map = resolve_qids(list(all_qids))
 
@@ -82,18 +96,44 @@ def get_person_info(name):
     gender_labels = [qid_map.get(q, q) for q in genders]
     eth_labels = [qid_map.get(q, q) for q in ethnicities]
 
-    # Age at death
-    age = None
-    if birth and death:
-        try:
-            age = int(death[0][:4]) - int(birth[0][:4])
-        except Exception:
-            pass
+    # Extract sitelink (Wikipedia link)
+    sitelinks = ent.get("sitelinks", {})
+    wikipedia_link = None
+    if "enwiki" in sitelinks:
+        wikipedia_link = sitelinks["enwiki"].get("url")
+    elif sitelinks:  # fallback: pick any available wiki
+        wikipedia_link = next(iter(sitelinks.values())).get("url")
+
+    # Clean dates
+    def clean_date(dt_list):
+        if not dt_list:
+            return None
+        return dt_list[0].split("T")[0]  # "YYYY-MM-DD"
+
+    birth_date = clean_date(birth)
+    death_date = clean_date(death)
 
     return {
         "Name": name,
         "Primary Occupation": occ_labels[0] if occ_labels else None,
         "Race": eth_labels[0] if eth_labels else None,
         "Sex": gender_labels[0] if gender_labels else None,
-        "Age at Death": age
+        "Birth Date": birth_date,
+        "Death Date": death_date,
+        "Wikipedia Link": wikipedia_link
     }
+
+import pandas as pd
+
+with open("names.txt", encoding="utf-8") as f:
+    names = [name.strip() for name in f.readlines()]
+    results = []
+    for i, name in enumerate(names):
+        if i % 10 == 0:
+            print(i)
+        info = get_person_info(name)
+        results.append(info)
+
+    df = pd.DataFrame(results)
+    df = df.dropna(subset=[col for col in df.columns if col != "Name"], how="all")
+    df.to_csv("wikipedia_api_scraper/output_v2.csv", index=False)
