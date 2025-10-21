@@ -12,6 +12,11 @@ import json
 from typing import Optional, Dict, Any
 import asyncio
 from crawl4ai import AsyncWebCrawler
+try:
+    from dotenv import load_dotenv
+    _DOTENV_AVAILABLE = True
+except Exception:
+    _DOTENV_AVAILABLE = False
 from mistralai import Mistral
 
 
@@ -25,6 +30,13 @@ class PersonSummarizer:
         Args:
             MistralAPIKey: Mistral API key. If not provided, will look for MistralAPIKey env var.
         """
+        # Load .env.local if present and not already loaded
+        if _DOTENV_AVAILABLE:
+            try:
+                load_dotenv(".env.local")
+            except Exception:
+                pass
+
         self.MistralAPIKey = MistralAPIKey or os.getenv('MistralAPIKey')
         if not self.MistralAPIKey:
             raise ValueError("Mistral API key must be provided or set as MistralAPIKey environment variable")
