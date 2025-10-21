@@ -122,18 +122,3 @@ def get_person_info(name):
         "Death Date": death_date,
         "Wikipedia Link": wikipedia_link
     }
-
-import pandas as pd
-
-with open("names.txt", encoding="utf-8") as f:
-    names = [name.strip() for name in f.readlines()]
-    results = []
-    for i, name in enumerate(names):
-        if i % 10 == 0:
-            print(i)
-        info = get_person_info(name)
-        results.append(info)
-
-    df = pd.DataFrame(results)
-    df = df.dropna(subset=[col for col in df.columns if col != "Name"], how="all")
-    df.to_csv("wikipedia_api_scraper/output_v2.csv", index=False)
