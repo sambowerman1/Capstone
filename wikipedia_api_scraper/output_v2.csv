@@ -1,4 +1,4 @@
-Name,Primary Occupation,Race,Sex,Birth Date,Death Date,Wikipedia Link,Verified
+Clean_Name,Primary Occupation,Race,Sex,Birth Date,Death Date,Wikipedia Link,Noah_Thinks_is_Real
 Jim Tullis,politician,,male,1941-11-03,2017-10-14,https://en.wikipedia.org/wiki/Jim_Tullis,True
 Allan Bense,politician,,male,1951-10-06,,https://en.wikipedia.org/wiki/Allan_Bense,True
 Dr. Martin Luther King Jr.,pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
@@ -7,7 +7,7 @@ James Harold Thompson,politician,,male,1944-11-10,,https://en.wikipedia.org/wiki
 John U. Lloyd,,,,,,https://en.wikipedia.org/wiki/Dr._Von_D._Mizell-Eula_Johnson_State_Park,False
 Helen Gordon Davis,actor,,female,1926-12-25,2015-05-18,https://en.wikipedia.org/wiki/Helen_Davis,True
 Robert L. Shevin,lawyer,,male,1934-01-19,2005-07-11,https://en.wikipedia.org/wiki/Robert_L._Shevin,True
-"Martin Luther King, Jr.",pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
+"Martin Luther King, Jr.,",pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
 Countyline,,,,,,"https://en.wikipedia.org/wiki/Countyline,_Oklahoma",False
 Harriet Tubman,writer,African Americans,female,1821-00-00,1913-03-10,https://en.wikipedia.org/wiki/Harriet_Tubman,True
 Purple Heart,,,,,,https://en.wikipedia.org/wiki/Purple_Heart,True
@@ -64,7 +64,7 @@ James Henry Mills,military personnel,,male,1923-05-02,1973-11-11,https://en.wiki
 John L. Robinson,politician,,male,1813-05-03,1860-03-21,https://en.wikipedia.org/wiki/John_L._Robinson,False
 Circus,,,,,,https://en.wikipedia.org/wiki/Circus_(bird),False
 Veteran's,,,,,,https://en.wikipedia.org/wiki/War_grave,False
-"Martin Luther King, Jr.",pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
+"Martin Luther King, Jr.,",pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
 Sid Martin,,,,,,https://commons.wikimedia.org/wiki/Category:Sid_Martin_Biotechnology_Incubator,False
 Veterans,,,,,,https://en.wikipedia.org/wiki/Veteran,True
 Ben Rowe,racing automobile driver,,male,1975-05-07,,https://fr.wikipedia.org/wiki/Ben_Rowe,False
@@ -161,7 +161,7 @@ Ralph C. Carter,politician,,male,1932-06-25,2007-09-04,https://en.wikipedia.org/
 Vernon,,,,,,"https://en.wikipedia.org/wiki/Vernon,_Eure",False
 Davie,,,,,,"https://en.wikipedia.org/wiki/Davie,_Florida",True
 Dwight L. Rogers,politician,,male,1886-08-17,1954-12-01,https://en.wikipedia.org/wiki/Dwight_L._Rogers,True
-"E. Clay Shaw, Jr.",politician,,male,1939-04-19,2013-09-10,https://en.wikipedia.org/wiki/Clay_Shaw_(politician),True
+"E. Clay Shaw, Jr.,",politician,,male,1939-04-19,2013-09-10,https://en.wikipedia.org/wiki/Clay_Shaw_(politician),True
 Henry E. Kinney Tunnel,,,,,,https://en.wikipedia.org/wiki/New_River_Tunnel,False
 Pembroke Park,,,,,,"https://en.wikipedia.org/wiki/Pembroke_Park,_Florida",True
 Seminole,,,,,,"https://en.wikipedia.org/wiki/Seminole,_Texas",False
@@ -181,7 +181,7 @@ Jerry Thomas,politician,,male,1953-05-23,,https://en.wikipedia.org/wiki/Jerry_Th
 Moroso,,,,,,https://commons.wikimedia.org/wiki/Category:Moroso_(surname),False
 North Ocean,,,,,,https://commons.wikimedia.org/wiki/Category:IMO_7530016,False
 PGA,,,,,,https://en.wikipedia.org/wiki/Folate,False
-Purple Heart,,,,,,https://en.wikipedia.org/wiki/Purple_Heart,False
+Purple Heart,,,,,,https://en.wikipedia.org/wiki/Purple_Heart,True
 Challenger,,,,,,https://en.wikipedia.org/wiki/HMS_Challenger_(1858),False
 Columbia,,,,,,https://en.wikipedia.org/wiki/Columbia_Records,False
 Hubert Humphrey,politician,Norwegian Americans,male,1911-05-27,1978-01-13,https://en.wikipedia.org/wiki/Hubert_Humphrey,True
@@ -216,7 +216,7 @@ Seminole,,,,,,"https://en.wikipedia.org/wiki/Seminole,_Texas",False
 Clyde Hart,pianist,,male,1910-02-24,1945-03-19,https://en.wikipedia.org/wiki/Clyde_Hart_(pianist),False
 Douglas Stenstrom,lawyer,,male,1921-09-05,2010-06-23,https://en.wikipedia.org/wiki/Douglas_Stenstrom,True
 International Speedway,,,,,,https://it.wikipedia.org/wiki/International_Speedway,True
-"Martin Luther King, Jr.",pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
+"Martin Luther King, Jr.,",pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
 St. Johns River Veterans,,,,,,https://en.wikipedia.org/wiki/St._Johns_River_Veterans_Memorial_Bridge,True
 24th of February,,,,,,https://en.wikipedia.org/wiki/February_24,True
 Alexandre Petion,politician,,male,1770-04-02,1818-03-29,https://en.wikipedia.org/wiki/Alexandre_P%C3%A9tion,True
@@ -241,7 +241,6 @@ George Gill,baseball player,,male,,,https://en.wikipedia.org/wiki/George_Gill_(f
 Golden Glades,,,,,,"https://en.wikipedia.org/wiki/Golden_Glades,_Florida",True
 Gwen Cherry,teacher,,female,1923-08-27,1979-02-07,https://en.wikipedia.org/wiki/Gwen_Cherry,True
 Henri Levy,rabbi,,male,1883-06-07,1942-08-13,https://de.wikipedia.org/wiki/Henri_L%C3%A9vy_(Rabbiner),False
-Biscayne,,,,,,https://en.wikipedia.org/wiki/Biscayne_National_Park,True
 Interama,,,,,,https://en.wikipedia.org/wiki/Parque_de_la_Ciudad,False
 James Weldon Johnson,writer,African Americans,male,1871-06-17,1938-06-26,https://en.wikipedia.org/wiki/James_Weldon_Johnson,True
 Jean Baptiste Point du Sable,merchant,,male,1745-01-01,1818-08-28,https://en.wikipedia.org/wiki/Jean_Baptiste_Point_du_Sable,True
@@ -301,7 +300,7 @@ Schrader,,,,,,https://en.wikipedia.org/wiki/Schrader,False
 Corey,,,,,,https://commons.wikimedia.org/wiki/Category:Corey_(given_name),False
 Eisenhower,,,,,,https://en.wikipedia.org/wiki/Eisenhower_(surname),False
 Barkett,,,,,,https://commons.wikimedia.org/wiki/Category:Barkett_(surname),False
-"Dr. Martin Luther King, Jr.",pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
+"Dr. Martin Luther King, Jr.,",pastor,African Americans,male,1929-01-15,1968-04-04,https://en.wikipedia.org/wiki/Martin_Luther_King_Jr.,True
 Bellas Artes,,,,,,https://en.wikipedia.org/wiki/Bellas_Artes_metro_station_(Mexico_City),False
 Oswaldo Payá,politician,,male,1952-02-29,2012-07-22,https://en.wikipedia.org/wiki/Oswaldo_Pay%C3%A1,True
 Purple Heart,,,,,,https://en.wikipedia.org/wiki/Purple_Heart,True
