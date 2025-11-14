@@ -3,11 +3,11 @@ import numpy as np
 from pathlib import Path
 
 # ---------- Config ----------
-path_A = "matched_data/matched_data.csv"
-path_B = "odmp_scraping/matched_officers.csv"
+path_A = "Capstone/memorial_highways_test_append.csv"
+path_B = "Capstone/odmp_scraping/matched_officers.csv"
 name_col_A = "DESIGNATIO"   # change if different
 name_col_B = "Matched Name"   # change if different
-output_path = "matched_data/matched_data_with_odmp.csv"
+output_path = "Capstone/matched_data/matched_data_with_odmp.csv"
 # ----------------------------
 
 # Load
