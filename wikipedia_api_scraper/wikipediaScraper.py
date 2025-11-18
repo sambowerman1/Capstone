@@ -1,4 +1,6 @@
 import requests
+from cleanNames import clean_name
+import pandas as pd
 
 WIKIDATA_API = "https://www.wikidata.org/w/api.php"
 WIKIDATA_ENTITY_URL = "https://www.wikidata.org/wiki/Special:EntityData/{}.json"
@@ -122,3 +124,18 @@ def get_person_info(name):
         "Death Date": death_date,
         "Wikipedia Link": wikipedia_link
     }
+
+highways_path = "memorial_highways_test_append.csv"
+highways = pd.read_csv(highways_path)
+names = [clean_name(i) for i in highways["DESIGNATIO"]]
+highways["Name"] = names
+
+highways.to_csv("wikipedia_api_scraper/data_with_names2.csv", index=False)
+
+data = [get_person_info(name) for name in names]
+df = pd.DataFrame(data)
+df_unique = df.drop_duplicates(subset="Name", keep="first")
+df_unique.to_csv("wikipedia_api_scraper/scraper_output.csv", index=False)
+
+merged = pd.merge(highways, df_unique, on="Name", how="left")
+merged.to_csv("wikipedia_api_scraper/final_output.csv", index=False)
