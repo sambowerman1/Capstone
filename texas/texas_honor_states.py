@@ -8,7 +8,7 @@ from difflib import SequenceMatcher
 
 # Config
 base_dir = os.path.dirname(os.path.abspath(__file__))
-names_path = os.path.join(base_dir, "..", "names.txt")
+names_path = os.path.join(base_dir, "..", "C:/Users/lucas/Data_Science_Capstone/Capstone/texas/cleaned_names.txt")
 
 # Reading honoree names
 with open(names_path, "r", encoding="utf-8") as f:
@@ -22,13 +22,13 @@ normalized_targets = {normalize(n): n for n in target_names}
 print(f"📋 Loaded {len(target_names)} names from {names_path}")
 print("🧾 Sample names:", target_names[:8])
 
-# Pages to check (all wars + main FL page)
+# Pages to check (all wars + main tx page)
 base_urls = [
     "https://www.honorstates.org/states/TX/",
-    "https://www.honorstates.org/index.php?do=q&state=FL&war=WW1",
-    "https://www.honorstates.org/index.php?do=q&state=FL&war=WW2",
-    "https://www.honorstates.org/index.php?do=q&state=FL&war=Korea",
-    "https://www.honorstates.org/index.php?do=q&state=FL&war=Vietnam",
+    "https://www.honorstates.org/index.php?do=q&state=TX&war=WW1",
+    "https://www.honorstates.org/index.php?do=q&state=TX&war=WW2",
+    "https://www.honorstates.org/index.php?do=q&state=TX&war=Korea",
+    "https://www.honorstates.org/index.php?do=q&state=TX&war=Vietnam",
 ]
 
 headers = {"User-Agent": "Mozilla/5.0"}
