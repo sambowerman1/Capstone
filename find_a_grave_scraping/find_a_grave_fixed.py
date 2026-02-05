@@ -67,7 +67,7 @@ SESSION = requests.Session()
 SESSION.headers.update(HEADERS)
 
 # Optional: preferred state to prioritize matches
-PREFERRED_STATE = "Florida"   # <-- set to None or "" to disable preference
+PREFERRED_STATE = "Montana"   # <-- set to None or "" to disable preference
 PREFERRED_STATE_WEIGHT = 0.15 # how much to boost confidence if matched (0.05–0.25 works well)
 
 
