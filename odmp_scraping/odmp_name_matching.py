@@ -2,7 +2,7 @@ import csv
 from difflib import SequenceMatcher
 
 # --- CONFIGURATION ---
-NAMES_FILE = "C:/Users/lucas/Data_Science_Capstone/Capstone/names.txt"
+NAMES_FILE = "Texas/Texas_Names.csv"
 CSV_FILE = "C:/Users/lucas/Data_Science_Capstone/Capstone/odmp_scraping/odmp_florida_officers.csv"
 OUTPUT_FILE = "matched_officers.csv"
 NAME_COLUMN_INDEX = 2  # 0-based index for the name column in CSV
