@@ -129,12 +129,26 @@ def highway_description_to_counties(desc: str):
         "parsed": parsed,
         "counties_crossed": crossed,
     }
+### Michigan Test Run
+import pandas as pd
 
-desc = "The portion of highway M-66 beginning at the intersection with highway M-78 in Calhoun County and extending north to the intersection with highway US-131 in Kalkaska County shall be known as the ""Green Arrow Route""."
-result = highway_description_to_counties(desc)
+file = "Michigan/Memorial_Highways.csv"
 
+df = pd.read_csv(file)
+descriptions = df["Description"]
+county_values = []
+for desc in descriptions:
+    try:
+        result = highway_description_to_counties(desc)
+        print(result["parsed"])
+        print("Counties crossed:")
+        for c in result["counties_crossed"]:
+            print("-", c["name"])
+        counties = [c["name"] for c in result["counties_crossed"]]
+    except:
+        print(f"Could not find highway for : {desc}")
+        counties = "NA"
+    county_values.append(counties)
 
-print(result["parsed"])
-print("Counties crossed:")
-for c in result["counties_crossed"]:
-    print("-", c["name"])
+df["Counties Crossed"] = county_values
+df.to_csv("description_to_county/data/outputs/Michigan_with_counties.csv")
