@@ -1,0 +1,191 @@
+"""
+Fetch ACS 5-year indicators for ALL US counties (all 50 states + DC)
+and write a single CSV.
+
+Requires:
+    pip install requests pandas
+
+Optional:
+    Set Census API key as environment variable:
+        export CENSUS_KEY=your_key_here
+        export ACS_YEAR=2023
+
+Output:
+    us_counties_demographics.csv
+"""
+
+import os
+import sys
+import time
+import pandas as pd
+import requests
+
+
+# ==============================
+# Configuration
+# ==============================
+
+YEAR = os.environ.get("ACS_YEAR", "2023")
+PROFILE = f"https://api.census.gov/data/{YEAR}/acs/acs5/profile"
+SUBJECT = f"https://api.census.gov/data/{YEAR}/acs/acs5/subject"
+API_KEY = os.environ.get("CENSUS_KEY", "")
+
+# All state FIPS codes (50 states + DC)
+STATE_FIPS_LIST = [
+    "01","02","04","05","06","08","09","10","11","12",
+    "13","15","16","17","18","19","20","21","22","23",
+    "24","25","26","27","28","29","30","31","32","33",
+    "34","35","36","37","38","39","40","41","42","44",
+    "45","46","47","48","49","50","51","53","54","55","56"
+]
+
+# ==============================
+# Variables
+# ==============================
+
+VAR_MEDIAN_AGE = "DP05_0018E"
+VAR_MEDIAN_HH_INC = "S1901_C01_012E"
+VAR_MEDIAN_HOME_VALUE = "DP04_0089E"
+
+VAR_ED_HSPLUS = "S1501_C02_015E"
+VAR_ED_BACHPLUS = "S1501_C02_014E"
+
+VAR_UNEMPLOYMENT_RATE = "S2301_C04_001E"
+VAR_POVERTY_RATE = "S1701_C03_001E"
+
+VAR_PCT_WHITE = "DP05_0077PE"
+VAR_PCT_BLACK = "DP05_0078PE"
+VAR_PCT_AIAN  = "DP05_0079PE"
+VAR_PCT_ASIAN = "DP05_0080PE"
+VAR_PCT_NHPI  = "DP05_0081PE"
+VAR_PCT_OTHER = "DP05_0082PE"
+VAR_PCT_TWO   = "DP05_0083PE"
+VAR_PCT_HISP  = "DP05_0071PE"
+
+
+# ==============================
+# API Pull Function
+# ==============================
+
+def pull(endpoint, vars_, state_fips):
+    params = {
+        "get": ",".join(["NAME"] + vars_),
+        "for": "county:*",
+        "in": f"state:{state_fips}",
+    }
+
+    if API_KEY:
+        params["key"] = API_KEY
+
+    r = requests.get(endpoint, params=params, timeout=60)
+    r.raise_for_status()
+
+    rows = r.json()
+    cols = rows[0]
+    data = rows[1:]
+
+    df = pd.DataFrame(data, columns=cols)
+    df["GEOID"] = df["state"] + df["county"]
+
+    return df
+
+
+# ==============================
+# Main Script
+# ==============================
+
+def main():
+
+    prof_vars = [
+        VAR_MEDIAN_AGE, VAR_MEDIAN_HOME_VALUE,
+        VAR_PCT_WHITE, VAR_PCT_BLACK, VAR_PCT_ASIAN,
+        VAR_PCT_AIAN, VAR_PCT_NHPI, VAR_PCT_OTHER,
+        VAR_PCT_TWO, VAR_PCT_HISP
+    ]
+
+    subj_vars = [
+        VAR_MEDIAN_HH_INC, VAR_ED_HSPLUS,
+        VAR_ED_BACHPLUS, VAR_UNEMPLOYMENT_RATE,
+        VAR_POVERTY_RATE
+    ]
+
+    all_profiles = []
+    all_subjects = []
+
+    # Loop through every state
+    for state in STATE_FIPS_LIST:
+        print(f"Pulling state {state}...")
+        try:
+            df_profile = pull(PROFILE, prof_vars, state)
+            df_subject = pull(SUBJECT, subj_vars, state)
+
+            all_profiles.append(df_profile)
+            all_subjects.append(df_subject)
+
+            time.sleep(0.4)  # small delay to avoid rate limits
+
+        except requests.HTTPError as e:
+            print(f"Failed for state {state}: {e}")
+
+    # Combine all states
+    df_profile = pd.concat(all_profiles, ignore_index=True)
+    df_subject = pd.concat(all_subjects, ignore_index=True)
+
+    # Merge
+    df = df_profile.merge(
+        df_subject[["GEOID"] + subj_vars],
+        on="GEOID",
+        how="left"
+    )
+
+    # Rename columns
+    rename_map = {
+        "NAME": "County",
+        VAR_MEDIAN_AGE: "Median_Age",
+        VAR_MEDIAN_HH_INC: "Median_Household_Income",
+        VAR_MEDIAN_HOME_VALUE: "Median_Home_Value",
+        VAR_PCT_WHITE: "Pct_White_Alone",
+        VAR_PCT_BLACK: "Pct_Black_Alone",
+        VAR_PCT_ASIAN: "Pct_Asian_Alone",
+        VAR_PCT_AIAN: "Pct_AIAN_Alone",
+        VAR_PCT_NHPI: "Pct_NHPI_Alone",
+        VAR_PCT_OTHER: "Pct_SomeOther_Alone",
+        VAR_PCT_TWO: "Pct_TwoOrMore",
+        VAR_PCT_HISP: "Pct_Hispanic",
+        VAR_ED_HSPLUS: "HS_Grad_or_Higher",
+        VAR_ED_BACHPLUS: "Bachelors_or_Higher",
+        VAR_UNEMPLOYMENT_RATE: "Unemployment_Rate",
+        VAR_POVERTY_RATE: "Pct_Below_Poverty_Level"
+    }
+
+    df = df.rename(columns=rename_map)
+
+    df = df.assign(
+        StateFIPS=df["state"],
+        CountyFIPS=df["county"]
+    ).drop(columns=["state", "county"])
+
+    # Convert numeric columns
+    num_cols = [c for c in df.columns if c not in ("GEOID","County","StateFIPS","CountyFIPS")]
+    for c in num_cols:
+        df[c] = pd.to_numeric(df[c], errors="coerce")
+
+    # Sort by state + county
+    df = df.sort_values(["StateFIPS", "County"]).reset_index(drop=True)
+
+    out_path = "us_counties_demographics.csv"
+    df.to_csv(out_path, index=False)
+
+    print(f"\nWrote {out_path} with {len(df)} rows.")
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except requests.HTTPError as e:
+        print("HTTPError:", e, file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print("Error:", e, file=sys.stderr)
+        sys.exit(2)
+3
