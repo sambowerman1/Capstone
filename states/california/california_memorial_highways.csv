@@ -1,0 +1,656 @@
+_id,highway_name,route_no,district,how_named,from_location,to_location
+1,Blue Star Memorial Highway,1,"12, 7, 5, 4, 1","ACR 58, CH 108, 2003",I-5 at Dana Point,Route 101 at Leggett
+2,Blue Star Memorial Highway,8,11,"ACR 62, CH 107, 1961",San Diego,Arizona State Line
+3,Blue Star Memorial Highway,36,"1, 2","SCR 36, CH 104, 1983",Route 101 near Alton,Route 395 near Susanville
+4,Blue Star Memorial Highway,40,8,"ACR 112, CH 143, 1984",I-15 at Barstow,Arizona State Line near Needles
+5,Blue Star Memorial Highway,58,"5, 6, 8","ACR 203, CH 323, 1969",Route 101 in Santa Margarita,I-15 in Barstow
+6,Blue Star Memorial Highway,62,8,"ACR 180, CH 127, 2004",I-10 in Riverside County,Adobe Road in Twentynine Palms
+7,Blue Star Memorial Highway,70,"3, 2","ACR 150, CH 98, 2000",Marysville,Hallelujah Junction
+8,Blue Star Memorial Highway,89,"9, 10, 3, 2 ","ACR 111, CH 96, 1986",Route 395 near Topaz,I-5 near Mt. Shasta
+9,Blue Star Memorial Highway,97,2,"SR 64, 1961","I-5, Weed",Oregon State Line
+10,Blue Star Memorial Highway,101,"7, 5, 4, 1","SCR 41, CH 24, 1984",Start of Route 101 in Los Angeles,Oregon State Line
+11,Blue Star Memorial Highway,140,10,"SCR 39, CH 23, 1984",I-5 near Gustine,Yosemite National Park
+12,Blue Star Memorial Highway,254,1,"ACR 61, CH 58, 1996",Route 101 near Phillipsville,Route 101 near Pepperwood
+13,Blue Star Memorial Highway,280,4,"ACR 50, CH 72, 1996",I-680 near San Jose,"Third Street, San Francisco"
+14,Blue Star Memorial Highway,395,"8, 6, 9, 3, 2","ACR 112, CH 143, 1984","I-15 near Cajon Pass to Nevada State Line, Mono County","Nevada State Line, Sierra County to the Oregon State Line, Modoc County"
+15,Blue Star Memorial Highway,680,4,"SCR 38, CH 175, 1970",Contra Costa/Alameda County Line,Benicia-Martinez Bridge (Contra Costa/Solano County Line)
+16,Blue Star Memorial Highway,282,11,"ACR 163, CH 124, 2016",Orange Avenue (PM 0.000R/L),Naval Air Station North Island (PM 0.691R and 0.581L)
+17,East-West Blue Star Memorial Highway,80,"4, 3","SCR 33, CH 82, 1947",San Francisco,Nevada State Line
+18,North-South Blue Star Memorial Highway,5,"11, 12, 7, 6, 10, 3, 2","SCR 61, CH 116, 1971",Mexico International Border,Oregon State Line
+19,North-South Blue Star Memorial Highway ,"111, 86, 10, 5, 99, 65, 5","2, 3, 6, 7, 8, 10, 11","SCR 33, CH 82, 1947",Mexico International Border at Calexico,Oregon State Line at Hilt
+1,“Farm-to-Fork Corridor”,99,3,"ACR 44, CH 107, 2019",Junction with State Route 70 around (PM R8.109),Garden Highway UC# 18-25 (PM 11.975)
+2,10th Mountain Division Memorial Highway,89,3,"SCR 43, CH 106, 1997",Tahoe City,City of Truckee
+3,100th Infantry Battalion Memorial Highway,99,6,"ACR 62, CH 115, 1994",City of Fresno,City of Madera
+4,442nd Regimental Combat Team Memorial Highway,99,10,"ACR 62, CH 115, 1994","Salida, northwest of Modesto",City of Manteca
+5,Katcho Achadjian Memorial Highway,101,5,"SCR 31, CH 137, 2023","JCT RTE 227, N. SEP# 49-176 (PM 13.173)",JCT RTE 1 EB# 49-184 (PM 17.767)
+6,CHP Officer Thomas R. Adams Memorial Highway,101,1,"ACR 76, CH 114, 2011",State Highway 271 - PM R101.895,S Fork Eel River #10-218 - PM R106.574
+7,Aerospace Highway,14,"7, 6","ACR 119, CH 83, 2002",Pearblossom Highway,Route 395
+8,"Ventura County Deputy Sheriff Peter Aguirre, Jr. Memorial Highway",33,7,"ACR 142, CH 83, 2016",East junction of Route 33/150 at (PM 11.210) ,La Luna Avenue / Fairview Road (PM 12.800)
+9,All America City Highway,65,6,"ACR 47, CH 41, 1996",Route 99,Route 198
+10,Alpine State Highway,"88, 89, 4",10,"CH 468, 1911",Jackson,"Calaveras Big Trees, via Markleeville"
+11,America’s Heroes-Veterans Memorial Highway,49,10,"ACR 165, CH 125, 2016",Valley View Way (PM R7.298),Amador Creek BB #26-0043 (PM R10.576)
+12,Glenn Anderson Freeway,105,7,"SCR 34, CH 83, 1987",Route 1,I-605
+13,Antelope Valley Freeway ,14,7,"ACR 57, CH 196, 1957",I-5 south of Newhall,Avenue D north of Lancaster
+14,Signal Hill Police Officer Anthony “Tony” Giniewicz Memorial Highway,405,7,"SCR 84, CH 89, 2014",Cherry Avenue South OC# 53-1200 - PM 4.879,Atlantic Avenue OC# 53-1204 - PM 6.076
+15,Jimmy A. Arevalo Memorial Highway,8,11,"ACR 51, CH 65, 2013",11-SD-8 PM R27.30,11-SD-8 PM R28.46
+16,"CHP Officer John ""Jack"" Armatoski Memorial Highway",40,8,"ACR 100, CH 109, 2012",West Park Road OC# 54-702 - PM R139.117,Needles Overhead OH# 54-813 R/L - PM R141.972
+17,Armed Forces Freeway,215,8,"ACR 22, CH 106, 2007",Ramona Expressway,Route 60
+18,Arroyo Seco Parkway,110,7,Streets & Highways Code Section 283,Post Mile 25.7,Post Mile 31.9
+19,Artesia Freeway,91,"7, 12","ACR 80, CH 148, 1970",I-710,I-5 in Fullerton
+20,Avenue of the Giants,254,1,"ACR 10, CH 36, 1960",Sylvandale,south of Jordan Creek
+21,Avocado Highway,15,"11, 8","SCR 9, CH 62, 1997",Route 78 in Escondido,Temecula
+22,Jeffrey Lynn Azuar Memorial Highway,80,4,"SCR 85, CH 155, 2000",The Carquinez Bridge,Columbus Parkway
+23,William T. Bagley Freeway,101,4,"SCR 46, CH 111, 1987",Waldo Tunnel in Sausalito,I-580 in San Rafael
+24,Esteban Bahena Memorial Highway,63,11,"SCR 122, CH 132, 2010",Washington Street,Route 8
+25,CHP Officer John Bailey Memorial Freeway,15,8,"SCR 119, CH 113, 2008",I-10,I-210
+26,California Corrections Youth Authority Counselor Ineasie M. Baker Memorial Freeway,60,8,"ACR 63, CH 115, 2005",South Milliken Avenue,South Euclid Avenue
+27,Bakersfield All-America City Freeway,99,6,"SCR 55, CH 39, 1992",I-5,Southern point of McFarland Avenue
+28,"Bakersfield, Maricopa and Ventura Highway","33, 119","5, 6, 7","CH 610, 1913",Ventura,Bakersfield
+29,Deputy Sheriff Scott Ballantyne and Sheriff Pilot James Chavez Memorial Highway,190,6,"ACR 169, CH 146, 2018",Just South of HQ Drive (Postmile 22.530),Pleasant Oak Drive (Postmile 26.540)
+30,United States Army Chief Warrant Officer 2 Edward Balli Memorial Highway,183,5,"SCR 57, CH 21 2018",Davis Road OC (PM R1.914),Espinosa Road (PM R7.651)
+31,Staff Sergeant Ricardo “Ricky” Barraza Memorial Highway ,43,6,"ACR 70, CH 134, 2017",East Los Angeles Street (PM 15.830),Fresno Avenue (PM 17.966)
+32,Abiel Barron Memorial Highway,138,7,"ACR 5, CH 64, 2005",Lone Pine Canyon ,Kruse Road
+33,Barstow Freeway,"215, 15",8,"By Commission, 11/20/1958",Highland Avenue in San Bernardino,Nevada State Line
+34,Gunnery Sergeant John Basilone Memorial Freeway,5,11,"SCR 25, CH 72, 1999",Camp Pendleton main gate,Basilone Road exit
+35,Bayshore Freeway,101,4,By Location,Route 82 in San Jose,I-80 in San Francisco
+36,"Officer Bill C. Bean, Jr. Memorial Highway",174,3,"ACR 68, CH 110, 1999",I-80 in Colfax,Route 20 in Grass Valley
+37,Dean E. Beattie Memorial Highway,163,11,"ACR 162, CH 123, 2004 ",I-8,I-805
+38,Joan Bechtel Memorial Highway,99,3,"ACR 150, CH 162, 2008",Central Avenue,Route 113
+39,John C. Begovich Memorial Highway,49,10,"ACR 139, CH 120, 2000",Southern city limits of Jackson,Route 88 
+40,Frank P. Belotti Freeway ,101,1,"HR 461, 1961","Sylvandale, 6 miles north of Garberville","Englewood, 1 mile south of Redcrest"
+41,Frank P. Belotti Memorial Freeway,101,1,"ACR 54, CH 114, 1994",Bridge No. 04-0241 at Smith Point,Myers Flat
+42,CHP Officer Dan N. Benavides Memorial Highway,15,11,"SCR 30, CH 92, 2011",Gopher Canyon Rd UC# 57-890 - PM R40.848,Old Hwy 395 OC# 57-869 - PM R43.279
+43,Oceanside Police Officer Daniel S. Bessant Memorial Highway,5,11,"ACR 100, CH 101, 2012",JCT RTE 78 - PM R51.201,Harbor Drive - PM R54.392
+44,"High Desert State Prison Correctional Officer Richard Bianchi, Jr., Memorial Highway ",36,2,"ACR 32, CH 110, 2021",JCT 36/139 (PM 25.356),JCT 36/395 (PM R29.390)
+45,Biggs-Willows Road,"45, 162",3,"CH 542, 1919",Willows,Biggs
+46,Senator Daniel E. Boatwright Highway,680,4,"SCR 4, CH 69, 2009",JCT Route 24 - PM 14.383,Benicia-Martinez Bridge# 28-153L - PM R24.948L
+47,Randy Bolt Memorial Highway,37,4,"ACR 95, CH 128, 2001",Skaggs Road,Route 29
+48,Sonny Bono Memorial Freeway,10,8,"ACR 25, CH 58, 2001",Just west of the Route 111 cutoff near Palm Springs,A point at the bottom of the grade east of the City of Coachella
+49,Border Friendship Route,8,11,"SCR 104, CH 254, 1968",San Diego,Arizona State Line
+50,Officer Keith Boyer Memorial Highway,605,7,"ACR 76, CH 137, 2017",Junction of Interstate 5/605 (PM R9.612),Obregon Street OC# 53-1529 (PM R13.982)
+51,Bracero Memorial Highway,101,5,"ACR 113, CH 86, 2010",exit 312,exit 317
+52,CHP Officer Michael Allen Brandt Memorial Highway,74,8,"ACR 100, CH 109, 2012",POSTMILE MARKER - PM 83.000,POSTMILE MARKER - PM 88.000
+53,"Arthur H. Breed, Jr. Freeway",580,4,"SCR 5, CH 73, 1983",Castro Valley ,Livermore
+54,CHP Officers Brian Law and Juan Gonzalez Memorial Highway,99,6,"ACR 158, CH 176, 2014",TULARE/FRESNO COUNTY LINE - PM R0.000,MOUNTAIN VIEW AVENUE OC# 42-219 - PM R3.742
+55,Daniel Broeske Memorial Highway,101,1,"SCR 90, CH 65, 2008",Post Mile 32.1,Post Mile 33.1
+56,Charles Brown Highway ,178,9,"SCR 13, CH 25, 1961",Route 127 in Shoshone,Nevada State Line
+57,"Congressman George E. Brown, Jr. Memorial Highway",210,8,"ACR 152, CH 175, 2004",I-15,I-215
+58,"William Elton ""Brownie"" Brown Freeway",580,10,"ACR 74, CH 127, 1985",I-205,I-5
+59,Buffalo Soldiers Memorial Highway,41,6,"ACR 174, CH 134, 2016",Madera/Mariposa county line (PM 1.841),Yosemite National Park (PM 4.918)
+60,Alice Peña Bulos Memorial Highway,35,4,"ACR 165, CH 45, 2020","Glencourt Way (Postmile
+27.090)",Olympic Way (Postmile 31.061)
+61,Luther Burbank Memorial Highway,12,4,"SCR 4, CH 11, 1940",Sebastopol,Santa Rosa
+62,Kevin Michael Burrell and James Wayne MacDonald Memorial Highway,710,7,"ACR 178, CH 161, 2016",Junction of Routes 91/710 Sep# 53-2240 (PM 12.970) ,Alondra Blvd OC# 53-822 (PM 13.945)
+63,Michael J. Burns Memorial Freeway,101,1,"HR 230, 1949",Eureka,Arcata
+64,CHP Officer Don J. Burt Memorial Highway,57,12,"ACR 7, CH 80, 2003",Orangethorpe Avenue,Yorba Linda Boulevard
+65,John Burton Highway,35,4,"SCR 93, CH 117, 2012",SLOAT BLVD LT - PM 1.990,JCT RTE 1 - PM 3.164
+66,Cabrillo Freeway,163,11,Historical,I-5,I-15
+67,Cabrillo Highway,1,"5, 4","AB 1769, CH 1569, 1959, Streets & Highways Code Section 635",Las Cruces,San Francisco
+68,Deputy Darnell Andrew Calhoun Memorial Highway,15,8,"SCR 25, CH 150, 2023",Main Street UC# 56-382 (PM 20.948),Jct of Rte 74/Central Avenue (PM 22.277)
+69,California Delta Highway,4,"4, 10","SCR 11, CH 46, 1987",I-680 ,I-5
+70,California Wildland Firefighters Memorial Highway,74,"12, 8","SCR 71, CH 22, 2002",San Juan Capistrano,Lake Elsinore
+71,Adolfo Camarillo Memorial Highway,101,7,"ACR 116, CH 74, 2008",Top of the Conejo Grade,Lewis Road
+72,Los Angeles Police Officer Ian J. Campbell Memorial Highway,101,7,"ACR 100, CH 109, 2012",Hollywood Blvd - PM 6.520,Cahuenga Blvd - PM 7.459
+73,Capital City Freeway,51,3,"Sacramento Area Council of Governments, 1996",Route 50 / Route 99,I-80
+74,Vallejo Police Officer James Capoot Memorial Highway,37,4,"SCR 6, CH 85, 2013",JCT RTE 29/37 - PM R 9.665,JCT RTE 80/37 - PM R 11.728 R
+75,Carneros Highway,121,4,"SCR 62, CH 29, 1992",Route 37 in Sonoma County,Route 29 in Napa County
+76,Pomona Police Officer Greggory Casillas Memorial Highway,10,"7, 8","ACR 236, CH 157 2018",North San Antonio Undercrossing UC # 53-859 (Postmile 46.718),Mountain Avenue Undercrossing UC # 54-1187 (Postmile 2.370)
+77,CHP Officer William “Ivan” Casselman Memorial Highway,80,3,"ACR 100, CH 109, 2012",5 MILES WEST FROM COUNTY ROAD 32A PM 0.781,Webster UC # 22-43 PM 5.781
+78,Central Yosemite Highway,140,10,"ACR 27, CH 69, 1989",Merced/Mariposa County Line near Planada,Yosemite National Park
+79,Century Freeway,105,7,Local Usage,El Segundo near LAX,I-605 near Norwalk
+80,"United States Army Specialist Ricardo Cerros, Jr. Memorial Highway",101,5,"SCR 57, CH 21 2018",Esperanza Road (PM 78.840),Gould Road (PM 82.570)
+81,Cesar Chavez Memorial Highway,215,8,"SCR 112, CH 118 2018",(Approx. Postmile 12.753) ,Junction of 15/215 Separator # 54-783 (Postmile 17.753)
+82,"Eugene ""Gene"" Chappie Memorial Highway",193,3,"SCR 2, CH 105, 2015",JCT ROUTE 49 - PM 0.000,CRAMER ROAD - APPROX PM R2.150
+83,CHP Officer Lucas F. Chellew Memorial Highway,80,3,"SCR 117, CH 180, 2022",Antelope Road OC# 24-0129 (PM 16.685) ,Douglas Boulevard OC# 19-0079 (PM 1.975)
+84,Officer Dave Chetcuti Memorial Highway,101,4,"SCR 97, CH 158, 1998",San Francisco International Airport,Broadway-Burlingame exit
+85,Larry Chimbole Memorial Highway,138,7,"ACR 138, CH 160, 2016",Junction of Routes 14/138 (PM 43.418),40th Street East (PM 47.761)
+86,Chino Valley Freeway,71,"7, 8","ACR 20, CH 55, 1993",I-10,San Bernardino/Riverside County Line
+87,Chumash Highway,154,5,"ACR 75, CH 149, 2007","Start of Route 154, Junction Route 101","Terminus of Route 154, Junction Route 101"
+88,Civilian Women Volunteers All Wars Memorial Freeway,101,4,"ACR 83, CH 36, 2000",Ralston Avenue exit in Belmont,Route 92
+89,Linus F. Claeys Freeway,80,4,"SCR 85, CH 80, 1990",Route 4,Carquinez Bridge
+90,Don Clausen Highway,101,1,"ACR 92, CH 62, 1996",Along the Redwood National Park Bypass,
+91,CAL-FIRE Chief William R. Clayton Memorial Highway,5,11,"SCR 12, CH 81, 2021",La Costa Avenue (PM R44.071),Cannon Rod (PM R47.975)
+92,California Highway Patrol Officer Brent William Clearman Memorial Freeway,880,4,"SCR 132, CH 141, 2008",Post Mile 26.61,Post Mile 27.63
+93,"Senator David E. Cogdill, Sr., Memorial Highway",395,9,"SCR 133, CH 243 2018",Junction Route 182 (Postmile 76.300),South Buckeye Creek Bridge #47-33 (Postmile 79.168)
+94,CHP Officer Thomas P. Coleman Memorial Highway,10,8,"SCR 25, CH 89, 2011",Texas Street UC# 54-583 - PM 30.377,Wabash Ave OC# 54-590 - PM 34.288
+95,Colorado Freeway,134,7,By Location,Eagle Rock Boulevard,Linda Vista Avenue in Pasadena
+96,Detective Monty L. Conley and Detective Joe R. Landin Memorial Highway,198,6,"ACR 15, CH 51, 2011",JCT 245 AVE 296&RD 204 - PM R19.762,Mehrten Drive - PM 23.760
+97,California Highway Patrol Officer David W. Copleman Memorial Highway,126,7,"ACR 46, CH 66, 2005",Hallock Drive ,Fillmore City Limit
+98,Deputy Isaiah A. Cordero Memorial Highway,60,8,"SCR 16, CH 134, 2023",Pyrite Street UC# 56-528 R/L (PM R5.575),Valley Way UC# 56-424 (PM 7.533)
+99,Officer Natalie Corona Memorial Highway,5,3,"ACR 66, CH 113, 2019",Greenbay Road OC# 15-60 (PM R3.149),Salt Creek Bridge# 15-05 (PM R7.991)
+100,Corona Freeway,"71, 91, 15","7, 8","By Commission, 7/23/1958",I-10 west of Pomona,I-215
+101,Thomas J. Cosgrove Memorial Highway,65,3,"SCR 46, CH 108, 2017",Lincoln Boulevard UC# 19-187L (PM R12.823),Nelson Lane (PM R15.546) 
+102,Senator Jim Costa Highway,180,6,"ACR 102, CH 130, 2002",Route 99,Clovis Avenue
+103,Costa Mesa Freeway,55,12,"ACR 177, CH 86, 1976",Southern Boundary of Costa Mesa,Route 91
+104,Ohlone Costanoan Esselen Highway,68,5,"ACR 55, CH 135, 2013",ANZA DRIVE (APPROX) - PM 15.860,BLANCO ROAD - PM 19.971
+105,Army Specialist Juan Miguel Mendez Covarrubias Memorial Highway,198,6,"ACR 157, CH 134, 2022","18th Avenue OC#
+45-76 (PM R10.561)",14th Avenue UC# 45-79 (PM R14.767)
+106,Dana Cowell Memorial Highway,12,10,"SCR 85, CH 103, 2012",Potato Slough EB# 29-101 - PM M5.002,JCT RTE 5 - PM 10.167
+107,Joe Cox Memorial Highway,152,10,"ACR 224, CH 155 2018",Los Banos Campus of Merced (Approx. Postmile 18.006),San Luis Street intersection (Approx. Postmile 22.876)
+108,James Craig Schmidt Memorial Highway,94,11,"ACR 57, CH 136, 2013",BANCROFT DR UC #57-538 L/R - PM R11.081,AVOCADO BLVD OC #57-575 - PM R13.333
+109,Ricardo A. Crocker Memorial Highway,10,7,"SCR 20, CH 94, 2007",Within city limits of Santa Monica - PM R2.155,PM R4.267
+110,Officer Rick Charles Cromwell Memorial Freeway,12,10,"SCR 38, CH 128, 1999",Lower Sacramento Road ,Route 99
+111,Rudolph B. Davila Memorial Freeway,91,7,"SCR 107, CH 125, 2010",Central Avenue,Figueroa Street
+112,Jacob Dekema Freeway,805,11,"SCR 12, CH 48, 1981",I-5,I-5
+113,Donald E. DeMers Highway,41,6,"SCR 37, CH 138, 2006",Elkhorn Avenue,Jensen Avenue
+114,Mayor Dick DeWees Memorial Highway,246,5,"ACR 165, CH 153, 2010",Post Mile 9.56,Post Mile R13.65
+115,Pomona Police Officer Shaun Diamond Memorial Highway,10,7,"ACR 104, CH 53, 2016",Junction of State Route 57 Interchange (PM 42.443) ,North Towne Avenue Exit – Eastbound Off to Towne Avenue (PM 46.273)
+116,"Richard ""Dick"" Dickerson Memorial Highway",44,2,"ACR 53, CH 134, 2015",EAST STREET - PM L0.241L & L0.312R,VICTOR AVENUE - PM R1.239
+117,CHP Officer Robert Franklin Dickey Memorial Highway,8,11,"ACR 80, CH 70, 2008",Ogilby Road,Sidewinder Road
+118,Border Patrol Agent Jarod Charles Dittman Memorial Highway,94,11,"ACR 154, CH 145, 2018",(PM 24.500),(PM 29.500)
+119,Donald D. Doyle Highway,680,4,"SCR 69, CH 93, 1998",I-580,Route 24
+120,Amber Dubois Memorial Highway,78,11,"ACR 165, CH 134, 2012",West Zoo Road - PM 23.636,Old Milky Way - PM 24.990
+121,Dutch Flat and Donner Lake Wagon Road,80,3,"CH 224, 1909",Emigrant Gap,Donner Lake
+122,CHP Officer Richard D. Duvall Memorial Highway,15,8,"SCR 69, CH 65, 2010",D Street,State Highway Route 395 interchange
+123,Jeffrey “Jef” Dye Memorial Highway,5,7,"ACR 147, CH 44, 2020", Postmile R68.818,Forest SVC Road UC# 53-1837 (Postmile R73.553)
+124,Amelia Earhart Memorial Highway,101,7,"ACR 79, CH 121, 2022","JCT 134 E, 170 N (Postmile 11.747R)",SB OFF LAUREL CANYON BL (Postmile 13.053)
+125,Amelia Earhart Memorial Highway,134,7,"ACR 79, CH 121, 2022",JCT ST 170 N (Postmile 000.000),EB OFF PASS AVE (Postmile 1.669)
+126,Eastshore Freeway,"880, 80",4,By Location,Route 101 in San Jose,Richmond
+127,Kevin R. Ebbert SO1 Navy SEAL Memorial Highway,101,1,"ACR 54, CH 97, 2015",PM 85.350,PM 86.280
+128,Dwight D. Eisenhower Highway,80,"4, 3","Federal Highway Act, 1973",San Francisco,Nevada State Line
+129,Dwight David Eisenhower Memorial Freeway,41,6,"SCR 42, CH 141, 1971                  Adjusted SCR 45, CH1, 2016",Golden State Blvd (PM Approx. R22.196),Bullard Avenue OC# 42-303 (PM R29.463)
+130,El Camino Real,"280, 82, 101, 5, 72","11, 12, 7, 5, 4","AB 1769, CH 1569, 1959, Streets & Highways Code Section 635",Mexico International Border,San Francisco
+131,El Camino Real (additional routes),"238, 12, 37, 121, 87, 162, 185, 92, 123","11, 12, 7, 5, 4","AB 1707, CH 739, 2001, Streets & Highways Code Section 635",Mexico International Border,Sonoma
+132,El Segundo Freeway,105,7,"ACR 46, CH 362, 1969",Route 1 near the City of El Segundo and LAX,I-405
+133,"Los Angeles County Sheriff Deputy Juan Abel Escalante
+Memorial Highway",101,7,"ACR 103, CH 117, 2010",North Mission Road,North Alameda Street
+134,Escondido Freeway,15,11,"ACR 34, CH 67, 1979",I-5,I-8
+135,Escondido Freeway ,"15, 215","11, 8","By Commission, 1/24/1957",I-805,Route 91
+136,Esperanza Firefighters Memorial Highway,243,8,"ACR 4, CH 99, 2007",Route 74,I-10
+137,"Lt. Leonard B. ""Larry"" Estes and Deputy William R. ""Bill"" Hunter Memorial Highway",149,3,"ACR 63, CH 14, 2008",Route 70,Route 99
+138,Steve Faris Memorial Highway,330,8,"SCR 12, CH 72, 2009",Route 210,Route 18
+139,Farm-to-Fork Corridor,99,2,"ACR 27, CH 109, 2021",Eldrid Avenue (PM 20.400),Arch Street (PM 24.529)
+140,Vic Fazio Highway,113,"4, 3","ACR 100, CH 124, 1998",I-80,I-5
+141,Caltrans Highway Maintenance Lead Worker Michael (Flea) Feliciano Memorial Highway,101,5,"SCR 120, CH 141, 2006",Payson Street,Esperanza Road
+142,CHP Officer Ernest R. Felio Memorial Highway,101,1,"ACR 31, CH 70, 2007","Dr. Ernest Fine Memorial Bridge, Bridge No. 01-0020",Oregon State Line
+143,Ralph Fertig Memorial Bicycle-Pedestrian Path,101,7,"ACR 58, CH 153, 2015",MOBIL PIER RD UC 52-328 - PM R39.782,END OF COUNTY OF VENTURA - R43.622
+144,Fire Captain Ramon Figueroa and Firefighter Patrick Jones Memorial Highway,65,6,"SCR 14, CH 82, 2021",Avenue 128/Teapot Dome Avenue (PM 16.130),Avenue 166/Pioneer Avenue (PM 20.880)
+145,Filipino-American Highway,54,11,"ACR 157, CH 145, 2006",Westernmost point of Route 54,Route 125
+146,Foothill Freeway,210,"7, 8","SCR 29, CH 128, 1991",I-5,I-10 in Redlands
+147,John F. Foran Freeway,280,4,"SCR 73, CH 49, 1986",San Mateo/San Francisco County Line,6th Street in San Francisco
+148,Carleton E. Forbes Freeway,5,"10, 3","ACR 62, CH 26, 1982",Stockton,Sacramento
+149,Police Officer Daniel T. Fraembs Memorial Highway,71,7,"SCR 12, CH 92, 2001",,
+150,CHP Officers Walter Frago and Roger Gore Memorial Freeway,99,10,"ACR 180, CH 147, 2000",Mission Avenue,"Campus Parkway, UC Merced"
+151,Stephanie Marie Frazier Memorial Highway,50,3,"SCR 22, CH 88, 2007","Post Mile 38.5, west of Ice House Road","Post Mile 40.5, east of Ice House Road"
+152,Deputy Sheriff Robert “Bobby” French Memorial Highway,50,3,"ACR 212, CH 153 2018",(Postmile 0.1),Latrobe Road UC#25-71 (Postmile 0.857)
+153,Los Angeles Police Officer Steven Gajda Memorial Highway,60,7,"SCR 38, CH 90, 2007","I-10, Post Mile .118","Indiana Street overpass, Post Mile 1.94"
+154,United States Army Specialist Vilmar Galarza Hernandez Memorial Highway,183,5,"SCR 57, CH 21 2018",Junction of State Highway 101 (PM 0.000 - RTE183) ,Davis Road OC (PM R1.914)
+155,Downey Police Officer Ricardo Galvez Memorial Highway,5,7,"SCR 111, CH 95, 2016",San Gabriel River Bridge #53-213 (PM 7.063),Rio Hondo River Bridge #53-639 (PM 9.466)
+156,Detective Raul Vasquez Gama Memorial Highway,710,7,"SCR 26, CH 86, 2021",Florence Avenue OC# 53-834 (PM 19.730),Third Street OC# 53-1152 (PM 24.466)
+157,Martin L. Ganz Memorial Highway,405,7,"ACR 145, CH 145, 2004",Hawthorne Boulevard in the City of Lawndale,Rosecrans Avenue in the City of Manhattan Beach
+158,Arnold C. Garcia Memorial Highway,5,7,"ACR 130, CH 111, 2010",East Olympic Boulevard,South Atlantic Boulevard
+159,Garden Grove Freeway,22,12,"By Commission, 10/22/1957",I-405,Route 55
+160,Garden Grove Police Officers Memorial Highway,22,12,"ACR 127, CH 95, 2008",Western city limits of Garden Grove,Eastern city limits of Garden Grove
+161,Gardena Freeway ,91,7,"SCR 16, CH 35, 1991",Eastern boundary of the City of Gardena,I-710
+162,Deputy Greg A. Gariepy Memorial Highway,247,8,"ACR 20, CH 65, 2007",Route 62,Town limit of Yucca Valley
+163,Hawthorne Police Officer Andrew Garton Memorial Highway,405,7,"ACR 100, CH 109, 2012",Rosecrans Ave. UC# 53-1236 - PM 19.205,El Segundo Blvd. UC# 53-1239 - PM 20.216
+164,Dave Ghilarducci Memorial Highway,101,1,"SCR 12, CH 92, 2001",Bridge 04-0221,Bridge 04-0016
+165,Luther E. Gibson Freeway ,680,4,"SCR 21, CH 160, 1967","Benicia, near the Benicia-Martinez Bridge",I-80 near Cordelia
+166,Sergeant Gilbert Cortez and K-9 Mattie Memorial Highway,15,8,"SCR 64, CH 7, 2014",2ND STREET UC# 56-667 - PM 43.637,LIMONITE AVENUE OC# 56-663 - PM 48.261
+167,Glendale Freeway,2,7,"By Commission, 8/17/1955",Route 101 ,I-210
+168,Golden Center Freeway,20,3,"SR 340, HR 556, 1968",Route 49 near Grass Valley,Nevada City
+169,Golden Chain Highway,49,"6, 10, 3, 2","AB 2922, CH 1318, 1992, Pub Res Code","Route 41 near Oakhurst, Madera County","Route 70 near Vinton, Plumas County"
+170,Golden Gate Bridge Freeway,"1, 101",4,"SCR 11, CH 39, 1954",Route 1 from Lake Street to Route 101,Route 101 from Richardson Avenue to Waldo Point
+171,Golden State Freeway,5,7,"MTEB, 2/28/58",Junction I-5 & I-10 & Route 60 & Route 101,Route 14
+172,"Correctional Officer Manuel A. Gonzalez, Jr. Memorial Highway",71,"7, 8","SCR 11, CH 85, 2007",Route 60,Central Avenue/Soquel Canyon
+173,Officer James M. Goodman Memorial Highway,10,8,"ACR 41, CH 72, 2007",Post Mile 25.26,Post Mile 29.82
+174,California Highway Patrol Officer Charles D. Goss Memorial Highway,152,6,"ACR 89, CH 122, 2022",Postmile 2.350,Postmile 7.350
+175,Grand Army of the Republic Highway ,"110, 5, 14, 395, 6","7, 6, 9","ACR 33, CH 73, 1943",San Pedro,"Nevada State Line, via Mojave"
+176,Deputy David P. Grant Memorial Highway,49,10,"ACR 132, CH 105, 2006",One mile before Parrott's Ferry Road,One mile after Parrott's Ferry Road
+177,Deputy David G. Graves Memorial Freeway,41,6,"ACR 61, CH 90, 2009",Herndon Ave,Avenue 10
+178,Officer Stephan Gene Gray Memorial Highway,99,10,"SCR 7, CH 56, 2006",Childs Avenue,16th Steet
+179,Great Sierra Wagon Road,120,9,"AB 302, CH 306, 1915",East Boundary of Yosemite National Park,Route 395
+180,Greatest Generation Memorial Highway,63,6,"ACR 36, CH 78, 2009",West Visalia Parkway,Avenue 264
+181,CHP Officer Scott M. Greenly Memorial Freeway,85,4,"ACR 172, CH 140, 1998",Quito Road,Prospect Road
+182,CHP Officer Kirk Griess Memorial Highway,505,4,"ACR 4, CH 105, 2019",Junction of Interstate 80 (PM R0.000),Vaca Valley Parkway (PM R1.450)
+183,Grove-Shafter Freeway,980,4,"By Location, mentioned in ACR 116, CH 233, 1961",I-880,I-580
+184,Tony Gwynn Memorial Freeway,15,11,"ACR 63, CH 168, 2015",SCRIPPS POWAY PKWY/MERCY ROAD - PM M17.311,CAMINO DEL NORTE UC# 57-930 - PM M21.952
+185,Harvey L. Hall Memorial Highway,58,6,"ACR 64, CH 138, 2021",EB OFF to Allen Road (PM R45.181),EB OFF to Coffe Road (PM R48.268)
+186,"Firefighter Michael ""Mikey"" Hallenbeck Memorial Highway",50,3,"SCR 149, CH 182, 2016",Mount Ralston Road (PM R61.845),Echo Summit (PM 66.483)
+187,Special Deputy Frank Hamilton Memorial Highway,371,8,"SCR 51, CH 2, 2016",Tribal Road (PM 67.178),Howard Road (PM 68.709)
+188,Hansen Way,"20, 49",3,"SCR 10, CH 104, 2005",South Auburn Street,Bennett Street
+189,Happy Trails Highway,18,7,"ACR 82, CH 80, 1992",Apple Valley Eastern City Limit,Apple Valley Western City Limit
+190,Harbor Freeway,110,7,By Location,San Pedro,Route 101
+191,CHP Officers Harold E. Horine and Bill Leiphardt Memorial Highway,10,7,"SCR 57, CH 5, 2014",BALDWIN PARK BLVD OC# 53-664 PM 32.218,SUNSET AVENUE UC# 53-668 PM 34.851
+192,Alan S. Hart Freeway,80,3,"SCR 102, CH 164, 1986",Sacramento/Placer County Line,Nevada State Line
+193,Fullerton Police Officer Jerry Hatch Memorial Highway,91,12,"SCR 27, CH 109, 2015",MAGNOLIA AVENUE UC#55-296R - PM R3.851R,STATE COLLEGE BOULEVARD UC#55-852 - PM 5.258
+194,Detective Kent Haws Memorial Highway,65,6,"ACR 147, CH 161, 2008",Route 137,Route 198
+195,Hawthorne Freeway,107,7,By Location,Route 1,I-405
+196,National Purple Heart Trail,223,6,"SCR 105, CH 95, 2010",Route 99,Route 58
+197,William Z. Hegy Memorial Highway,101,1,"SCR 53, CH 39, 1988",Little River near Trinidad,Patrick's Point undercrossing
+198,Gary Helming Memorial Highway,41,6,"ACR 74, CH 120, 2022",Avenal Cr 45-36 (Postmile 3.753),JCT ST 33 (Postmile 8.098)
+199,Sergeant Ronald “Ron” Lee Helus Memorial Highway,101,7,"ACR 17, CH 120, 2019",Hampshire Road UC# 52-273 (PM 1.622),Lynn Road OC# 52-325 (PM 5.046)
+200,Sam Helwer Memorial Freeway,101,1,"ACR 54, CH 114, 1994",Myers Flat,Stafford
+201,Senator Henry J. Mello Highway,1,5,"ACR 67, CH 141, 2014",STRUVE ROAD N - PM 98.350,PAJARO RIVER BRIDGE# 44-69 - AVG BEG PM R101.980
+202,Deputy Kent Hintergardt Memorial Highway,15,8,"ACR 33, CH 89, 2009",Route 215 Interchange,"South 79 Exit, Route 79"
+203,Historic Highway Route 67 ,67,11,"SCR 56, CH 177, 2017",Junction Route 8 (PM R0.000),Junction Route 78 (PM R24.377)
+204,Historic Highway Route 79,79,"8, 11","SCR 147, CH 181, 2016",Junction Of Interstate 8 11-SD-79-(PM L0.044),08-RIV-79-(PM 15.740)
+205,Historic Alternate U.S. Highway Route 40,40,"3, 2","SCR 66, CH 51, 2006",City of Davis on Route 113,Hallelujah Junction on Route 395
+206,Historic Highway Route 66,66,"7, 8","ACR 6, CH 52, 1991",Santa Monica,Arizona State Line
+207,Historic U.S. Highway 395,395,"11, 8","ACR 98, CH 79, 2008",San Diego,Hesperia
+208,Historic U.S. Highway 99,99,"11, 8, 7, 6, 10, 3, 2","ACR 19, CH 73, 1993",Mexico International Border,Oregon State Line
+209,Historic U.S. Highway Route 6,6,"7, 6, 9","ACR 26, CH 67, 2007",Long Beach,Nevada State Line
+210,Historic U.S. Highway Route 40,40,"4, 3","ACR 180, CH 161, 1998",San Francisco,Nevada State Line
+211,Historic U.S. Highway Route 80,80,11,"ACR 123, CH 104, 2006",San Diego Bay,Colorado River 
+212,Historic U.S. Highway Route 101,101,"11, 12, 7, 5, 4, 1","ACR 92, CH 150, 1998",Mexican Border,Oregon State Line
+213,Historic Yosemite Highway,132,10,"ACR 27, CH 69, 1989",Stanislaus/Tuolumne County Line near La Grange,Route 49
+214,Crynthia and Erling Hjertager Memorial Highway,3,2,"ACR 108, CH 84, 2006",Callahan,City of Etna
+215,Hollywood Freeway,"101, 170",7,By Location,I-110 4-level Interchange,I-5
+216,CHP Officer A. Donald Hoover Memorial Highway,1,5,"ACR 100, CH 109, 2012",Park Avenue UC#36-29 - PM 12.088,Branciforte Avenue OC#36-104 - PM16.241
+217,Deputy Sheriff Jack Hopkins Memorial Highway ,395,2,"ACR 29, CH 130, 2017",South Fork Pit River Bridge # 3-52 (PM R16.523),Modoc National Wildlife Refuge (PM R20.000)
+218,PFC George Howell Memorial Highway,101,5,"ACR 202, CH 170,  2022",Sala Road OC# 44-0283 (PM 92.190),Prunedale South Road OC# 44-0284 (PM 94.071)
+219,CHP Officer Artie J. Hubbard Memorial Freeway,5,3,"SCR 12, CH 73, 2005",Southern Boundary of the City of Sacramento,Pocket Road
+220,"Kern County Deputy Sheriff William ""Joe"" Hudnall, Jr., Memorial Highway",178,6,"ACR 90, CH 71, 2008",Post Mile 13.7 at the mouth of Kern Canyon,Kernville Road/Route 155
+221,Leo Stanley Hulett Highway,101,1,"SCR 61, CH 21, 1990",0.5 miles south of Haehl overhead,0.5 miles north of Reynolds Highway
+222,Ben Hulse Highway,78,"11, 8","AB 2499, CH 1387, 1961, changed by SCR 70, CH 121, 2004","Route 111, east of Brawley",I-10 near Blythe
+223,Solano County Deputy Sheriff Hale Humphrey Memorial Highway,12,4,"ACR 177, CH 135, 2016",Pennsylvania Avenue (PM R4.072) ,Marina Boulevard (PM 5.150)
+224,Los Angeles County Sheriff’s Deputy Didier M. Hurdle Memorial Highway,105,7,"ACR 214, CH 170 2018",Junction of Interstate 110 (PM R7.386),Long Beach Blvd UC# 53-2493 (PM R11.506)
+225,Officer Richard Hyche Memorial Freeway,10,8,"SCR 95, CH 93, 2006",Euclid Avenue,6th Street overcrossing
+226,George Alan Ingalls Memorial Highway,198,6,"ACR 47, CH 60, 2001",Twelfth Avenue,Seventh Avenue
+227,Officer Jimmy Arty Inn Memorial Highway,4,10,"ACR 195, CH 164, 2022",N JCT RTE 5 (PM R16.059),JCT 99 (PM R19.407)
+228,CHP Officers Irvine and Stovall Memorial Highway,166,5,"SCR 79, CH 65, 1998",Route 101 near Santa Maria,Route 33 in the Cuyama Valley
+229,Deputy Sheriff Brian “Ish” Ishmael Memorial Highway,50,3,"SCR 89, CH 34, 2020","Missouri
+Flat Road OC# 25-121 (Postmile R15.061)",Ray Lawyer Drive OC# 25-117 (Postmile 16.523)
+230,“CAL FIRE Firefighter Cory Iverson Memorial Highway”,15,11,"ACR 205, CH 152 2018",Via Rancho Parkway OC# 57-623 (PM M26.970),Junction with State Route 78 (PM R31.517)
+231,"Sheriff’s Deputies Ronald Wayne Ives and Daniel Jess Lobo, Jr., Memorial Highway",15,8,"ACR 123, CH 119, 2016",Junction with Route 210 (PM 8.094),Sierra Avenue UC# 54-981 (PM 12.871)
+232,Robert M. Jackson Memorial Highway,89,10,"SCR 57, CH 27, 2006",Alpine/Mono County Line,Route 4
+233,CHP Officer Paul C. Jarske Memorial Highway,101,1,"ACR 76, CH 114, 2011",Branscomb Road - PM 69.490,PM 74.490
+234,United States Army Private First Class Conrado D. Javier Memorial Highway,218,5,"SCR 57, CH 21 2018",Junction of 1/218 (PM R0.000),Junction of 68/218 (PM 1.956)
+235,Lance Corporal Javier Olvera Memorial Highway,14,7,"SCR 60, CH 6, 2014",JCT 14/138 SEP 53-1419RT - PM R59.783,WEST AVE O-8 UC# 53-2379LT - PM R62.129
+236,Senator Jenny Oropeza Memorial Freeway,710,7,"SCR 115, CH 130, 2014",PICO AVENUE NB ONRAMP OH# 53-2785S - PM 5.820,JCT RTE 1/710 SEP# 53-725 - PM 6.881
+237,Joe Gatto Memorial Highway,10,7,"ACR 173, CH 184, 2014",JCT RTE 5/10 SEP# 53-1329 - PM 18.394,JCT RTE 710/10 SEP# 55-1445 - PM 21.382
+238,CDF Firefighter John D. Guthrie Memorial Highway,215,8,"ACR 107, CH 80, 2008 & ACR 162, CH 160, 2014","N JCT 74, BR# 56-458 - PM 26.308",NB ON FROM RAMONA EXPWY - PM R31.075
+239,John Steinbeck Highway,101,5,"ACR 67, CH 141, 2014",JCT ROUTE 68 WEST/JOHN STREET PM - 86.815,ESPINOZA ROAD/RUSSELL ROAD PM - R91.900
+240,San Jose Police Officer Michael Johnson Memorial Highway,87,4,"ACR 88, CH 186, 2015",JCT ROUTE 87/85 APPROX - PM 0.156,JCT ROUTE 87/ 280 - PM5.156
+241,Paul Johnson Highway,55,12,"ACR 179, CH 160, 2010",Katella Avenue,Chapman Avenue
+242,Robert Scott Johnson Memorial Highway,1,5,"ACR 47, CH 135, 2021",Exit 404 - SB OFF to Fremont Blvd/Del Monte Blvd (PM R80.970),Exit 406 - SB OFF to Lightfighter Drive (PM R82.759)
+243,"Harold  T. ""Bizz"" Johnson Expressway",65,3,"ACR 92, CH 88, 1986",I-80,Blue Oaks Boulevard
+244,Ray E. Johnson Expressway,99,3,"ACR 74, CH 113, 1993",Pentz Road overcrossing at Post Mile 23.863,"Edgar Slough, Bridge No. 12-0128, PM 30.040"
+245,El Monte Police Officer Donald Ralph Johnston Memorial Highway,10,7,"ACR 71, CH 115, 2003",Route 164 (signed as Route 19) in the City of Rosemead - PM26.857,I-605 in the City of Baldwin Park - PM 31.151
+246,Ohlone Kallentaruk Highway,129,5,"ACR 100, CH 101, 2012",Blackburn Street - PM 0.540,Murphy Crossing Road - PM 4.742
+247,CDF Firefighter Chris Kanton Memorial Highway,10,8,"ACR 10, CH 64, 2007",Beaumont Avenue/Route 79 exit,Sunset Avenue exit
+248,Officer and Medal of Valor Recipient Waldron G. Karp Memorial Highway,5,12,"ACR 149, CH 144, 2018",Northbound Tustin Ranch Road (PM 28.224),Southbound Tustin Ranch Road (PM R28.456)
+249,Michael “Mike” Jason Katherman Memorial Highway,85,4,"ACR 173, CH 160, 2022",JCT 87/85 (PM 5.222),Almaden Expwy UC#37-530 (PM 6.136)
+250,Senator David G. Kelley Highway,86,8,"ACR 106, CH 108, 2000",82nd Avenue,66th Avenue
+251,Officer Justin Kepler Memorial Highway,120,10,"ACR 119, CH 38, 2020",Sexton Road (Postmile 14.830),Brennan Avenue (Postmile 15.860)
+252,Kern County Korean War Veterans Memorial Highway,58,6,"ACR 209, CH 194, 2004",Route 184,Kern County/San Bernardino County Line
+253,Kern County Korean War Veterans Memorial Highway,99,6,"ACR 46, CH 54, 2001","I-5, 3.5 miles south of Mettler",Northern Kern County Line at County Line Road (J44) in Delano
+254,Officer Kevin Tonn Memorial Highway,99,3,"SCR 74, CH 74, 2014",WITH IN THE CITY OF GALT FROM (PM 0.000),WITH IN THE CITY OF GALT TO (PM 2.050)
+255,"Martin Luther King, Jr. Freeway",94,11,"SCR 67, CH 129, 1989",I-5 in the City of San Diego,Route 125
+256,John T. Knox Freeway ,580,4,"SCR 50, CH 78, 1980","I-80, the Albany Interchange",Richmond-San Rafael Bridge
+257,Deran Koligian Memorial Highway,180,6,"SCR 94, CH 158, 2002","Route 33 (and, upon completion, from Route 5)",Route 99
+258,Quentin L. Kopp Freeway,380,4,"SCR 99, CH 145, 1998",Route 1 near Pacifica,Route 101 near South San Francisco
+259,Korean War Veterans Memorial Highway ,37,4,"SCR 28, CH 64, 2021",Atherton Avenue UC# 27-79 (PM 13.773),Junction of 37/121 (PM 3.900)
+260,Korean War Veterans' Memorial Highway,126,7,"SCR 41, CH 131, 1994 & ACR 135, CH 89, 2002",Route 101 near Ventura,I-5 near Santa Clarita
+261,Costa Mesa Fire Captain Michael Kreza Memorial Highway,55,12,"SCR 21, CH 139, 2019",19th Street (Postmile 2.021),MacArthur Blvd UC# 55-410 (Postmile R6.969)
+262,Kumeyaay Highway,8,11,"ACR 57, CH 112, 1997 & ACR 156, CH 90, 2002","Nimitz Boulevard in Mission Bay, City of San Diego",San Diego/Imperial County Line
+263,Milton La Malfa Memorial Highway,99,3,"ACR 71, CH 107, 2009",Oroville Dam Boulevard West PM 13.161,Nelson Avenue PM 15.170
+264,Laguna Freeway ,133,12,"By Commission, 11/26/1957",I-5,Laguna Beach
+265,Officer David Lamoree Memorial Highway,12,4,"ACR 7, CH 121, 2007",Olsen Road,Route 113
+266,William H. Lancaster Memorial Highway,210,"7, 8","ACR 2, CH 76, 2003",City of Duarte,I-15 exit
+267,Lieutenant Jared M. Landaker Memorial Highway,38,8,"ACR 59, CH 115, 2007",Post Mile 49.530/Route 18,Post Mile 59.396/Route 18
+268,Detectives Mike Lane and John Pierce Memorial Highway,72,7,"ACR 62, CH 139, 2013",COSTA GLEN AVENUE - PM 0.601,PENN STREET - PM 4.856
+269,Frank Lanterman Freeway ,2,7,"ACR 131, CH 126, 1978",Route 134 in Glendale,I-210 in La Canada Flintridge
+270,"Staff Sergeant Salvador J. Lara, Staff Sergeant Ysmael R. Villegas, and Sergeant Jesus S. Duran Memorial Highway",91,8,"SCR 38, CH 111, 2015",MADISON SREET UC#56-384L/R - PM 16.651,THIRD STREET UC#53-316 - PM 20.845
+271,Tommy Lasorda Memorial Highway ,5,12,"ACR 67, CH 115, 2021",Ball Road OC# 55-670 (PM 37.638),Eastbound Exit State 91 (PM 42.671)
+272,Lassen State Highway,299,2,"CH 498, 1911",Shasta/Lassen County Line,Lassen/Modoc County Line
+273,Glendale Police Officer Charles A. Lazzaretto Memorial Freeway,134,7,"ACR 67, CH 97, 1999",I-5,Route 2
+274,CAL FIRE Firefighter Christopher Lee Douglas Memorial Highway,10,8,"SCR 22, CH 107, 2015",22ND STREET UC#56-430 - PM R11.962,MALKI/FIELDS ROAD UC#56-454 - PM R16.544
+275,Army Specialist Roger Lee Memorial Highway,68,5,"ACR 203, CH 166, 2022",Morse Drive (PM 2.260),Skyline Forest Drive (PM 3.370)
+276,Deputy Bruce Lee Memorial Highway,111,8,"SCR 5, CH 15, 2005",Jefferson Street,Washington Street
+277,"Sergeant Darrell Keith Lee, Sergeant Gary Wayne Wolfley, and Officer Sergio Carrera Jr. Memorial Highway",10,8,"ACR 100, CH 109, 2012",Cedar Avenue OC# 54-35 - PM R18.492,Pepper Avenue OC# 54-531 - PM 20.965
+278,"William ""Bill"" Lehn Memorial Highway",99,6,"ACR 30, CH 82, 2003",Mountain View Avenue overcrossing,San Joaquin River an the Fresno/Madera County Line
+279,"Willliam Alexander Leidesdorff, Jr. Memorial Highway",50,3,"ACR 131, CH 41, 2004",Bradshaw Road,Sacramento/El Dorado County Line
+280,Police Officer Tyler “Ty” Lenehan Memorial Highway,99,3,"ACR 194, CH 169, 2022",Grant Line Road OC# 24-155 (PM 10.070),Sheldon Road OC# 24-374 (PM 14.869)
+281,Marine Corporal Christopher D. Leon Memorial Highway,14,7,"SCR 5, CH 70, 2009",Avenue M,Avenue L
+282,Joe Levy Memorial Highway,41,6,"SCR 45, CH1, 2016",Bullard Avenue OC# 42-303 (PM R29.463),Herdon Avenue UC# 42-305 (PM R30.447)
+283,E.G. Lewis Highway,41,5,"ACR 76, CH 47, 1994",Route 1,Route 101
+284,Willard F. Libby Memorial Highway,116,4,"ACR 149, CH 128, 1984",Forestville,Sebastopol
+285,Donald Mark Lichliter Memorial Highway,12,10,"ACR 100, CH 109, 2012","JCT 99, North BR# 29-140 - PM 18.080",POSTMILE MARKER - 23.080
+286,James Lick Memorial Freeway,101,4,"ACR 37, CH 122, 1951",San Mateo/San Francisco County Line,I-80
+287,CHP Sergeant Steven L. Licon Memorial Highway,15,8,"ACR 107, CH 36, 2020",Junction with Route 74 at (PM 22.277),Lake Street UC# 56-682 (PM 26.688)
+288,CHP Officer Charles Lilly Memorial Highway,101,4,"SCR 100, CH 109, 2012",JCT 87/101 SEP 37-183 PM 39.925,Fair Oaks Avenue OC 37-168 PM 44.831
+289,Steven Lindblom Memorial Freeway,99,6,"ACR 35, CH 83, 2003",Southern city limits of Madera ,Madera/Merced County Line
+290,R. Kirk Lindsey Memorial Highway,108,10,"SCR 54, CH 79, 2010",Five Points,City of Riverbank
+291,"CHP Officer Stephen M. Linen, Jr. Memorial Freeway",5,11,"SCR 24, CH 127, 2003",Leucadia Boulevard,La Costa Avenue
+292,Ort J. Lofthus Freeway,4,10,"ACR 95, CH 51, 1986",I-5,Route 99
+293,Long Beach Freeway ,710,7,By Commission 11/18/1954,Route 1 in Long Beach,I-5 in Commerce
+294,Los Angeles County Vietnam Veterans Memorial Highway,1,7,"ACR 115, CH 94, 2000",,
+295,"Colonel William R. ""Bill"" Lucius Highway",101,4,"SCR 73, CH 15, 1990",Russian River south of Healdsburg,Mendocino County Line
+296,Senator Paul J. Lunardi Memorial Highway,267,3,"SCR 23, CH 141, 2015",PM 4.898,END OF ROUTE 267 - PM 9.898
+297,Police Sergeant Scott Lunger Memorial Highway ,4,4,"ACR 49, CH 133, 2017",Laurel Road OC #28-390 (PM R31.368),Balfour Road (PM R35.598)
+298,CHP Officer Christopher D. Lydon Memorial Freeway,67,11,"ACR 53, CH 88, 1999",I-8 in El Cajon,Mapleview Street in Lakeside
+299,MacArthur Freeway,580,4,"ACR 27, CH 156, 1968",Route 238,I-880
+300,Detective Jeremiah MacKay Memorial Highway,38,8,"ACR 68, CH 142, 2013",PM 24.000,PM 29.000
+301,Kenneth L. Maddy Freeway,99,10,"SCR 25, CH 85, 1997",0.3 mile south of Dwight Way,0.1 mile south of August Avenue
+302,Alex Madonna Memorial Highway,101,5,"ACR 97, CH 83, 2006",Madonna Road exit in San Luis Obispo,Santa Barbara Road in Atascadero
+303,"Officer Sixto Maldonado, Jr., Memorial Highway",33,6,"ACR 128, CH 75, 2008",Bullard Avenue,Douglas Avenue
+304,CalFire Firefighter Andrew Maloney Memorial Highway ,165,10,"ACR 47, CH 132, 2017",Pioneer Road (PM 7.782),Berkeley Drive (PM 8.140)
+305,CHP Officer David W. Manning Memorial Freeway,178,6,"SCR 50, CH 117, 2004",M Street,Fairfax Road
+306,CHP Officer Erick S. Manny Memorial Highway,5,6,"ACR 58, CH 114, 2007",Fort Tejon exit (Exit 210),Grapevine exit (Exit 215)
+307,Captain Matthew Patrick Manoukian Memorial Highway,280,4,"ACR 151, CH 132, 2022","JCT 85/280 
+(PM 10.741)",NB OFF TO El Monte Road (PM 14.844)
+308,Specialist Manuel Joaquin Holguin Memorial Highway,245,6,"ACR 135, CH 85, 2014",Avenue 364 - PM 9.970,Avenue 398 - PM 14.970
+309,Marin County Veterans Memorial Freeway,101,4,"ACR 5, CH 49, 1999",Lucas Valley Road in San Rafael,Two miles north of Lucas Valley Road
+310,Marina Freeway ,90,"7, 12","SCR 59, CH 25, 1976",Route 1,Route 91
+311,CHP Officer Johnny R. Martinez Memorial Highway,10,7,"ACR 159, CH 104, 2010",eastbound milepost marker 22.31,westbound milepost marker 22.33
+312,CHP Officer Saul Martinez Memorial Highway,86,8,"SCR 100, CH 109, 2012",5 MILES SOUTH FROM JCT RTE 10 PM R18.000,"JCT 10, RT LANES PM R23.000"
+313,Officer Robert Joe Mata and Officer Roberto C. Sanchez Memorial Highway,110,7,"ACR 12, CH 151, 2015",EXIT 1A / BEG OF RTE 110 - PM 0.744,EXIT 1B / NB OFF TO CHANNEL AND PACIFIC - PM 1.390
+314,Martin A. Matich Highway,210,8,"ACR 156, CH 156, 2006",I-215 at Post Mile 21.84,I-10 at Post Mile 33.0
+315,Donna P. Mauzy Memorial Freeway,8,11,"ACR 93, CH 127, 2001",Route 67,Greenfield Drive
+316,Doctor June McCarroll Memorial Freeway,10,8,"SCR 58, CH 105, 2000",Jefferson Street and Indio Boulevard Interchange,Route 86
+317,California Highway Patrol Officer Justin W. McGrory Memorial Highway,15,8,"ACR 37, CH 49, 2011",Wild Wash RD OC #54-565 - PM 55.957,Hodge RD OC 54-566 - PM 60.159
+318,"John McVeigh, Jr. Memorial Highway",198,5,"ACR 119, CH 147, 1994",Route 101,Monterey/Fresno County Line
+319,Christopher Meadows Memorial Highway,101,5,"ACR 100, CH 109, 2012",NB off to SAN LUIS BAY DR - PM R22.150,NB off to MADONNA RD - PM 27.400
+320,Medal of Honor Memorial Highway,215,8,"ACR 230, CH 156 2018",Barton Road Overcrossing OC # 54-528 (Postmile 1.312),Orange Show Road Overcrossing OC # 54-473 (Postmile 5.025)
+321,Jerry Medina Memorial Highway,99,10,"ACR 168, CH 140, 2002",Tuolumne Boulevard,Standiford Avenue/Beckwith Road
+322,Jere Melo Memorial Highway,1,1,"ACR 100, CH 109, 2012",Chestnut Street - PM 60.925,Elm Street - PM 61.993
+323,Betty Meltzer Memorial Highway,82,4,"SCR 30, CH 74, 2009",Page Mill Road (PM 24.04),San Francisquito Creek (SCL/SM County Line 26.37)
+324,Joel Mendenhall Memorial Highway,76,11,"ACR 4, CH 113, 2015",PM 42.790,E PALOMAR RD LT T - PM 47.790
+325,Deputy Sheriff Merrit W. Deeds Memorial Highway,116,4,"ACR 159, CH 177, 2014",JCT RTE 1 - PM 0.000,PM 5.000
+326,Officer Michael Crain Memorial Highway,91,8,"ACR 134, CH 84, 2014",La Sierra Avenue OC 56-425 - PM 11.991,Madison Street UC 56-384 - PM 16.651
+327,Military Intelligence Service Memorial Highway,23,7,"ACR 62, CH 115, 1994",Route 101,Route 118
+328,Military Servicewomen's Memorial Highway,101,4,"ACR 171, CH 154, 1998",San Mateo/Santa Clara County Line,Ralston Avenue exit in Belmont
+329,"Officer Russell M. Miller, Sr. Memorial Highway",60,7,"SCR 83, CH 122, 2010",Mountain Avenue,Ramona Avenue
+330,CHP Officer John P. Miller Memorial Highway,580,4,"ACR 78, CH 110, 2009","Airway Boulevard, Post Mile 14.98","North Flynn Road, Post Mile 6.00"
+331,Fortuna Police Officer Raymond Quincy Mills Memorial Highway,101,1,"SCR 98, CH 107, 2022",Kenmar Road UC# 4-128 (PM 59.503),Palmer Blvd UC# 4-112 (PM 62.229)
+332,Norman Y. Mineta Highway,85,4,"ACR 25, CH 66, 2007",Route 101 in San Jose to Quito Road,Prospect Road to Route 101 in Mountain View
+333,Sergeant 1st Class Sean K. Mitchell Memorial Highway,1,5,"ACR 204, CH 167, 2022",Postmile R75.500,Iris Canyon Road UC END BR 44-0192 LT (PM R76.500)
+334,Officer David F. Mobilio Memorial Highway,5,2,"SCR 78, CH 88, 2012",Riverside Ave OC# 8-113 - PM R23.384,North Red Bluff OC# 8-98 - PM R28.377
+335,Mojave Freeway,15,8,"ACR 47, CH 117, 1987",I-215 at Devore,Nevada State Line
+336,Frank F. Momyer Bypass,108,10,"ACR 112, CH 97, 1986",Route 120,Route 49
+337,Robert T. Monagan Freeway,205,"4, 10","ACR 75, CH 128, 1985",I-580,I-5
+338,Officer John Paul Monego Memorial Freeway,680,4,"SCR 60, CH 114, 2000",I-580,Alcosta Boulevard
+339,Mono Lake Basin Road,120,9,"CH 704, 1917",Route 395,Mono Mills (Site)
+340,John J. Montgomery Freeway,5,11,"ACR 16, CH 83, 1949",Mexico International Border at Tijuana,Route 94 in San Diego
+341,Archie Moore Memorial Freeway,15,11,"ACR 90, CH 141, 1999",Ocean View Boulevard exit,Home Avenue exit
+342,Moreno Valley Freeway,60,8,"SCR 45, CH 103, 1989",Route 91,I-10
+343,Mother Lode Highway,49,"10, 3","CH 839, 1921",Sonora,Auburn
+344,"CHP Officer Andre Maurice Moye, Jr. Memorial Freeway",215,8,"SCR 7, CH 80, 2021",Eucalyptus Avenue OC# 56-757 (PM R37.436),Junction State Route 60/215 SEP# 56-507R (PM R38.339)
+345,CHP Officer Daniel J. Muehlhausen Memorial Highway,62,8,"ACR 29, CH 90, 2003",5.4 miles west of junction with Route 177,4.6 miles east of junction with Route 177
+346,Muir Woods Toll Road,,4,"CH 634, 1935",Route 1,Junction of Panoramic Hwy
+347,Willard H. Murray Freeway,91,7,"ACR 78, CH 135, 1997",Central Avenue,Alameda Street
+348,National Purple Heart Trail,"5, 80","11, 12, 7, 6, 10, 3, 2 & 4, 3","SCR 14, CH 79, 2001",Mexico International Border (Tijuana) and San Francisco,Oregon State Line (Henley) and Nevada State Line
+349,National Purple Heart Trail,45,3,"ACR 191, CH 163, 2016",Beg of Colusa County (PM 0.000),End of Colusa County (PM 34.176)
+350,National Purple Heart Trail,20,3,"ACR 191, CH 163, 2016",Beg of Colusa County (PM 0.000),End of Colusa County (PM R39.340)
+351,National Purple Heart Trail,5,3,"ACR 191, CH 163, 2016",Beg of Colusa County (PM  R0.000),End of Colusa County (PM R34.365)
+352,National Purple Heart Trail,16,3,"ACR 191, CH 163, 2016",Beg of Colusa County (PM 0.000),End of Colusa County (PM 7.256)
+353,CHP Officer Sean Nava Memorial Freeway,5,11,"SCR 24, CH 127, 2003",Tamarack Avenue,Route 78
+354,Needles Freeway,40,8,"SCR 1, 1968",I-15,Arizona State Line
+355,Lieutenant Colonel Seth “Jethro” Nehring Memorial Highway,168,6,"ACR 164, CH 136, 2022",Lodge Road (PM L27.368),Qualls Prather Road (PM L28.250)
+356,CHP Officer Dale E. Newby Memorial Highway,5,10,"SCR 89, CH 155, 2002",French Camp Road,Eight Mile Road
+357,CHP Officer Archie E. Nichols Memorial Highway,99,2,"SCR 105, CH 117 2018",9th Avenue (Postmile 16.266) ,61st Avenue (Postmile 16.700)
+358,Nels Dan Niemi Memorial Highway,880,4,"SCR 41, CH 91, 2007",Washington Avenue,Marina Boulevard
+359,Nimitz Freeway,880,4,"SCR 23, CH 84, 1958",Route 101,I-80
+360,Robert and Pat Nimmo Memorial Highway,41,5,"ACR 122, CH 94, 2008",El Camino Real,Creston Road
+361,First Lady Pat Nixon Memorial Highway,91,7,"SCR 68, CH 103, 2022","Pioneer Blvd UC# 53-
+1335 (PM R18.087)",Carmenita Rd OC# 53-1432 (PM R20.454)
+362,Richard “Dick” Noles Memorial Highway,168,9,"ACR 115, CH 118, 2016",4090 West Line Street = Approx. Red Hill Road (PM 15.075),North junction with State Route 395 (PM 18.310)
+363,Nomlaki Highway,5,2,"SCR 15, CH 93, 2007",Gyle Road,Flores Avenue
+364,Northern Yosemite Highway,120,10,"ACR 27, CH 69, 1989",San Joaquin/Stanislaus County Line near Escalon,Yosemite National Park
+365,Norwalk Freeway,105,7,"ACR 46, CH 362, 1969",I-405,Route 605 near the City of Norwalk
+366,"Colonel Young Oak Kim, United States Army, Memorial Highway",5,12,"ACR 188, CH 122, 2018",Eastbound exit State Route 91 exit (Postmile 42.671),The boundary with the Los Angeles County (Postmile 44.382)
+367,President Barack H. Obama Highway,134,7,"SCR 8, CH 147, 2017",State Highway Route 2 (PM R8.963),Junction of Interstate 210 (PM R13.341)
+368,Chiura Obata Great Nature Memorial Highway,120,9,"ACR 112, CH 37, 2020",(PM R0.000),(PM 5.000)
+369,Caltrans Highway Maintenance Leadworker Jaime Obeso Memorial Highway,8,11,"SCR 52, CH 94, 2011",Postmile Marker 11-IMP-008-R30.925,Postmile Marker 11-IMP-008-R31.425
+370,Ocean Beach Freeway ,8,11,"ACR 117, CH 233, 1968",Sunset Cliffs Boulevard,I-5 in San Diego
+371,Jack O'Connell Highway,46,5,"ACR 78, CH 135, 1997",Route 101 in Paso Robles,Roue 41 at Cholame
+372,Ojai Freeway,33,7,By Location,Route 101,Foster Park
+373,Ramon Ojeda Memorial Highway,78,11,"ACR 47, CH 100, 2006",Route 67,Third Street
+374,CHP Officer Hugo Olazar Memorial Highway,280,4,"SCR 36, CH 127, 1999",San Jose/Sickles Avenue onramp,San Jose Avenue overcrossing
+375,Deputy Sheriff Danny P. Oliver Memorial Highway,50,3,"SCR 152, CH 184, 2016",Cambridge Road OC #25-83 (PM 4.962),Cameron Park Drive UC #25-84 (PM 6.570)
+376,Ontario Freeway,15,8,"ACR 10, CH 136, 1989","Limonite Avenue exit, south of Route 60 interchange",I-215 at Devore
+377,Orange Freeway,57,"12, 7","ACR 17, CH 157, 1969",Route 1,Route 60 near the City of Diamond Bar
+378,Orange County Korean War Veterans Memorial Highway,1,12,"ACR 29, CH 100, 2001",I-5 near San Juan Capistrano,Golden West Street in Huntington Beach
+379,Orange County Veterans Memorial Highway,133,12,"SCR 74, CH 96, 1998",Route 1,Junction with Eastern Transportation Corridor
+380,Los Angeles County Deputy Sheriff Jerry Ortiz Memorial Highway,60,7,"ACR 27, CH 68, 2007",Rosemead Boulevard/Route 19,I-605
+381,California Highway Patrol Officer Phillip Dennis Ortiz Memorial Highway,405,7,"ACR 41, CH 52, 2011",JCT ST 187 Venice Blvd - PM 27.964,National Blvd - PM 29.163
+382,Oscar Rios Highway,129,5,"ACR 67, CH 141, 2014",JCT RTE 1 SEP# 36-91 - PM L0.000,BLACKBURN STREET - PM 0.540
+383,Ventura County Fire Engineer Ryan Osler Memorial Highway,101,7,"ACR 135, CH 142, 2018",Seward Avenue OC# 52-216 (PM 28.452) ,Vista Del Mar UC# 52-152 (PM 29.458 – Mid bridge point)
+384,La Habra Police Officer Michael Anthony Osornio Memorial Highway,39,12,"SCR 78, CH 88, 2012",South City Limits La Habra - PM 18.846,North City Limits La Habra - PM 22.660
+385,Los Angeles County Sheriff’s Sergeant Steven C. Owen Memorial Highway ,14,7,"ACR 31, CH 135, 2017",E Avenue S UC# 53-1417 (PM R58.172),E Avenue R End of BR# 53-1440 (PM R59.167)
+386,Pacific Coast Highway,1,"12, 7","AB 1769, CH 1569, 1959, Streets & Highways Code Section 635",San Juan Capistrano,El Rio
+387,Ronald Packard Parkway,78,11,"ACR 165, CH 124, 2000",I-5,I-15
+388,Esther Padilla Memorial Highway,168,6,"ACR 139, CH 43, 2020","Junction
+with State Route 180 (Postmile R0.000R)",East Shields Avenue OC# 42-0338 (Postmile R2.017)
+389,Officer John Palacios Memorial Highway,269,6,"SCR 14, CH 92, 2007",Route 198,Five Points/Route 145
+390,Senior Master Sergeant John James Paoletti Memorial Highway,5,12,"ACR 208, CH 171, 2022",El Horno Street UC#55-230 (PM 10.001),Crown Valley Parkway OC# 55-444 (PM 13.776)
+391,Louis J. Papan Highway,1,4,"ACR 234, CH 176, 2002",Southern city limits of Pacifica,Skyline Boulevard/Route 35
+392,"Deputy Sheriff Robert “Bob” Paris, Jr., Memorial Highway",88,10,"ACR 179, CH 161, 2018",Comstock Road (PM 4.935),East Harney Lane (PM 9.610)
+393,Rosa Parks Freeway,10,7,"ACR 134, CH 2, 2002",I-405 - PM R5.430,I-110 - PM 14.836
+394,Rosa Parks Highway,58,6,"ACR 136, CH 110, 2002",Route 99,Route 184
+395,Pasadena Freeway ,110,7,By Commission 11/18/1954,Route 101 (4-level Structure),Pasadena
+396,U.S. Army SP4 Dwayne M. Patterson Memorial Highway,111,11,"SCR 15, CH 83, 2021",(Postmile 33.000),(Postmile 37.600)
+397,Joash E. Paul Memorial Highway,99,10,"ACR 19, CH 81, 2003",Stanislaus/Merced County Line,Mitchell Road
+398,Burbank Police Officer Matthew Pavelka Memoria Freeway,5,7,"ACR 156, CH 150, 2004",West Burbank Boulevard,Hollywood Way
+399,Pearl Harbor Memorial Highway,10,"7, 8","SCR 8, CH 72, 2005",Santa Monica,Arizona State Line
+400,Pearl Harbor Survivors Memorial Highway,99,6,"SCR 13, CH 81, 1993",Tulare,Fresno
+401,CHP Officer John Pedro Memorial Highway,1,5,"SCR 67, CH 118, 2004",Pajaro River Bridge,Harkins Slough Road
+402,"Fire Chief F. S. ""Pete"" Pedroza Memorial Highway",111,11,"SCR 64, CH 116, 2004",I-8,East Jasper Road near the City of Calexico
+403,"California Highway Patrol Officers James E. Pence, Jr., Roger D. Gore, Walter C. Frago, and George M. Alleyn Memorial Highway",5,7,"SCR 93, CH 92, 2006",Magic Mountain Parkway,Rye Canyon Road undercrossing
+404,Police Officer Richard Perkins Memorial Highway,395,9,"SCR 46, CH 53, 2004",Warm Springs Road,Southern City Limits of Bishop
+405,Officer Pepe Petersen Memorial Highway,99,10,"SCR 46, CH 162, 2019",Arch Road UC# 29-316 (Postmile 14.568),Mariposa Road OC# 29.157 (Postmile 16.698)
+406,Petroleum Highway,33,6,"ACR 185, CH 128, 2004",Route 166,Route 46
+407,Deputy Sheriff Dennis E. Phelps Memorial Highway,168,6,"SCR 17, CH 106, 2003",Temperance Avenue,Shepherd Avenue
+408,Westminster Police Officer Steven L. Phillips Memorial Highway,39,12,"ACR 70, CH 132, 2005",I-405,Route 22
+409,Medal of Honor Recipient Larry Stanley Pierce Memorial Highway,46,6,"ACR 60, CH 68, 2009","Western City Limits, City of Wasco","Eastern City Limits, City of Wasco"
+410,David E. Pierson and Bill Freeman Highway,86,11,"ACR 23, CH 68, 1989",San Felipe Creek Bridge at Route 78,Imperial/Riverside County Line
+411,Gateway to the Pinnacles Highway,101,5,"ACR 67, CH 141, 2014",Exit 301 SB ON FROM ARROYO SECO - PM 60.150,Exit 305 SB ON FROM CAMPHORA/GLORIA - PM 64.410
+412,Paul H. Pino Memorial Highway,395,9,"SCR 55, CH 50, 2006",Gill Station Coso Road,Route 190
+413,Lewis E. Platt Memorial Highway,87,4,"SCR 37, CH 96, 2007",I-280,Julian Street/Santa Clara Street exit
+414,Officer Jack Polen Memorial Highway,44,2,"ACR 135, CH 121, 2016",Wilson Hill Road (PM R27.882) ,Airport Way (PM 35.930)
+415,Pomona Freeway,60,"7, 8",By Commission 11/15/1955,I-5,Route 83 in Chino
+416,Harold Del Ponte Memorial Highway,101,1,"SCR 124, CH 119 2018",The county border of Del Norte and Humboldt (Postmile M0.000),(Postmile R2.000)
+417,Senator Chuck Poochigian Highway,180,6,"SCR 103, CH 87, 2008",Clovis Avenue,General Grant Grove Park
+418,Portola Freeway ,380,4,"ACR 113, CH 217, 1970",Route 1,Route 101 near San Francisco International Airport
+419,Post No. 1747 Veterans of Foreign Wars of the United States Memorial Highway,70,3,"ACR 149, CH 97, 2000",Pacific Heights/Georgia Way,Westbound ramp to Garden Drive
+420,LA County Deputy Sheriff David Powell Memorial Highway,91,7,"ACR 30, CH 47, 2009",Route 605,Pioneer Boulevard
+421,Deputy Sheriff Sandra Powell-Larson Memorial Highway,5,3,"SCR 96, CH 113, 2006",Q Street,J Street
+422,Deputy Frank M. Pribble Memorial Highway,10,8,"ACR 96, CH 72, 2008",Post Mile 12.25,Post Mile 15.25
+423,Soledad State Prison Correctional Officers Memorial Highway,101,5,"SCR 23, CH 95, 2013",Exit 305 (PM 64.630),Exit 310 (PM 69.372)
+424,National Purple Heart Trail,70,3,"ACR 19, CH 106, 2021 ",(Postmile 13.604),(Postmile 15.850)
+425,National Purple Heart Trail,20,3,"ACR 19, CH 106, 2021 ",(Postmile 0.000),(Postmile R3.389)
+426,Purple Heart Veterans Highway,99,"10, 3","SCR 54, CH 19, 1992",Route 4 in Stockton,Route 50 in Sacramento
+427,National Purple Heart Trail,101,5,"ACR 12, CH 84, 2009",Mon Post Mile 9.67,SB Post Mile 36.16
+428,National Purple Heart Trail,101,"5, 7","SCR 27, CH 88, 2013",VENTURA COUNTY (PM 0.000),SANTA BARBARA COUNTY (PM R36.160)
+429,Kent D. Pursel Memorial Freeway,80,4,"SCR 99, CH 229, 1968",SF-Oakland Bay Bridge,Alameda/Contra Costa County Line
+430,CHP Officer Robert J. Quirk Memorial Highway,5,2,"ACR 3, CH 73, 2013",NINE MILE HILL OC# 8-101 PM 36.371,SUNSET HILLS DRIVE OC# 8-102 PM 38.716
+431,Ramona Freeway ,10,"7, 8",Not Officially Named,Route 101,I-215
+432,Officer James Rapozo Memorial Freeway,198,6,"ACR 84, CH 118, 1999",Route 99,Route 245
+433,Captain Mark Ratledge Memorial Highway,5,2,"SCR 78, CH 88, 2012",Bowman Road OC# 8-105 - TEH-PM 41.525,N. Cottonwood 6-38 N/B On - SHA-PM 2.076
+434,Ronald Reagan Freeway,118,7,"SR 7, 12/5/1994, and by local usage",Route 126,I-210
+435,Redondo Beach Freeway ,91,7,"ACR 80, CH 148, 1970",I-405,I-710
+436,Redwood Highway,101,"4, 1","ACR 174, CH 269, 1957",Golden Gate Bridge,Oregon State Line
+437,Pasadena Police Agent Richard Morris Memorial Highway,210,7,"ACR 170, CH 181, 2014",ALLEN AVENUE UC# 53-2040 R/L - PM R27.409,ROSEMEAD BOULEVARD SEP 210/164 # 53-1957 R/L - PM R29.486
+438,Special Agent Richard “Rick” K. Oules Memorial Highway,140,10,"SCR 77, CH 75, 2014",Arboleda Drive - PM 40.700,Plainsburg Road - PM 43.700
+439,Bernie Richter Memorial Highway,99,3,"ACR 189, CH 142, 2004",5 miles south of junction with Route 70,Route 70
+440,Deputy Sheriff Ricky Del Fiorentino Memorial Highway,1,1,"ACR 159, CH 177, 2014",PM 62.000,PM R65.000
+441,Dr. Sally Ride Memorial Highway,101,7,"ACR 51, CH 114, 2021",Junction 101/405 SEP# 53-1146R (PM 17.165R),Balboa Boulevard UC# 53-1052 (PM 19.217)
+442,Deputy Probation Officer Irene B. Rios Memorial Highway,8,11,"ACR 66, CH 99, 2011",PM R4.600L,PM R6.600L
+443,"CHP Officer Reuben F. Rios, Sr., Memorial Freeway",15,8,"ACR 110, CH 93, 2000",Sierra Avenue,Kenwood Avenue
+444,Correctional Officer Jose Rivera Memorial Highway,99,10,"SCR 118, CH 129, 2010",Franklin Road,Winton Way
+445,Riverside Freeway,"91, 215","12, 8","By Commission, 10/22/1957",I-5,I-10 in Colton
+446,Robert Jones Memorial Highway,5,2,"SCR 53, CH 4, 2014",PM R41.500,PM R43.500
+447,Jackie Robinson Memorial Highway,210,7,"ACR 197, CH 165, 2016",Gould Avenue OC# 53-2177 (PM R20.600),Orange Grove Boulevard OC# 53-2195 (PM R24.641)
+448,CHP Officer David M. Romero Memorial Highway,60,7,"SCR 57, CH 123, 2009",Route 605 (Post Mile 11.59),Hacienda Boulevard (Post Mile 15.96)
+449,Eric W. Rood Memorial Expressway,20,3,"ACR 122, CH 32, 2010",State Highway Route 49,Intersection of the Rough and Ready Highway and Penn Valley Drive
+450,LA County Deputy Sheriff Maria Cecilia Rosa Memorial Highway,710,7,"ACR 34, CH 48, 2009",Pacific Coast Highway,Wardlow Road
+451,Long Beach Fire Captain David Rosa Memorial Highway,5,12,"SCR 159, CH 234 2018","Camino Las Ramblas, known as Route 1 Junction SEP# 55-510 (Postmile 6.761)","Ortega Highway, also known as State Route 74 Junction SEP# 55-229 (Postmile 9.604)"
+452,Border Patrol Agent Robert W. Rosas Jr. Memorial Highway,8,11,"SCR 37, CH 54, 2011",Postmile Marker 8-SD-R51.000,Postmile Marker 8-SD-R55.800
+453,Paul Vincent Rotondaro Memorial Highway,140,10,"ACR 144, CH 131, 2022",Postmile 6.500,Postmile 11.000
+454,Corporal Luis Carlos Ruan Memorial Highway,119,6,"ACR 211, CH 172, 2022","East Kern
+Street (PM 0.340)",Cedar Street (PM 1.300)
+455,Firefighter Steven Rucker Memorial Highway,79,11,"SCR 53, CH 114, 2004",Engineers Road in Cuyamaca,Route 78 in Santa Ysabel
+456,Deputy Sheriff Robert Rumfelt Memorial Highway,29,1,"SCR 92, CH 116 2018",Junction of State Route 175 (Postmile R40.144),11th Street UC 14-38 (Postmile R42.677)
+457,William Byron Rumford Freeway,24,4,"ACR 137, CH 92, 1980",I-580 in Oakland,Caldecott Tunnel
+458,Senator Sharon Runner Memorial Highway,14,7,"ACR 138, CH 160, 2016",“K” Avenue UC #53-2381RT (PM R66.730) ,“H” Avenue OC #53-1862 (PM R69.991)
+459,CHP Officer Douglas “Scott” Russell Memorial Freeway,50,3,"SCR 100, CH 70, 2010",eastbound Post-mile 08.533,"westbound Post-mile
+08.598"
+460,Sergeant Daniel Sakai Memorial Highway,580,4,"ACR 79, CH 111, 2009",Strobridge Avenue,East Castro Valley Boulevard
+461,Ruben Salazar Memorial Freeway,710,7,"SCR 46, CH 78, 2005",Route 60,East Cesar Chavez Avenue
+462,Roberto “Bobby” Salcedo Memorial Highway,60,7,"ACR 174, CH 144, 2010",Atlantic Boulevard in the City of Monterey Park,"city limit of the City of
+Rosemead"
+463,San Bernardino Freeway,10,"7, 8","By Commission, 11/18/1954",Route 101,I-215
+464,San Diego Freeway,5,"11, 12","By Commission, 4/25/1957",Route 94,I-405 near Irvine
+465,San Diego Freeway ,405,"12, 7","By Commission, 11/18/1954",I-5 south of Irvine,I-5 north of San Fernando
+466,San Gabriel River Freeway,605,"12, 7","SB 99, CH 1101, 1967",I-405,I-10
+467,San Luis Rey Mission Expressway,76,11,"ACR 6, CH 54, 1995",I-5,I-15
+468,Officer Samuel Sanchez Memorial Highway,166,5,"SCR 12, CH 106, 2015",SIMAS ROAD - PM 0.892,BONITA SCHOOL ROAD - PM 3.745
+469,United States Army Sgt. Javier Sanchez Memorial Highway,101,5,"SCR 57, CH 21 2018",Approx. Espinosa Road (PM 52.210),Hudson Road (PM 55.940)
+470,Correctional Officer Jesus “Jesse” Sanchez Memorial Highway,83,7,"SCR 83, CH 122, 2010",State Highway Route 60,Kimball Avenue
+471,Sig Sanchez Highway,101,4,"SCR 46, CH 71, 1994",Morgan Hill Bypass,
+472,CHP Officer Joseph P. Sanders Memorial Highway,60,7,"ACR 94, CH 116, 2009",Hacienda Boulevard (Post Mile 15.96),Nogales Street (Post Mile 20.44)
+473,Santa Ana Freeway,"5, 101","12, 7",By Location,I-405,I-110 (4-level Interchange)
+474,Santa Monica Freeway ,10,7,"By Commission, 4/25/1957",Route 1 - PM R2.155,I-5 - PM 18.394
+475,Santa Paula Freeway,126,7,"SB 835, CH 1223, 1967",Route 101 near Ventura,I-5 near Santa Clarita
+476,"Detective Gerald ""Blackie"" Sawyer Memorial Highway",39,12,"ACR 16, CH 68, 2013",12-ORA-039 STAGE ROAD PM 16.130,12-LA-039 HILLSBOROUGH DRIVE PM approx. D18.3
+477,CDF Firefighter Eva Marie Schicke Memorial Highway,120,10,"ACR 156, CH 166, 2008",Rim of the World Vista,Mariposa/Tuolumne County Line
+478,James D. Schultz Memorial Freeway,8,11,"SCR 21, CH 87, 2007",Brock Research Center Road,Gordons Well
+479,"CHP Officer James J. Schumacher, Jr., Memorial Highway",99,10,"ACR 111, CH 32, 2002",Athlone Road,Worden Avenue
+480,Humboldt County Sheriff’s Office Corporal Rich Schlesiger Memorial Highway,101,1,"ACR 43, CH 131, 2017",Posmile Marker 64.500 near Ferndale Exit,Posmile Marker 68.000 near Hookton Road)
+481,CHP Officer Earl Scott Memorial Highway,99,10,"SCR 120, CH 130, 2010",Pelandale Avenue,Route 219
+482,Officer Tommy Scott Memorial Highway,405,7,"SCR 39, CH 54, 2022",Imperial Highway UC# 53-1241 (PM R21.222),West Century Boulevard UC# 53-1243 (PM 22.216)
+483,California Highway Patrol Officer Earl Scott Memorial Highway,219,10,"ACR 31, CH 47, 2011",JCT 99 - PM 0.116,JCT 108. END OF ROUTE - PM 4.858
+484,Screaming Eagles Highway,101,7,"ACR 54, CH 85, 2003",Los Angeles/Ventura County Line,Ventura/Santa Barbara County Line
+485,Officer Loren D. Scruggs Memorial Highway,101,5,"SCR 57, CH 38, 2008",Santa Maria Way,South edge of the Santa Maria River Bridge
+486,Ranger Patricia M. Scully Memorial Highway,1,4,"SCR 102, CH 120, 2012",JCT 84 E. SAN GREGORIO - PM 18.189,VERDE-LOBITOS CR RDS RT - PM 22.662
+487,Sears Point Toll Road,37,4,"CH 393, 1933",Route 121 near Sears Point,Vallejo
+488,Seaside Freeway ,47,7,"HR 144, 1959",San Pedro,Long Beach
+489,Eric Seastrand Memorial Highway,46,5,"ACR 22, CH 75, 1993",Route 1 near Cambria,Route 101 near Paso Robles
+490,Tom Seaver Memorial Highway,41,6,"ACR 52, CH 136, 2021",E. Jensen Avenue OC# 42-268 (PM R21.113),South Fresno Viaduct# 42-226 (PM R22.107)
+491,Semper Fi Highway,15,11,"ACR 121, CH 40, 2004",Route 163,Miramar Road
+492,Sepulveda Freeway ,405,"12, 7",By Location,I-5 south of Irvine,I-5 north of San Fernando
+493,Sequoia-Kings Canyon Freeway,180,6,"SCR 25, CH 85, 1997",Brawley Avenue,Highland Avenue
+494,Junipero Serra Freeway,280,4,"ACR 140, CH 208, 1967",Route 17 in Santa Clara County,Route 1 in San Francisco
+495,Nathan Shapell Memorial Highway,405,7,"ACR 73, CH 148, 2007",Howard Hughes Parkway,Mulholland Drive
+496,"Kings County Deputy Sheriff Allen
+Thomas Sharra Memorial Highway",41,6,"ACR 38, CH 106, 2019",Lincoln Avenue (PM 32.420),Lansing Avenue (PM 33.590)
+497,Shawn Baker Memorial Highway,5,2,"SCR 53, CH 4, 2014",PM R35.700,PM R39.500
+498,"CHP Officer Ambers O. ""Sonny"" Shewmaker Memorial Highway",10,8,"ACR 100, CH 109, 2012",Main Street - PM R19.398,Verbenia Avenue OC# 56-530- PM R24.554
+499,Shoreline Highway,"1, 211","4, 1","SCR 91, CH 239, 1957",San Francisco,Fernbridge
+500,Sierra Freeway,168,6,"SCR 25, CH 85, 1997",Route 180 in Fresno,Armstrong Avenue in Fresno
+501,Army Specialist Eduardo Silva Memorial Highway,101,5,"ACR 201, CH 165, 2022",Kenny Road (PM 50.285),Underwood Road (PM 51.060)
+502,Simi Valley-San Fernando Valley Freeway,118,7,"ACR 145, CH 185, 1970",Route 23 in Moorpark,I-210 in San Fernando
+503,Sinclair Freeway,"280, 680",4,"ACR 104, CH 168, 1967",Route 17 near San Jose,Santa Clara/Alameda County Line
+504,Corporal Ronil Singh Memorial Highway,33,10,"ACR 128, CH 42, 2020",Sanches Road (Postmile 29.730) ,Stuhr Road (Postmile 2.060)
+505,Skyline Boulevard,"17, 35, 92, 280",4,"CH 46, 1919",Santa Cruz,San Francisco
+506,Skyway Freeway (Unconstructed),170,7,"ACR 109, CH 26, 1974",LA International Airport,Route 90
+507,Matthew “SLOStringer” Frank Memorial Highway,101,5,"ACR 103, CH 169, 2018",Spyglass / Shell Beach Drive UC# 49-189 (PM R19.812),Avila Beach Drive UC# 49-191 (PM R21.105)
+508,California Small Business Owner's Highway,99,3,"ACR 118, CH 174, 2014",HULL ROAD - PM 22.830,STEWART ROAD - PM 26.880
+509,"Detective Sergeant Thomas A. Smith, Jr. Memorial Highway",680,4,"ACR 22, CH 127, 2017",Bollinger Canyon Road OC# 28-224 (PM R2.885) ,Crow Canyon Road OC# 28-206 (PM R4.182)
+510,CHP Officer Charles T. Smith Memorial Highway,5,3,"ACR 75, CH 113, 2011",County Road 25 - PM R21.824,State Highway 32 - PM R25.529
+511,Caltrans Leadworker Gary Wayne Smith Memorial Highway,99,3,"SCR 52, CH 94, 2011",Postmile Marker 03-BUT-099-38.790,Postmile Marker 11-BUT-099-44.320
+512,CHP Officer William P. Sniffen Memorial Highway,880,4,"ACR 100, CH 109, 2012",23rd Avenue OC# 33.139 - PM 28.934,16th Avenue OC# 33-137 - PM 29.692
+513,Mayor Jack Snyder Memorial Highway,120,10,"ACR 138, CH 128, 2022","Wyche OH 
+End of Bridge# 29-272RT (PM R1.845)",Moffat Blvd. OH End of Bridge# 29-278RT (PM R6.431)
+514,Sonoma County Veterans Memorial Highway,101,4,"SCR 70, CH 102, 1998",Marin/Sonoma County Line,Healdsburg at the Bill Lucius Highway
+515,Sonora and Mono Wagon Road,"108, 395","10, 9","SB 289, CH 111, 1901, Extended AB 672, CH 510, 1919",Eastern boundary of the City of Sonora,Bridgeport
+516,Deputy Sheriff Stephen Sorensen Memorial Highway,138,7,"ACR 135, CH 42, 2004",136th Street,195th Street
+517,CHP Officer Charles “Chuck” Sorenson Memorial Highway,12,3,"SCR 100, CH 109, 2012",5 MILES WEST FROM BRANNAN ISLAND ROAD PM 0.845,BRANNAN ISLAND RD LT PM 5.845
+518,South Bay Freeway,54,11,By Location,I-805,Route 94
+519,Southern California Native American Freeway,210,"7, 8","AB 776, CH 543, 2023",JCT 5. 210/5 BR# 53-1985 (R0.000),JCT10. RT LNS END RTE 210 (PM R33.180)
+520,Southern Yosemite Highway,41,6,"ACR 27, CH 69, 1989",Fresno/Madera County Line,Yosemite National Park
+521,Stan Statham Memorial Highway,44,2,"SCR 97, CH 178, 2022",Postmile R7.700,Postmile R9.000
+522,Officer Richard T. Steed Memorial Highway,5,12,"ACR 35, CH 73, 2011",Avenida San Luis Rey OC #55-151 - PM 0.647,Camino De Estrella OC #55-224 - PM 5.801
+523,CHP Officer Thomas J. Steiner Memorial Highway,60,7,"SCR 20, CH 2, 2006",Phillips Ranch Road,Reservoir Street
+524,"Stephen Palmer, Sr., Memorial Highway",94,11,"SCR 38, CH 3, 2014",OLD CAMPO ROAD - PM R16.480,MELODY ROAD - PM 20.662
+525,"CHP Officer Andrew ""Andy"" Stevens Memorial Highway",16,3,"ACR 141, CH 137, 2008",I-505,County Road 98
+526,Robert Louis Stevenson's Historic Trail to Silverado,29,4,"SCR 37, CH 93, 2010",Post Mile 37.9,Post Mile 39.5
+527,Jeffey Stevenson Memorial Bike Path,101,4,"SCR 27, CH 63, 2021",Miller Creek Road OC#27-82 (PM 15.570),Pacheco Creek OC# 27-84 (PM 16.641)
+528,"CHP Officer Larry L. Wetterling and San Bernardino County Sheriff’s Lieutenant Alfred E.
+Stewart Memorial Highway",15,8,"ACR 127, CH 110, 2010",Route 138,Oak Hill Road
+529,Stone Turnpike Memorial Freeway,5,2,"ACR 94, CH 98, 1994",Pit River Bridge,Shasta/Siskiyou County Line
+530,California Highway Patrol Officer Franke A. Story Memorial Highway,86,11,"ACR 57, CH 73, 1996",City of Imperial,City of Brawley
+531,Officer Ryan Stringer Memorial Highway,10,7,"ACR 100, CH 109, 2012",South Marguerita Ave. - PM 23.117,South Almansor Street - PM 24.315
+532,Vernon L. Sturgeon Memorial Highway,101,5,"SCR 72, CH 96, 2006",Spring Street in Paso Robles,Santa Barbara Road in Atascadero
+533,Jack Tanaka Memorial Highway,60,7,"SCR 11, CH 118, 2019",Lemon Avenue UC# 53-1787 (Postmile R22.377),Golden Spring Drive UC# 53-2079 (Postmile R26.526)
+534,Stephen P. Teale Highway,26,10,"SCR 43, CH 106, 1997",Mokelumne Hill,West Point
+535,Deputy Sheriff Erik Jon Telen Memorial Highway,168,6,"SCR 43, CH 70, 2002",Herndon Avenue,Temperance Avenue
+536,Temecula Valley Freeway,15,8,"ACR 125, CH 78, 1990",San Diego/Riverside County Line,Bundy Canyon Road near Lake Elsinore
+537,Frederick E. Terman Memorial Highway,101,4,"SCR 30, CH 110, 2015",SHORELINE BOULEVARD OC#37-153 - PM 48.596,COUNTY LINE OF SANTA CLARA AND SAN MATEO - PM 52.550
+538,Riverside County Deputy Sheriff Eric Andrew Thach Memorial Freeway,215,8,"SCR 92, CH 134, 2000",Murrieta Hot Springs Road,McCall Boulevard
+539,Mayor James Thalman and Mayor Michael Wickman Memorial Highway,71,8,"SCR 52, CH 26, 2006",Soquel Canyon/Central Avenue,Pine Avenue
+540,Lt. Colonel Nguyen Thi Hanh Nhon's Disabled Veterans Memorial Highway,405,12,"SCR 60, CH 178, 2017",Brookhurst Street OC# 55-402 (PM 13.780),"Magnolia Street OC# 55-264 (PM 15.210),"
+541,Everett and Louella Thomas Memorial Highway,101,1,"SCR 69, CH 120, 2004",Patrick's Point undercrossing,Four miles north of that undercrossing near Big Lagoon
+542,Robert “Bob” Thompson Memorial Highway,299,2,"ACR 202, CH 151 2018",(Postmile 83.030),(Postmile 84.000)
+543,Deputy James Throne Memorial Highway,184,6,"ACR 48, CH 80, 2009",Route 223,Route 178
+544,Tinloy Street,"20, 49",3,"SCR 11, CH 121, 2005",East Main Street,South Auburn Street
+545,Tioga Road ,120,9,"AB 302, CH 306, 1915",East Boundary of Yosemite National Park,Route 395
+546,United States Navy Lientenant Commander Otis Vincent Tolbert Memorial Highway,198,6,"SCR 35, CH 51, 2004",25th Avenue near Lemoore Naval Air Station,18th Avenue near Lemoore High School
+547,Torrance Freeway,107,7,"ACR 63, CH 171, 1968",Route 1 near Torrance,I-405 near Lawndale
+548,Trinity Scenic Byway,299,"1, 2","ACR 126, CH 131, 1992",Route 101 in Arcata,I-5 in Redding
+549,Tuolumne County Vietnam Veterans Memorial Highway,108,10,"ACR 17, CH 89, 2003",Stanislaus/Tuolumne County Line,Tuolumne/Mono County Line
+550,CHP Officer Alfred R. Turner Memorial Highway,5,10,"SCR 80, CH 97, 1998",Route 165,Route 152
+551,Tuskegee Airmen Memorial Highway,80,4,"SCR 45, CH 92, 2013",E. JCT RTE 12 SEP# 23-0199F - PM 15.815,MIDWAY ROAD OC# 23-148 - PM 32.622
+552,Tuskegee Airmen Highway,15,11,"SCR 90, CH 104, 2012",Miramar Road - PM M14.285,Mercy Road - PM M17.311
+553,Twentynine Palms Highway,62,8,"ACR 164, CH 121, 1990",I-10,Route 177
+554,U.S. Submarine Veterans of WWII Memorial Highway,1,12,"ACR 98, CH 103, 2000",Golden West Street in Huntington Beach,Orange/Los Angeles County Line
+555,Ritchie Valens Memorial Highway ,5,7,"ACR 23, CH 128, 2017",Junction with State Route 170 SEP# 53-1122R (PM 36.358)  ,Junction with State Route 118 SEP# 53-2324L (PM 39.385)
+556,Vernon P. Valenzuela Memorial Highway,204,6,"SCR 4, CH 69, 2013","""Q"" Street - PM 4.270","""F"" Street - PM 5.137"
+557,"Imperial Valley Pioneers
+Expressway",111,11,"ACR 160, CH 147, 2010",Route 8,Route 78
+558,Valley of the Moon Scenic Route,"37, 121, 12",4,"SCR 56, CH 192, 1953 & ACR 46, CH 140, 1949",Route 101 near Ignacio,Santa Rosa via Sonoma
+559,Stanley L. Van Vleck Memorial Highway,16,3,"ACR 4, CH 61, 2001",Dillard Road,Sacramento/Amador County line
+560,CAL FIRE Firefighter Braden Varney Memorial Highway,140,10,"ACR 47, CH 108, 2019",Junction 49/140 (PM 22.080),Triangle Road (PM 26.290)
+561,Lance Corporal Christian Vasquez Memorial Highway,198,6,"ACR 100, CH 109, 2012",Sixth Avenue - PM 23.320,END of County - PM 28.325
+562,Police Officer Jose “Gil” Vega and Police Officer Lesley Zerebny Memorial Highway ,111,8,"ACR 2, CH 125, 2017",West San Rafael Drive (PM 54.955),Overture Drive (PM 58.478)
+563,Officer Nicholas Vella Memorial Highway,39,12,"ACR 162, CH 135, 2022",JCT 1/39 (PM 0.000),Talbert Avenue (PM 3.611)
+564,John G. Veneman Freeway,99,10,"ACR 171, CH 131, 1984",Turlock,Modesto
+565,Ventura Freeway,"134, 101",7,Historical ,I-5,"Route 1, east of the City of Ventura"
+566,Ventura Freeway Extension,101,7,"SCR 4, CH 62, 1973","Route 1, east of the City of Ventura",Santa Barbara/Ventura County Line
+567,Ventura County Vietnam Veterans Memorial Highway,1,7,"ACR 135, CH 89, 2002",Los Angeles/Ventura County Line,Ventura/Santa Barbara County Line
+568,Veteran’s Memorial Highway,29,4,"ACR 67, CH 159, 2018",Darms Lane (Approx. PM 16.507,Yount Mill Road (PM 21.620)
+569,Veterans Boulevard,1,4,"SCR 73, CH 64, 1998",Lake Street,The vicinity of San Francisco National Cemetery
+570,Veterans Memorial Freeway ,73,12,"SCR 2, CH 13, 1967",Route 1 near Corona Del Mar,Jamboree Road - PM 24.778
+571,Veterans Memorial Freeway,10,8,"ACR 137, CH 104, 1994",Post Mile 79,Post Mile 89
+572,Veterans Memorial Highway,156,5,"SCR 22, CH 65, 1997",0.2 miles east of Union Road,0.4 miles east of San Felipe Road
+573,Veterans Memorial Highway,101,5,"ACR 133, CH 103, 1994",,
+574,Veterans of Foreign Wars of the United States Memorial Highway,99,6,"SCR 54, CH 19, 1992",McFarland,Tulare
+575,Veterans' Memorial Highway,101,1,"ACR 57, CH 113, 2007",Post Mile 68.40,Post Mile 71.10
+576,Victor V. Veysey Expressway,78,11,"SCR 70, CH 121, 2004",Route 86 near Brawley,Route 111 east of Brawley
+577,Viet Dzung Human Rights Memorial Highway,39,12,"SCR 85, CH 90, 2014",Talbert Avenue - PM 3.611,State Highway Route 405 SEP# 55-267 - PM 5.800
+578,Vietnam Veterans Memorial Highway,88,10,"ACR 184, CH 148, 2018",The Nevada State Line 5 miles southwest (Postmile 20.283),The Nevada State Line (Postmile 25.283)
+579,Vietnam Veterans Memorial Highway,119,6,"SCR 68, CH 95, 2006",Enos Lane,Route 184
+580,Vietnam Veterans Memorial Highway,1,5,"SCR 26, CH 90, 2011",JCT RTE 166 - PM 49.199,Santa Barbara / San Luis Obispo County Line - PM 50.606
+581,"Modesto Police Officer Leo Volk, Jr., and Modesto Police Sergeant Steve May Memorial Highway",132,10,"ACR 46, CH 136, 2017",6th Street (PM 14.770) ,Garner Road / Claus Road (PM 19.010)
+582,Wabash Boulevard,15,11,By Location,I-5,I-805
+583,Deputy Sheriff Joel B. Wahlenmaier Memorial Highway,168,6,"ACR 164, CH 152, 2010",Intersection of Dragonfly Lane and Tollhouse Road,Ockenden Ranch Road
+584,Sergeant Brian Walker Memorial Highway,247,8,"ACR 180, CH 162, 2016",Camp Rock Road (PM 39.598),Allen Way (PM 44.366) 
+585,CHP Lieutenant Michael Elvin Walker Memorial Highway,17,5,"SCR 51, CH 110, 2007",Post Mile 5.91,Post Mile 11.78
+586,Deputy Sheriff Dennis Wallace Memorial Highway,132,10,"ACR 181, CH 147, 2018",Root Road (Postmile 20.640),McEwen Road (Postmile 25.146)
+587,"James Mitchell ""Mitch"" Waller Memorial Highway",405,12,"ACR 65, CH 169, 2015",SAN DIEGO CREEK EB# 55-451RT - PM 1.525,SAN DIEGO CREEK EB# 55-285 - PM 6.459
+588,Charles I. Walter Memorial Highway,1,5,"ACR 88, CH 140, 2017",Kansas Avenue (PM 20.890) ,Canet Road (PM 25.580)
+589,Clarence Ward Memorial Boulevard ,217,5,"AB 2718, CH 1789, 1955",Route 101 in Santa Barbara,UC Santa Barbara Campus
+590,Warren Boulevard ,13,4,"ACR 96, CH 166, 1957",I-580,Route 24
+591,West Side Freeway,5,"6, 10, 3",By Location,Route 99 in Wheeler Ridge,Woodland
+592,West Valley Freeway,85,4,"ACR 57, CH 73, 1996",Route 101 near Bernal Road in San Jose,Route 101 near Moffett Boulevard in Mountain View
+593,Patricia Ann Weston Memorial Highway,99,3,"SCR 84, CH 66, 2010",Post mile 36,Post mile 40
+594,Officer Mark A. White Memorial Highway,65,3,"ACR 179, CH 126, 2004",Sunset Boulevard,Route 193/McBean Park Drive
+595,Bill Whitehurst Memorial Highway,152,6,"SCR 36, CH 71, 2013","JCT RTE 233,NE. BR 41-59 - PM 10.799",JCT RTE 99 - PM 15.622
+596,"CAL-FIRE Firefighter Matt Will Memorial
+Highway",156,4,"ACR 106, CH 38, 2010",Route 25,Route 101
+597,Los Angeles County Deputy Sheriff Jack Williams Memorial Highway,605,7,"SCR 67, CH 16, 2020","Alondra Blvd UC# 53-1645 (Postmile
+R5.811)",Rosecrans Avenue UC#53-1648 (Postmile R6.814)
+598,Federal Correctional Officer Scott Williams Memorial Highway,1,5,"SCR 28, CH 91, 2011",Santa Lucia Canyon Rd - PM R26.690,California Blvd / Via Vandenberg Rd - PM M29.891
+599,John B. Williams Freeway                  ,980,4,"ACR 52, CH 61, 1977",I-880,17th Street
+600,Ted Williams Freeway,56,11,"ACR 21, CH 74, 1993",I-5 ,I-15
+601,Roy Wilson Memorial Highway,74,8,"ACR 109, CH 31, 2010",entrance to the Santa Rosa and San Jacinto Mountains National Monument visitor center,"extending four
+miles to the west thereof"
+602,"United States Forest
+Service Firefighter Brent Michael Witham Memorial Highway",38,8,"SCR 32, CH 138, 2019",Mill Creek Bridge# 54-346 (Postmile 9.601),Mt. Home Creek Bridge# 54-1046 (Postmile R12.279)
+603,Women Veterans' Highway,99,10,"SCR 43, CH 129, 2003",Route 4,Hammer Lane
+604,Los Angeles Firefighter Kelly Wong Memorial Highway,101,7,"SCR 78, CH 105, 2022",SB Off Exit to Broadway (PM 1.181),SB Off to Temple St (PM 1.435)
+605,"CHP Officers Gayle W. Wood, Jr and James E. McCabe Memorial Highway",5,7,"ACR 70, CH 109, 2011",Palomas Wash Br 53-65R - PM R60.516R,PM R65.516
+606,Rim of the World Veterans Memorial Highway,18,8,"ACR 21, CH 87, 2015",JCT ROUTE 330 - PM 31.903,PM 36.403
+607,Kevin Woyjeck Memorial Highway,405,12,"ACR 100, CH 116, 2016",PM 20.400,End of Orange County PM 24.178
+608,West Covina Police Officer Kenneth Wrede Memorial Highway,10,7,"ACR 104, CH 102, 2006",Vincent Avenue - PM 35.392,Grand Avenue - 38.509
+609,Earle W. Wrieden Memorial Highway,29,1,"SCR 18, CH 80, 2001",Napa/Lake County Line,Route 175 near Middletown
+610,"Deputy Sheriff Yevhen ""Eugene"" Kostiuchenko Memorial Highway",101,7,"ACR 14, CH 114, 2015",LEWIS ROAD/JCT RTE 34 - PM 13.848,LAS POSAS OC#52-246 - PM 15.888
+611,Yolo and Lake Highway,"53, 20, 16","1, 3","CH 283, 1915",Lower Lake,Rumsey
+612,Los Angeles County Sheriff's Deputy Shayne Daniel York Memorial Highway,5,7,"ACR 16, CH 86, 2015",NEWHALL RANCH ROAD/JCT RTE126 OC# 53-1871 - PM R55.287,HASLEY CANYON ROAD OC# 53-1809 - PM R56.602
+613,Yosemite Freeway,41,6,"SCR 25, CH 85, 1997",Elkhorn Avenue to Ventura Avenue,Herndon Avenue to the Fresno/Madera County Line
+614,Colonel Charles Young Memorial Highway,198,6,"ACR 142, CH 143, 2018",Salt Creek #46-28 (PM 41.226) ,Sequoia National Park limits (PM 44.163)
+615,J. Arthur Younger Freeway,92,4,"SCR 78, CH 188, 1967",Route 1 near Half Moon Bay,West Approach to San Mateo-Hayward Bridge
+616,Louis Zamperini Memorial Highway,405,7,"ACR 157, CH 122, 2016",South Western Avenue (PM 14.398) ,Redondo Beach Boulevard (PM 16.884)
+617,Oceanside Police Officer Tony Zeppetella Memorial Highway,76,11,"ACR 133, CH 137, 2004",North Coast Highway,Douglas Drive
+618,Mayor Bob Zirbes Memorial Freeway,57,7,"ACR 82, CH 78, 2008",Los Angeles/Orange County Line,Pathfinder Road
