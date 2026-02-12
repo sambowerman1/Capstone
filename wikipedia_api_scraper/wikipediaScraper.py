@@ -125,17 +125,17 @@ def get_person_info(name):
         "Wikipedia Link": wikipedia_link
     }
 
-highways_path = "memorial_highways_test_append.csv"
+highways_path = "C:/Users/lucas/Data_Science_Capstone/states/nebraska/nebraska-named-highways(1).csv"
 highways = pd.read_csv(highways_path)
-names = [clean_name(i) for i in highways["DESIGNATIO"]]
+names = [clean_name(i) for i in highways["Name"]]
 highways["Name"] = names
 
-highways.to_csv("wikipedia_api_scraper/data_with_names2.csv", index=False)
+highways.to_csv("data_with_names2_nebraska.csv", index=False)
 
 data = [get_person_info(name) for name in names]
 df = pd.DataFrame(data)
 df_unique = df.drop_duplicates(subset="Name", keep="first")
-df_unique.to_csv("wikipedia_api_scraper/scraper_output.csv", index=False)
+df_unique.to_csv("scraper_output_nebraska.csv", index=False)
 
 merged = pd.merge(highways, df_unique, on="Name", how="left")
-merged.to_csv("wikipedia_api_scraper/final_output.csv", index=False)
+merged.to_csv("final_output_nebraska.csv", index=False)

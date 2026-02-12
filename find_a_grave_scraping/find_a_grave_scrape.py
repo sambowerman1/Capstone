@@ -18,9 +18,9 @@ import time
 import re
 import urllib.parse
 
-INPUT_FILE = "names.txt"
-OUTPUT_FILE = "findagrave_results.csv"
-STATE = "Florida"   # set "" to skip state filter
+INPUT_FILE = "C:/Users/lucas/Data_Science_Capstone/states/montana/cleaned_names_montana.txt"
+OUTPUT_FILE = "montana_findagrave_results.csv"
+STATE = "Montana"   # set "" to skip state filter
 DELAY_SECONDS = 1.5
 
 BASE = "https://www.findagrave.com"
