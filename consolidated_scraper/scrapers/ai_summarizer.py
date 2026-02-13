@@ -6,7 +6,14 @@ Uses the existing PersonSummarizer to extract biographical data from Wikipedia U
 
 import sys
 import os
+import time
+import logging
 from typing import Optional, Dict, Any
+
+from ..timing import Timer
+
+# Configure logger
+logger = logging.getLogger(__name__)
 
 # Add parent directory to path to import person_summarizer
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..', 'ai_summarizer'))
@@ -34,9 +41,13 @@ class AISummarizer:
         """
         self.mistral_api_key = mistral_api_key
         self._summarizer = None
+        
+        # Timing tracking
+        self.last_extraction_time: float = 0.0
+        self.extraction_times: list = []
 
         if not AI_SUMMARIZER_AVAILABLE:
-            print("Warning: AI summarizer not available. Install required dependencies.")
+            logger.warning("Warning: AI summarizer not available. Install required dependencies.")
 
     def _get_summarizer(self) -> Optional['PersonSummarizer']:
         """Get or create the PersonSummarizer instance."""
@@ -47,7 +58,7 @@ class AISummarizer:
             try:
                 self._summarizer = PersonSummarizer(MistralAPIKey=self.mistral_api_key)
             except Exception as e:
-                print(f"Failed to initialize PersonSummarizer: {e}")
+                logger.error(f"Failed to initialize PersonSummarizer: {e}")
                 return None
 
         return self._summarizer
@@ -79,17 +90,26 @@ class AISummarizer:
             return empty_result
 
         if not AI_SUMMARIZER_AVAILABLE:
-            print("AI summarizer not available")
+            logger.warning("AI summarizer not available")
             return empty_result
 
+        start_time = time.perf_counter()
+        
         try:
             # Create Person object and extract data
+            logger.info(f"[AI] Creating Person object for: {wikipedia_url}")
+            person_start = time.perf_counter()
             person = Person(wikipedia_url, MistralAPIKey=self.mistral_api_key)
+            person_init_time = time.perf_counter() - person_start
+            logger.info(f"[TIMING] AI Person Init: {person_init_time:.2f}s")
 
-            # This triggers data extraction
+            # This triggers data extraction (includes web crawl + Mistral API call)
+            summary_start = time.perf_counter()
             summary = person.getSummary()
+            summary_time = time.perf_counter() - summary_start
+            logger.info(f"[TIMING] AI Data Extraction (crawl + API): {summary_time:.2f}s")
 
-            return {
+            result = {
                 "summary": summary,
                 "education": person.getEducation() or [],
                 "dob": person.getDOB(),
@@ -102,13 +122,41 @@ class AISummarizer:
                 "involved_in_military": person.getInvolvedInMilitary(),
                 "involved_in_music": person.getInvolvedInMusic()
             }
+            
+            self.last_extraction_time = time.perf_counter() - start_time
+            self.extraction_times.append(self.last_extraction_time)
+            logger.info(f"[TIMING] AI Total Extraction: {self.last_extraction_time:.2f}s")
+            
+            return result
 
         except ValueError as e:
-            print(f"Invalid URL: {e}")
+            elapsed = time.perf_counter() - start_time
+            logger.error(f"Invalid URL ({elapsed:.2f}s): {e}")
             return empty_result
         except Exception as e:
-            print(f"Error extracting AI data from {wikipedia_url}: {e}")
+            elapsed = time.perf_counter() - start_time
+            logger.error(f"Error extracting AI data from {wikipedia_url} ({elapsed:.2f}s): {e}")
             return empty_result
+
+    def get_timing_summary(self) -> str:
+        """Get a summary of AI summarizer timing."""
+        lines = [
+            "",
+            "-" * 40,
+            "AI Summarizer Timing Breakdown:",
+        ]
+        
+        if self.extraction_times:
+            total_time = sum(self.extraction_times)
+            avg_time = total_time / len(self.extraction_times)
+            lines.append(f"  Extractions: {total_time:.2f}s total")
+            lines.append(f"    - Count: {len(self.extraction_times)}")
+            lines.append(f"    - Average: {avg_time:.2f}s per extraction")
+        else:
+            lines.append("  No extractions performed")
+        
+        lines.append("-" * 40)
+        return "\n".join(lines)
 
     @staticmethod
     def _empty_result() -> Dict[str, Any]:

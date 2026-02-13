@@ -2,9 +2,13 @@
 ODMP (Officer Down Memorial Page) scraper.
 
 Searches for fallen officers by name and extracts biographical information.
+
+OPTIMIZED: Collects officer names during URL collection phase, enabling
+in-memory fuzzy matching instead of re-visiting every profile for each search.
 """
 
 import time
+import logging
 from typing import Optional, Dict, Any, List
 
 from bs4 import BeautifulSoup, NavigableString
@@ -16,6 +20,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
 from rapidfuzz import fuzz
+
+from ..timing import Timer, TimingStats
+
+
+# Configure logger
+logger = logging.getLogger(__name__)
 
 
 class ODMPScraper:
@@ -35,20 +45,30 @@ class ODMPScraper:
         self.state = state.lower()
         self.threshold = threshold
         self.driver = None
-        self._officer_urls_cache = None
+        # Cache stores list of {"url": ..., "name": ...} dicts
+        self._officers_cache: Optional[List[Dict[str, str]]] = None
+        
+        # Timing stats for performance tracking
+        self.timing_stats = TimingStats("ODMP Scraper")
+        self.collection_time: float = 0.0
+        self.profile_scrape_times: List[float] = []
 
     def _get_driver(self) -> webdriver.Chrome:
         """Create and return a headless Chrome WebDriver."""
+        start = time.perf_counter()
         options = Options()
         options.add_argument("--headless=new")
         options.add_argument("--window-size=1920,1080")
         options.add_argument("--disable-gpu")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
-        return webdriver.Chrome(
+        driver = webdriver.Chrome(
             service=Service(ChromeDriverManager().install()),
             options=options
         )
+        elapsed = time.perf_counter() - start
+        logger.info(f"[TIMING] ODMP Driver Initialization: {elapsed:.2f}s")
+        return driver
 
     def _ensure_driver(self):
         """Ensure driver is initialized."""
@@ -112,30 +132,57 @@ class ODMPScraper:
             return True
 
         except Exception as e:
-            print(f"Pagination error: {e}")
+            logger.warning(f"Pagination error: {e}")
             return False
 
-    def _collect_officer_urls(self) -> List[str]:
+    def _extract_name_from_page(self, wait: WebDriverWait) -> Optional[str]:
         """
-        Collect all officer profile URLs from the state browse page.
+        Extract officer name from the current profile page.
+        
+        Args:
+            wait: WebDriverWait instance
+        
+        Returns:
+            Officer name or None if not found
+        """
+        try:
+            # Wait for the h1 to be present before extracting
+            wait.until(EC.presence_of_element_located((By.CSS_SELECTOR, "h1")))
+            soup = BeautifulSoup(self.driver.page_source, "lxml")
+            h1 = soup.find("h1")
+            return h1.get_text(strip=True) if h1 else None
+        except Exception as e:
+            logger.warning(f"Could not extract name: {e}")
+            return None
+
+    def _collect_officers(self) -> List[Dict[str, str]]:
+        """
+        Collect all officer profile URLs AND names from the state browse page.
+        
+        This is the OPTIMIZED version that scrapes names during URL collection,
+        enabling instant in-memory fuzzy matching later.
 
         Returns:
-            List of officer profile URLs
+            List of dicts with {"url": ..., "name": ...}
         """
-        if self._officer_urls_cache is not None:
-            return self._officer_urls_cache
+        if self._officers_cache is not None:
+            logger.info(f"[TIMING] ODMP Officer Collection: 0.00s (cached, {len(self._officers_cache)} officers)")
+            return self._officers_cache
 
+        start_time = time.perf_counter()
+        
         self._ensure_driver()
         wait = WebDriverWait(self.driver, 10)
 
         start_url = f"{self.BASE_URL}/search/browse/{self.state}"
         self.driver.get(start_url)
 
-        officer_links = set()
+        officers = []
+        seen_urls = set()
         page_number = 1
 
         while True:
-            print(f"Scanning browse page {page_number}...")
+            logger.info(f"Scanning browse page {page_number}...")
 
             try:
                 wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "mat-card")))
@@ -157,27 +204,41 @@ class ODMPScraper:
                     self.driver.execute_script("arguments[0].click();", card)
 
                     wait.until(EC.url_contains("/officer/"))
-                    officer_links.add(self.driver.current_url)
-                    print(f"  Found: {self.driver.current_url}")
+                    
+                    url = self.driver.current_url
+                    
+                    # Only process if we haven't seen this URL before
+                    if url not in seen_urls:
+                        seen_urls.add(url)
+                        
+                        # OPTIMIZATION: Extract name while we're on the profile page
+                        name = self._extract_name_from_page(wait)
+                        
+                        officers.append({"url": url, "name": name})
+                        logger.info(f"  Found: {name} ({url})")
 
                     self.driver.back()
                     wait.until(EC.presence_of_all_elements_located((By.CSS_SELECTOR, "mat-card")))
                     time.sleep(2)
 
                 except Exception as e:
-                    print(f"  Skipping card due to error: {e}")
+                    logger.warning(f"  Skipping card due to error: {e}")
 
             if self._click_next_page(wait):
                 page_number += 1
             else:
                 break
 
-        self._officer_urls_cache = sorted(officer_links)
-        return self._officer_urls_cache
+        self._officers_cache = officers
+        
+        self.collection_time = time.perf_counter() - start_time
+        logger.info(f"[TIMING] ODMP Officer Collection: {self.collection_time:.2f}s ({len(officers)} officers found)")
+        
+        return self._officers_cache
 
     def _scrape_officer_profile(self, url: str) -> Dict[str, Any]:
         """
-        Scrape biographical data from an officer profile page.
+        Scrape full biographical data from an officer profile page.
 
         Args:
             url: Officer profile URL
@@ -185,6 +246,8 @@ class ODMPScraper:
         Returns:
             Dictionary with officer data
         """
+        start_time = time.perf_counter()
+        
         self._ensure_driver()
         wait = WebDriverWait(self.driver, 10)
         self.driver.get(url)
@@ -243,12 +306,18 @@ class ODMPScraper:
 
         data["incident_details"] = " ".join(incident_text) if incident_text else None
 
-        print(f"Scraped: {data['name']}")
+        elapsed = time.perf_counter() - start_time
+        self.profile_scrape_times.append(elapsed)
+        logger.info(f"Scraped full profile: {data['name']} ({elapsed:.2f}s)")
+        
         return data
 
     def search_officer(self, name: str) -> Optional[Dict[str, Any]]:
         """
         Search for an officer by name.
+        
+        OPTIMIZED: Uses in-memory fuzzy matching against cached officer names,
+        only visiting the profile page if a match is found.
 
         Args:
             name: Person name to search for
@@ -256,27 +325,62 @@ class ODMPScraper:
         Returns:
             Dictionary with officer data if found, None otherwise
         """
-        print(f"\nSearching ODMP for: {name}")
-        officer_urls = self._collect_officer_urls()
-
-        for url in officer_urls:
-            try:
-                officer = self._scrape_officer_profile(url)
-
-                if officer["name"]:
-                    match, score = self._is_fuzzy_match(officer["name"], name)
-
-                    if match:
-                        officer["fuzzy_score"] = score
-                        print(f"Match found ({score}): {officer['name']}")
-                        return officer
-
-                time.sleep(1)
-            except Exception as e:
-                print(f"Error scraping {url}: {e}")
-
-        print(f"No ODMP match found for: {name}")
+        search_start = time.perf_counter()
+        
+        logger.info(f"\nSearching ODMP for: {name}")
+        
+        # Collect officers (with names) - cached after first call
+        officers = self._collect_officers()
+        
+        # OPTIMIZATION: In-memory fuzzy matching - no page visits!
+        match_start = time.perf_counter()
+        for officer in officers:
+            if officer["name"]:
+                is_match, score = self._is_fuzzy_match(officer["name"], name)
+                
+                if is_match:
+                    match_time = time.perf_counter() - match_start
+                    logger.info(f"[TIMING] In-memory matching: {match_time:.4f}s")
+                    logger.info(f"Match found ({score}): {officer['name']}")
+                    
+                    # Only now do we visit the profile to get full details
+                    full_data = self._scrape_officer_profile(officer["url"])
+                    full_data["fuzzy_score"] = score
+                    
+                    elapsed = time.perf_counter() - search_start
+                    logger.info(f"[TIMING] ODMP Search Total: {elapsed:.2f}s (match found)")
+                    return full_data
+        
+        match_time = time.perf_counter() - match_start
+        elapsed = time.perf_counter() - search_start
+        logger.info(f"[TIMING] In-memory matching: {match_time:.4f}s (checked {len(officers)} names)")
+        logger.info(f"[TIMING] ODMP Search Total: {elapsed:.2f}s (no match)")
+        logger.info(f"No ODMP match found for: {name}")
         return None
+
+    def get_timing_summary(self) -> str:
+        """Get a summary of ODMP scraper timing."""
+        lines = [
+            "",
+            "-" * 40,
+            "ODMP Scraper Timing Breakdown:",
+            f"  Officer Collection: {self.collection_time:.2f}s",
+        ]
+        
+        if self._officers_cache:
+            lines.append(f"    - Officers cached: {len(self._officers_cache)}")
+        
+        if self.profile_scrape_times:
+            total_profile_time = sum(self.profile_scrape_times)
+            avg_profile_time = total_profile_time / len(self.profile_scrape_times)
+            lines.append(f"  Full Profile Scrapes: {total_profile_time:.2f}s total")
+            lines.append(f"    - Count: {len(self.profile_scrape_times)} profiles")
+            lines.append(f"    - Average: {avg_profile_time:.2f}s per profile")
+        else:
+            lines.append("  Full Profile Scrapes: 0 (no matches found)")
+        
+        lines.append("-" * 40)
+        return "\n".join(lines)
 
     def close(self):
         """Close the WebDriver."""
