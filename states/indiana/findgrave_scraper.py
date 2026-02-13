@@ -30,7 +30,7 @@ from typing import List, Tuple, Optional, Dict
 
 # -------------------
 
-INPUT_FILE = "cleaned_names.txt"                # lines: "Name" or "Name|birth|death|state"
+INPUT_FILE = "indiana_cleaned_names.txt"                # lines: "Name" or "Name|birth|death|state"
 OUTPUT_FILE = "findagrave_results.csv"
 DELAY_SECONDS = 1
 MAX_CANDIDATES = 3                      # how many search-result memorial links to evaluate
@@ -67,7 +67,7 @@ SESSION = requests.Session()
 SESSION.headers.update(HEADERS)
 
 # Optional: preferred state to prioritize matches
-PREFERRED_STATE = "California"   # <-- set to None or "" to disable preference
+PREFERRED_STATE = "Indiana"   # <-- set to None or "" to disable preference
 PREFERRED_STATE_WEIGHT = 0.15 # how much to boost confidence if matched (0.05–0.25 works well)
 
 
