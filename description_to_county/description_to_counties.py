@@ -7,17 +7,9 @@ from dotenv import load_dotenv
 from shapely.ops import unary_union
 from pyrosm import OSM
 
-OSM_PBF = "description_to_county\data\osm\michigan-260204.osm.pbf"
 
-print("Loading Michigan roads (one-time)...")
-_osm = OSM(OSM_PBF)
-_ROADS_WITH_REF = _osm.get_data_by_custom_criteria(
-    custom_filter={"highway": True, "ref": True},
-    extra_attributes=["ref", "name"],
-    keep_nodes=False
-)
 
-print(f"Loaded {_ROADS_WITH_REF.shape[0]} road segments with refs")
+
 
 load_dotenv()
 api_key = os.getenv("MISTRAL_API_KEY")
@@ -75,7 +67,7 @@ STATE_ABBR_TO_FIPS = {
 
 def get_highway_geometry_cached(highway_ref: str):
     """
-    Return Shapely geometry of a highway from cached Michigan roads
+    Return Shapely geometry of a highway from cached roads
     """
     ref_norm = highway_ref.replace("-", " ").upper()
 
@@ -132,9 +124,21 @@ def highway_description_to_counties(desc: str):
 ### Michigan Test Run
 import pandas as pd
 
-file = "Michigan/Memorial_Highways.csv"
+OSM_PBF = "description_to_county\data\osm/michigan-260204.osm.pbf"
+in_file = "Michigan/Memorial_Highways.csv"
+out_file = "description_to_county/data/outputs/Michigan_with_counties.csv"
 
-df = pd.read_csv(file)
+print("Loading roads (one-time)...")
+_osm = OSM(OSM_PBF)
+_ROADS_WITH_REF = _osm.get_data_by_custom_criteria(
+    custom_filter={"highway": True, "ref": True},
+    extra_attributes=["ref", "name"],
+    keep_nodes=False
+)
+print(f"Loaded {_ROADS_WITH_REF.shape[0]} road segments with refs")
+
+
+df = pd.read_csv(in_file)
 descriptions = df["Description"]
 county_values = []
 for desc in descriptions:
@@ -151,4 +155,4 @@ for desc in descriptions:
     county_values.append(counties)
 
 df["Counties Crossed"] = county_values
-df.to_csv("description_to_county/data/outputs/Michigan_with_counties.csv")
+df.to_csv(out_file)

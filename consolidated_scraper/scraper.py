@@ -3,14 +3,20 @@ Main ConsolidatedScraper class that orchestrates all three scrapers.
 """
 
 import csv
+import logging
 from typing import Optional, List, Union
 import pandas as pd
 
 from .models import PersonRecord
 from .name_cleaner import process_name
+from .timing import Timer, TimingStats
 from .scrapers.odmp import ODMPScraper
 from .scrapers.wikidata import WikidataScraper
 from .scrapers.ai_summarizer import AISummarizer
+
+
+# Configure logger
+logger = logging.getLogger(__name__)
 
 
 class ConsolidatedScraper:
@@ -49,6 +55,9 @@ class ConsolidatedScraper:
         self.enable_odmp = enable_odmp
         self.enable_wikidata = enable_wikidata
         self.enable_ai = enable_ai
+        
+        # Timing stats for performance tracking
+        self.timing_stats = TimingStats("ConsolidatedScraper")
 
         # Initialize ODMP scraper
         self._odmp = None
@@ -83,11 +92,11 @@ class ConsolidatedScraper:
         # Process the name
         cleaned_name, detected_type = process_name(name, input_type)
 
-        print(f"\n{'='*60}")
-        print(f"Scraping: {name}")
-        print(f"Cleaned name: {cleaned_name}")
-        print(f"Input type: {detected_type}")
-        print(f"{'='*60}")
+        logger.info(f"\n{'='*60}")
+        logger.info(f"Scraping: {name}")
+        logger.info(f"Cleaned name: {cleaned_name}")
+        logger.info(f"Input type: {detected_type}")
+        logger.info(f"{'='*60}")
 
         # Create record
         record = PersonRecord(
@@ -96,9 +105,10 @@ class ConsolidatedScraper:
             input_type=detected_type
         )
 
-        # Run ODMP scraper
+        # Run ODMP scraper with timing
         if self.enable_odmp and self._odmp:
-            odmp_data = self._odmp.search_officer(cleaned_name)
+            with self.timing_stats.time("ODMP Search") as timer:
+                odmp_data = self._odmp.search_officer(cleaned_name)
             if odmp_data:
                 record.odmp_url = odmp_data.get("source_url")
                 record.odmp_name = odmp_data.get("name")
@@ -111,10 +121,11 @@ class ConsolidatedScraper:
                 record.odmp_incident_details = odmp_data.get("incident_details")
                 record.odmp_fuzzy_score = odmp_data.get("fuzzy_score")
 
-        # Run Wikidata scraper
+        # Run Wikidata scraper with timing
         if self.enable_wikidata and self._wikidata:
-            print(f"\nSearching Wikidata for: {cleaned_name}")
-            wiki_data = self._wikidata.get_person_info(cleaned_name)
+            logger.info(f"\nSearching Wikidata for: {cleaned_name}")
+            with self.timing_stats.time("Wikidata Lookup") as timer:
+                wiki_data = self._wikidata.get_person_info(cleaned_name)
             record.wikidata_occupation = wiki_data.get("Primary Occupation")
             record.wikidata_race = wiki_data.get("Race")
             record.wikidata_sex = wiki_data.get("Sex")
@@ -122,10 +133,11 @@ class ConsolidatedScraper:
             record.wikidata_death_date = wiki_data.get("Death Date")
             record.wikipedia_link = wiki_data.get("Wikipedia Link")
 
-        # Run AI summarizer if Wikipedia link is available
+        # Run AI summarizer if Wikipedia link is available with timing
         if self.enable_ai and self._ai and record.wikipedia_link:
-            print(f"\nRunning AI summarizer on: {record.wikipedia_link}")
-            ai_data = self._ai.extract_data(record.wikipedia_link)
+            logger.info(f"\nRunning AI summarizer on: {record.wikipedia_link}")
+            with self.timing_stats.time("AI Summarizer") as timer:
+                ai_data = self._ai.extract_data(record.wikipedia_link)
             record.ai_summary = ai_data.get("summary")
             record.ai_education = ai_data.get("education", [])
             record.ai_dob = ai_data.get("dob")
@@ -158,17 +170,24 @@ class ConsolidatedScraper:
             List of PersonRecord objects
         """
         results = []
+        
+        # Start total timer
+        self.timing_stats.start_total()
 
         for i, name in enumerate(names, 1):
-            print(f"\n[{i}/{len(names)}] Processing: {name}")
-            try:
-                record = self.scrape_person(name, input_type)
-                results.append(record)
-            except Exception as e:
-                print(f"Error processing {name}: {e}")
-                # Create empty record with just the input name
-                record = PersonRecord(input_name=name, cleaned_name=name)
-                results.append(record)
+            logger.info(f"\n[{i}/{len(names)}] Processing: {name}")
+            with self.timing_stats.time(f"Person {i}: {name[:30]}...") as timer:
+                try:
+                    record = self.scrape_person(name, input_type)
+                    results.append(record)
+                except Exception as e:
+                    logger.error(f"Error processing {name}: {e}")
+                    # Create empty record with just the input name
+                    record = PersonRecord(input_name=name, cleaned_name=name)
+                    results.append(record)
+        
+        # Stop total timer
+        self.timing_stats.stop_total()
 
         if output_file:
             self._save_to_csv(results, output_file)
@@ -231,7 +250,7 @@ class ConsolidatedScraper:
     def _save_to_csv(self, records: List[PersonRecord], output_file: str):
         """Save records to CSV file."""
         if not records:
-            print("No records to save")
+            logger.info("No records to save")
             return
 
         fieldnames = PersonRecord.get_field_names()
@@ -242,7 +261,15 @@ class ConsolidatedScraper:
             for record in records:
                 writer.writerow(record.to_dict())
 
-        print(f"\nSaved {len(records)} records to {output_file}")
+        logger.info(f"\nSaved {len(records)} records to {output_file}")
+
+    def print_timing_summary(self):
+        """Print a summary of all timing data collected."""
+        self.timing_stats.print_summary()
+
+    def get_timing_stats(self) -> TimingStats:
+        """Get the timing stats object for custom analysis."""
+        return self.timing_stats
 
     def close(self):
         """Close all scrapers and release resources."""
