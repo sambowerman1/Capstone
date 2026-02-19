@@ -11,4 +11,4 @@ __pycache__/
 *.pyzw
 *.pyz
 description_to_county/data/osm/
-description_to_county/data/tl_2025_us_county
+description_to_county/data/tl_2025_us_county/
