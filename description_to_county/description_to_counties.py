@@ -124,22 +124,35 @@ def highway_description_to_counties(desc: str):
 ### Michigan Test Run
 import pandas as pd
 
-OSM_PBF = "description_to_county\data\osm/michigan-260204.osm.pbf"
-in_file = "Michigan/Memorial_Highways.csv"
-out_file = "description_to_county/data/outputs/Michigan_with_counties.csv"
+OSM_PBF = "description_to_county\data\osm\missouri-260224.osm.pbf"
+in_file = "states/sam_states_feb16/missouri/MemorialRoadsAndBridges_-9189987098950501562.csv"
+out_file = "description_to_county/data/outputs/Missouri_with_counties.csv"
 
 print("Loading roads (one-time)...")
 _osm = OSM(OSM_PBF)
+major_highways = [
+    "motorway",
+    "trunk",
+    "primary",
+    "secondary",
+    "tertiary"
+]
 _ROADS_WITH_REF = _osm.get_data_by_custom_criteria(
-    custom_filter={"highway": True, "ref": True},
+    custom_filter={
+        "highway": major_highways,
+        "ref": True
+    },
     extra_attributes=["ref", "name"],
-    keep_nodes=False
+    filter_type="keep",
+    tags_as_columns=[],
+    keep_nodes=False,
+    keep_relations=False,
 )
 print(f"Loaded {_ROADS_WITH_REF.shape[0]} road segments with refs")
 
 
 df = pd.read_csv(in_file)
-descriptions = df["Description"]
+descriptions = df["DESCRIPTIO"]
 county_values = []
 for desc in descriptions:
     try:
