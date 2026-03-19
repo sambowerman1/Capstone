@@ -1,0 +1,129 @@
+_id,highway_name,route_no,district,how_named,from_location,to_location,commemorative_keyword,person_named,keep,flag_reason
+1,“Farm-to-Fork Corridor”,99,3,"ACR 44, CH 107, 2019",Junction with State Route 70 around (PM R8.109),Garden Highway UC# 18-25 (PM 11.975),False,False,False,no commemorative keyword or person-name heuristic match
+7,Aerospace Highway,14,"7, 6","ACR 119, CH 83, 2002",Pearblossom Highway,Route 395,False,False,False,no commemorative keyword or person-name heuristic match
+9,All America City Highway,65,6,"ACR 47, CH 41, 1996",Route 99,Route 198,False,False,False,no commemorative keyword or person-name heuristic match
+10,Alpine State Highway,"88, 89, 4",10,"CH 468, 1911",Jackson,"Calaveras Big Trees, via Markleeville",False,False,False,no commemorative keyword or person-name heuristic match
+13,Antelope Valley Freeway ,14,7,"ACR 57, CH 196, 1957",I-5 south of Newhall,Avenue D north of Lancaster,False,False,False,no commemorative keyword or person-name heuristic match
+18,Arroyo Seco Parkway,110,7,Streets & Highways Code Section 283,Post Mile 25.7,Post Mile 31.9,False,False,False,no commemorative keyword or person-name heuristic match
+19,Artesia Freeway,91,"7, 12","ACR 80, CH 148, 1970",I-710,I-5 in Fullerton,False,False,False,no commemorative keyword or person-name heuristic match
+20,Avenue of the Giants,254,1,"ACR 10, CH 36, 1960",Sylvandale,south of Jordan Creek,False,False,False,no commemorative keyword or person-name heuristic match
+21,Avocado Highway,15,"11, 8","SCR 9, CH 62, 1997",Route 78 in Escondido,Temecula,False,False,False,no commemorative keyword or person-name heuristic match
+27,Bakersfield All-America City Freeway,99,6,"SCR 55, CH 39, 1992",I-5,Southern point of McFarland Avenue,False,False,False,no commemorative keyword or person-name heuristic match
+33,Barstow Freeway,"215, 15",8,"By Commission, 11/20/1958",Highland Avenue in San Bernardino,Nevada State Line,False,False,False,no commemorative keyword or person-name heuristic match
+35,Bayshore Freeway,101,4,By Location,Route 82 in San Jose,I-80 in San Francisco,False,False,False,no commemorative keyword or person-name heuristic match
+45,Biggs-Willows Road,"45, 162",3,"CH 542, 1919",Willows,Biggs,False,False,False,no commemorative keyword or person-name heuristic match
+49,Border Friendship Route,8,11,"SCR 104, CH 254, 1968",San Diego,Arizona State Line,False,False,False,no commemorative keyword or person-name heuristic match
+66,Cabrillo Freeway,163,11,Historical,I-5,I-15,False,False,False,no commemorative keyword or person-name heuristic match
+67,Cabrillo Highway,1,"5, 4","AB 1769, CH 1569, 1959, Streets & Highways Code Section 635",Las Cruces,San Francisco,False,False,False,no commemorative keyword or person-name heuristic match
+69,California Delta Highway,4,"4, 10","SCR 11, CH 46, 1987",I-680 ,I-5,False,False,False,no commemorative keyword or person-name heuristic match
+73,Capital City Freeway,51,3,"Sacramento Area Council of Governments, 1996",Route 50 / Route 99,I-80,False,False,False,no commemorative keyword or person-name heuristic match
+75,Carneros Highway,121,4,"SCR 62, CH 29, 1992",Route 37 in Sonoma County,Route 29 in Napa County,False,False,False,no commemorative keyword or person-name heuristic match
+78,Central Yosemite Highway,140,10,"ACR 27, CH 69, 1989",Merced/Mariposa County Line near Planada,Yosemite National Park,False,False,False,no commemorative keyword or person-name heuristic match
+79,Century Freeway,105,7,Local Usage,El Segundo near LAX,I-605 near Norwalk,False,False,False,no commemorative keyword or person-name heuristic match
+86,Chino Valley Freeway,71,"7, 8","ACR 20, CH 55, 1993",I-10,San Bernardino/Riverside County Line,False,False,False,no commemorative keyword or person-name heuristic match
+87,Chumash Highway,154,5,"ACR 75, CH 149, 2007","Start of Route 154, Junction Route 101","Terminus of Route 154, Junction Route 101",False,False,False,no commemorative keyword or person-name heuristic match
+95,Colorado Freeway,134,7,By Location,Eagle Rock Boulevard,Linda Vista Avenue in Pasadena,False,False,False,no commemorative keyword or person-name heuristic match
+100,Corona Freeway,"71, 91, 15","7, 8","By Commission, 7/23/1958",I-10 west of Pomona,I-215,False,False,False,no commemorative keyword or person-name heuristic match
+103,Costa Mesa Freeway,55,12,"ACR 177, CH 86, 1976",Southern Boundary of Costa Mesa,Route 91,False,False,False,no commemorative keyword or person-name heuristic match
+121,Dutch Flat and Donner Lake Wagon Road,80,3,"CH 224, 1909",Emigrant Gap,Donner Lake,False,False,False,no commemorative keyword or person-name heuristic match
+126,Eastshore Freeway,"880, 80",4,By Location,Route 101 in San Jose,Richmond,False,False,False,no commemorative keyword or person-name heuristic match
+131,El Camino Real (additional routes),"238, 12, 37, 121, 87, 162, 185, 92, 123","11, 12, 7, 5, 4","AB 1707, CH 739, 2001, Streets & Highways Code Section 635",Mexico International Border,Sonoma,False,False,False,no commemorative keyword or person-name heuristic match
+134,Escondido Freeway,15,11,"ACR 34, CH 67, 1979",I-5,I-8,False,False,False,no commemorative keyword or person-name heuristic match
+135,Escondido Freeway ,"15, 215","11, 8","By Commission, 1/24/1957",I-805,Route 91,False,False,False,no commemorative keyword or person-name heuristic match
+139,Farm-to-Fork Corridor,99,2,"ACR 27, CH 109, 2021",Eldrid Avenue (PM 20.400),Arch Street (PM 24.529),False,False,False,no commemorative keyword or person-name heuristic match
+145,Filipino-American Highway,54,11,"ACR 157, CH 145, 2006",Westernmost point of Route 54,Route 125,False,False,False,no commemorative keyword or person-name heuristic match
+146,Foothill Freeway,210,"7, 8","SCR 29, CH 128, 1991",I-5,I-10 in Redlands,False,False,False,no commemorative keyword or person-name heuristic match
+161,Gardena Freeway ,91,7,"SCR 16, CH 35, 1991",Eastern boundary of the City of Gardena,I-710,False,False,False,no commemorative keyword or person-name heuristic match
+167,Glendale Freeway,2,7,"By Commission, 8/17/1955",Route 101 ,I-210,False,False,False,no commemorative keyword or person-name heuristic match
+168,Golden Center Freeway,20,3,"SR 340, HR 556, 1968",Route 49 near Grass Valley,Nevada City,False,False,False,no commemorative keyword or person-name heuristic match
+169,Golden Chain Highway,49,"6, 10, 3, 2","AB 2922, CH 1318, 1992, Pub Res Code","Route 41 near Oakhurst, Madera County","Route 70 near Vinton, Plumas County",False,False,False,no commemorative keyword or person-name heuristic match
+170,Golden Gate Bridge Freeway,"1, 101",4,"SCR 11, CH 39, 1954",Route 1 from Lake Street to Route 101,Route 101 from Richardson Avenue to Waldo Point,False,False,False,no commemorative keyword or person-name heuristic match
+171,Golden State Freeway,5,7,"MTEB, 2/28/58",Junction I-5 & I-10 & Route 60 & Route 101,Route 14,False,False,False,no commemorative keyword or person-name heuristic match
+179,Great Sierra Wagon Road,120,9,"AB 302, CH 306, 1915",East Boundary of Yosemite National Park,Route 395,False,False,False,no commemorative keyword or person-name heuristic match
+183,Grove-Shafter Freeway,980,4,"By Location, mentioned in ACR 116, CH 233, 1961",I-880,I-580,False,False,False,no commemorative keyword or person-name heuristic match
+189,Happy Trails Highway,18,7,"ACR 82, CH 80, 1992",Apple Valley Eastern City Limit,Apple Valley Western City Limit,False,False,False,no commemorative keyword or person-name heuristic match
+190,Harbor Freeway,110,7,By Location,San Pedro,Route 101,False,False,False,no commemorative keyword or person-name heuristic match
+195,Hawthorne Freeway,107,7,By Location,Route 1,I-405,False,False,False,no commemorative keyword or person-name heuristic match
+203,Historic Highway Route 67 ,67,11,"SCR 56, CH 177, 2017",Junction Route 8 (PM R0.000),Junction Route 78 (PM R24.377),False,False,False,no commemorative keyword or person-name heuristic match
+204,Historic Highway Route 79,79,"8, 11","SCR 147, CH 181, 2016",Junction Of Interstate 8 11-SD-79-(PM L0.044),08-RIV-79-(PM 15.740),False,False,False,no commemorative keyword or person-name heuristic match
+205,Historic Alternate U.S. Highway Route 40,40,"3, 2","SCR 66, CH 51, 2006",City of Davis on Route 113,Hallelujah Junction on Route 395,False,False,False,no commemorative keyword or person-name heuristic match
+206,Historic Highway Route 66,66,"7, 8","ACR 6, CH 52, 1991",Santa Monica,Arizona State Line,False,False,False,no commemorative keyword or person-name heuristic match
+207,Historic U.S. Highway 395,395,"11, 8","ACR 98, CH 79, 2008",San Diego,Hesperia,False,False,False,no commemorative keyword or person-name heuristic match
+208,Historic U.S. Highway 99,99,"11, 8, 7, 6, 10, 3, 2","ACR 19, CH 73, 1993",Mexico International Border,Oregon State Line,False,False,False,no commemorative keyword or person-name heuristic match
+209,Historic U.S. Highway Route 6,6,"7, 6, 9","ACR 26, CH 67, 2007",Long Beach,Nevada State Line,False,False,False,no commemorative keyword or person-name heuristic match
+210,Historic U.S. Highway Route 40,40,"4, 3","ACR 180, CH 161, 1998",San Francisco,Nevada State Line,False,False,False,no commemorative keyword or person-name heuristic match
+211,Historic U.S. Highway Route 80,80,11,"ACR 123, CH 104, 2006",San Diego Bay,Colorado River ,False,False,False,no commemorative keyword or person-name heuristic match
+212,Historic U.S. Highway Route 101,101,"11, 12, 7, 5, 4, 1","ACR 92, CH 150, 1998",Mexican Border,Oregon State Line,False,False,False,no commemorative keyword or person-name heuristic match
+213,Historic Yosemite Highway,132,10,"ACR 27, CH 69, 1989",Stanislaus/Tuolumne County Line near La Grange,Route 49,False,False,False,no commemorative keyword or person-name heuristic match
+215,Hollywood Freeway,"101, 170",7,By Location,I-110 4-level Interchange,I-5,False,False,False,no commemorative keyword or person-name heuristic match
+262,Kumeyaay Highway,8,11,"ACR 57, CH 112, 1997 & ACR 156, CH 90, 2002","Nimitz Boulevard in Mission Bay, City of San Diego",San Diego/Imperial County Line,False,False,False,no commemorative keyword or person-name heuristic match
+264,Laguna Freeway ,133,12,"By Commission, 11/26/1957",I-5,Laguna Beach,False,False,False,no commemorative keyword or person-name heuristic match
+272,Lassen State Highway,299,2,"CH 498, 1911",Shasta/Lassen County Line,Lassen/Modoc County Line,False,False,False,no commemorative keyword or person-name heuristic match
+293,Long Beach Freeway ,710,7,By Commission 11/18/1954,Route 1 in Long Beach,I-5 in Commerce,False,False,False,no commemorative keyword or person-name heuristic match
+299,MacArthur Freeway,580,4,"ACR 27, CH 156, 1968",Route 238,I-880,False,False,False,no commemorative keyword or person-name heuristic match
+310,Marina Freeway ,90,"7, 12","SCR 59, CH 25, 1976",Route 1,Route 91,False,False,False,no commemorative keyword or person-name heuristic match
+335,Mojave Freeway,15,8,"ACR 47, CH 117, 1987",I-215 at Devore,Nevada State Line,False,False,False,no commemorative keyword or person-name heuristic match
+339,Mono Lake Basin Road,120,9,"CH 704, 1917",Route 395,Mono Mills (Site),False,False,False,no commemorative keyword or person-name heuristic match
+342,Moreno Valley Freeway,60,8,"SCR 45, CH 103, 1989",Route 91,I-10,False,False,False,no commemorative keyword or person-name heuristic match
+343,Mother Lode Highway,49,"10, 3","CH 839, 1921",Sonora,Auburn,False,False,False,no commemorative keyword or person-name heuristic match
+346,Muir Woods Toll Road,,4,"CH 634, 1935",Route 1,Junction of Panoramic Hwy,False,False,False,no commemorative keyword or person-name heuristic match
+354,Needles Freeway,40,8,"SCR 1, 1968",I-15,Arizona State Line,False,False,False,no commemorative keyword or person-name heuristic match
+359,Nimitz Freeway,880,4,"SCR 23, CH 84, 1958",Route 101,I-80,False,False,False,no commemorative keyword or person-name heuristic match
+363,Nomlaki Highway,5,2,"SCR 15, CH 93, 2007",Gyle Road,Flores Avenue,False,False,False,no commemorative keyword or person-name heuristic match
+364,Northern Yosemite Highway,120,10,"ACR 27, CH 69, 1989",San Joaquin/Stanislaus County Line near Escalon,Yosemite National Park,False,False,False,no commemorative keyword or person-name heuristic match
+365,Norwalk Freeway,105,7,"ACR 46, CH 362, 1969",I-405,Route 605 near the City of Norwalk,False,False,False,no commemorative keyword or person-name heuristic match
+370,Ocean Beach Freeway ,8,11,"ACR 117, CH 233, 1968",Sunset Cliffs Boulevard,I-5 in San Diego,False,False,False,no commemorative keyword or person-name heuristic match
+372,Ojai Freeway,33,7,By Location,Route 101,Foster Park,False,False,False,no commemorative keyword or person-name heuristic match
+376,Ontario Freeway,15,8,"ACR 10, CH 136, 1989","Limonite Avenue exit, south of Route 60 interchange",I-215 at Devore,False,False,False,no commemorative keyword or person-name heuristic match
+377,Orange Freeway,57,"12, 7","ACR 17, CH 157, 1969",Route 1,Route 60 near the City of Diamond Bar,False,False,False,no commemorative keyword or person-name heuristic match
+386,Pacific Coast Highway,1,"12, 7","AB 1769, CH 1569, 1959, Streets & Highways Code Section 635",San Juan Capistrano,El Rio,False,False,False,no commemorative keyword or person-name heuristic match
+395,Pasadena Freeway ,110,7,By Commission 11/18/1954,Route 101 (4-level Structure),Pasadena,False,False,False,no commemorative keyword or person-name heuristic match
+406,Petroleum Highway,33,6,"ACR 185, CH 128, 2004",Route 166,Route 46,False,False,False,no commemorative keyword or person-name heuristic match
+410,David E. Pierson and Bill Freeman Highway,86,11,"ACR 23, CH 68, 1989",San Felipe Creek Bridge at Route 78,Imperial/Riverside County Line,False,False,False,no commemorative keyword or person-name heuristic match
+411,Gateway to the Pinnacles Highway,101,5,"ACR 67, CH 141, 2014",Exit 301 SB ON FROM ARROYO SECO - PM 60.150,Exit 305 SB ON FROM CAMPHORA/GLORIA - PM 64.410,False,False,False,no commemorative keyword or person-name heuristic match
+415,Pomona Freeway,60,"7, 8",By Commission 11/15/1955,I-5,Route 83 in Chino,False,False,False,no commemorative keyword or person-name heuristic match
+418,Portola Freeway ,380,4,"ACR 113, CH 217, 1970",Route 1,Route 101 near San Francisco International Airport,False,False,False,no commemorative keyword or person-name heuristic match
+431,Ramona Freeway ,10,"7, 8",Not Officially Named,Route 101,I-215,False,False,False,no commemorative keyword or person-name heuristic match
+435,Redondo Beach Freeway ,91,7,"ACR 80, CH 148, 1970",I-405,I-710,False,False,False,no commemorative keyword or person-name heuristic match
+436,Redwood Highway,101,"4, 1","ACR 174, CH 269, 1957",Golden Gate Bridge,Oregon State Line,False,False,False,no commemorative keyword or person-name heuristic match
+445,Riverside Freeway,"91, 215","12, 8","By Commission, 10/22/1957",I-5,I-10 in Colton,False,False,False,no commemorative keyword or person-name heuristic match
+463,San Bernardino Freeway,10,"7, 8","By Commission, 11/18/1954",Route 101,I-215,False,False,False,no commemorative keyword or person-name heuristic match
+464,San Diego Freeway,5,"11, 12","By Commission, 4/25/1957",Route 94,I-405 near Irvine,False,False,False,no commemorative keyword or person-name heuristic match
+465,San Diego Freeway ,405,"12, 7","By Commission, 11/18/1954",I-5 south of Irvine,I-5 north of San Fernando,False,False,False,no commemorative keyword or person-name heuristic match
+466,San Gabriel River Freeway,605,"12, 7","SB 99, CH 1101, 1967",I-405,I-10,False,False,False,no commemorative keyword or person-name heuristic match
+467,San Luis Rey Mission Expressway,76,11,"ACR 6, CH 54, 1995",I-5,I-15,False,False,False,no commemorative keyword or person-name heuristic match
+473,Santa Ana Freeway,"5, 101","12, 7",By Location,I-405,I-110 (4-level Interchange),False,False,False,no commemorative keyword or person-name heuristic match
+474,Santa Monica Freeway ,10,7,"By Commission, 4/25/1957",Route 1 - PM R2.155,I-5 - PM 18.394,False,False,False,no commemorative keyword or person-name heuristic match
+475,Santa Paula Freeway,126,7,"SB 835, CH 1223, 1967",Route 101 near Ventura,I-5 near Santa Clarita,False,False,False,no commemorative keyword or person-name heuristic match
+487,Sears Point Toll Road,37,4,"CH 393, 1933",Route 121 near Sears Point,Vallejo,False,False,False,no commemorative keyword or person-name heuristic match
+488,Seaside Freeway ,47,7,"HR 144, 1959",San Pedro,Long Beach,False,False,False,no commemorative keyword or person-name heuristic match
+491,Semper Fi Highway,15,11,"ACR 121, CH 40, 2004",Route 163,Miramar Road,False,False,False,no commemorative keyword or person-name heuristic match
+492,Sepulveda Freeway ,405,"12, 7",By Location,I-5 south of Irvine,I-5 north of San Fernando,False,False,False,no commemorative keyword or person-name heuristic match
+493,Sequoia-Kings Canyon Freeway,180,6,"SCR 25, CH 85, 1997",Brawley Avenue,Highland Avenue,False,False,False,no commemorative keyword or person-name heuristic match
+499,Shoreline Highway,"1, 211","4, 1","SCR 91, CH 239, 1957",San Francisco,Fernbridge,False,False,False,no commemorative keyword or person-name heuristic match
+500,Sierra Freeway,168,6,"SCR 25, CH 85, 1997",Route 180 in Fresno,Armstrong Avenue in Fresno,False,False,False,no commemorative keyword or person-name heuristic match
+502,Simi Valley-San Fernando Valley Freeway,118,7,"ACR 145, CH 185, 1970",Route 23 in Moorpark,I-210 in San Fernando,False,False,False,no commemorative keyword or person-name heuristic match
+503,Sinclair Freeway,"280, 680",4,"ACR 104, CH 168, 1967",Route 17 near San Jose,Santa Clara/Alameda County Line,False,False,False,no commemorative keyword or person-name heuristic match
+505,Skyline Boulevard,"17, 35, 92, 280",4,"CH 46, 1919",Santa Cruz,San Francisco,False,False,False,no commemorative keyword or person-name heuristic match
+508,California Small Business Owner's Highway,99,3,"ACR 118, CH 174, 2014",HULL ROAD - PM 22.830,STEWART ROAD - PM 26.880,False,False,False,no commemorative keyword or person-name heuristic match
+515,Sonora and Mono Wagon Road,"108, 395","10, 9","SB 289, CH 111, 1901, Extended AB 672, CH 510, 1919",Eastern boundary of the City of Sonora,Bridgeport,False,False,False,no commemorative keyword or person-name heuristic match
+518,South Bay Freeway,54,11,By Location,I-805,Route 94,False,False,False,no commemorative keyword or person-name heuristic match
+520,Southern Yosemite Highway,41,6,"ACR 27, CH 69, 1989",Fresno/Madera County Line,Yosemite National Park,False,False,False,no commemorative keyword or person-name heuristic match
+526,Robert Louis Stevenson's Historic Trail to Silverado,29,4,"SCR 37, CH 93, 2010",Post Mile 37.9,Post Mile 39.5,False,False,False,no commemorative keyword or person-name heuristic match
+536,Temecula Valley Freeway,15,8,"ACR 125, CH 78, 1990",San Diego/Riverside County Line,Bundy Canyon Road near Lake Elsinore,False,False,False,no commemorative keyword or person-name heuristic match
+544,Tinloy Street,"20, 49",3,"SCR 11, CH 121, 2005",East Main Street,South Auburn Street,False,False,False,no commemorative keyword or person-name heuristic match
+545,Tioga Road ,120,9,"AB 302, CH 306, 1915",East Boundary of Yosemite National Park,Route 395,False,False,False,no commemorative keyword or person-name heuristic match
+547,Torrance Freeway,107,7,"ACR 63, CH 171, 1968",Route 1 near Torrance,I-405 near Lawndale,False,False,False,no commemorative keyword or person-name heuristic match
+548,Trinity Scenic Byway,299,"1, 2","ACR 126, CH 131, 1992",Route 101 in Arcata,I-5 in Redding,False,False,False,no commemorative keyword or person-name heuristic match
+553,Twentynine Palms Highway,62,8,"ACR 164, CH 121, 1990",I-10,Route 177,False,False,False,no commemorative keyword or person-name heuristic match
+557,"Imperial Valley Pioneers
+Expressway",111,11,"ACR 160, CH 147, 2010",Route 8,Route 78,False,False,False,no commemorative keyword or person-name heuristic match
+558,Valley of the Moon Scenic Route,"37, 121, 12",4,"SCR 56, CH 192, 1953 & ACR 46, CH 140, 1949",Route 101 near Ignacio,Santa Rosa via Sonoma,False,False,False,no commemorative keyword or person-name heuristic match
+565,Ventura Freeway,"134, 101",7,Historical ,I-5,"Route 1, east of the City of Ventura",False,False,False,no commemorative keyword or person-name heuristic match
+566,Ventura Freeway Extension,101,7,"SCR 4, CH 62, 1973","Route 1, east of the City of Ventura",Santa Barbara/Ventura County Line,False,False,False,no commemorative keyword or person-name heuristic match
+582,Wabash Boulevard,15,11,By Location,I-5,I-805,False,False,False,no commemorative keyword or person-name heuristic match
+590,Warren Boulevard ,13,4,"ACR 96, CH 166, 1957",I-580,Route 24,False,False,False,no commemorative keyword or person-name heuristic match
+591,West Side Freeway,5,"6, 10, 3",By Location,Route 99 in Wheeler Ridge,Woodland,False,False,False,no commemorative keyword or person-name heuristic match
+592,West Valley Freeway,85,4,"ACR 57, CH 73, 1996",Route 101 near Bernal Road in San Jose,Route 101 near Moffett Boulevard in Mountain View,False,False,False,no commemorative keyword or person-name heuristic match
+611,Yolo and Lake Highway,"53, 20, 16","1, 3","CH 283, 1915",Lower Lake,Rumsey,False,False,False,no commemorative keyword or person-name heuristic match
+613,Yosemite Freeway,41,6,"SCR 25, CH 85, 1997",Elkhorn Avenue to Ventura Avenue,Herndon Avenue to the Fresno/Madera County Line,False,False,False,no commemorative keyword or person-name heuristic match
