@@ -70,7 +70,7 @@ STATE_CSV_CONFIG = {
 OUTPUT_FIELDS = [
     'state', 'highway_name', 'route_no', 'from_location', 'to_location',
     'county', 'person_name', 'wikipedia_url', 'match_confidence',
-    'validated', 'validation_notes',
+    'validated', 'validation_notes', 'correct_person',
     'summary', 'education', 'dob', 'dod',
     'place_of_birth', 'place_of_death', 'gender',
     'involved_in_sports', 'involved_in_politics',
@@ -120,12 +120,30 @@ def load_completed_states() -> Set[str]:
 
 
 def ensure_header():
-    """Write the CSV header if the output file doesn't exist or is empty."""
-    if os.path.exists(OUTPUT_FILE) and os.path.getsize(OUTPUT_FILE) > 0:
+    """Write the CSV header if missing; pad and rewrite if an existing file lacks new columns."""
+    if not os.path.exists(OUTPUT_FILE) or os.path.getsize(OUTPUT_FILE) == 0:
+        with open(OUTPUT_FILE, 'w', newline='', encoding='utf-8') as f:
+            writer = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS)
+            writer.writeheader()
         return
+
+    with open(OUTPUT_FILE, 'r', encoding='utf-8') as f:
+        reader = csv.DictReader(f)
+        old_fields = list(reader.fieldnames or [])
+        rows = list(reader)
+
+    if old_fields and all(fn in old_fields for fn in OUTPUT_FIELDS):
+        return
+
+    for r in rows:
+        for fn in OUTPUT_FIELDS:
+            if fn not in r:
+                r[fn] = ''
+
     with open(OUTPUT_FILE, 'w', newline='', encoding='utf-8') as f:
-        writer = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS)
+        writer = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS, extrasaction='ignore')
         writer.writeheader()
+        writer.writerows(rows)
 
 
 def append_rows(rows: List[Dict[str, str]]):
@@ -147,6 +165,13 @@ def build_state_plan() -> List[Tuple[str, dict, int]]:
     return plan
 
 
+def format_correct_person_cell(value: Optional[bool]) -> str:
+    """CSV value for LLM page validation: true / false / empty if unknown."""
+    if value is None:
+        return ''
+    return 'true' if value else 'false'
+
+
 def make_empty_row(state_name: str, row: dict, **overrides) -> dict:
     out = {
         'state': state_name,
@@ -156,7 +181,7 @@ def make_empty_row(state_name: str, row: dict, **overrides) -> dict:
         'to_location': row.get('to_location', ''),
         'county': row.get('county', ''),
         'person_name': '', 'wikipedia_url': '', 'match_confidence': '',
-        'validated': '', 'validation_notes': '',
+        'validated': '', 'validation_notes': '', 'correct_person': '',
         'summary': '', 'education': '', 'dob': '', 'dod': '',
         'place_of_birth': '', 'place_of_death': '', 'gender': '',
         'involved_in_sports': '', 'involved_in_politics': '',
@@ -169,9 +194,12 @@ def make_empty_row(state_name: str, row: dict, **overrides) -> dict:
 def run_pipeline():
     pipeline_start = time.time()
 
-    api_key = os.getenv('OpenRouterAPIKey')
+    api_key = os.getenv('XiaomiAIKey') or os.getenv('XIAOMI_MIMO_API_KEY')
     if not api_key:
-        print("ERROR: OpenRouterAPIKey not set. Set it in .env.local or as an env var.")
+        print(
+            "ERROR: Xiaomi MiMo API key not set. Set XiaomiAIKey or XIAOMI_MIMO_API_KEY "
+            "in .env.local or as an env var (not OpenRouter — use Xiaomi's platform key)."
+        )
         sys.exit(1)
 
     # --- Pre-pass: count rows per state and sort ascending ---
@@ -200,6 +228,7 @@ def run_pipeline():
     global_highways = 0
     global_persons = 0
     global_summaries = 0
+    global_unverified = 0
     states_processed = 0
 
     for idx, (state_folder, config, row_count) in enumerate(state_plan, 1):
@@ -224,6 +253,7 @@ def run_pipeline():
         st_names_extracted = 0
         st_wiki_found = 0
         st_summaries_ok = 0
+        st_summaries_unverified = 0
         st_summaries_fail = 0
 
         for i, row in enumerate(rows, 1):
@@ -285,7 +315,16 @@ def run_pipeline():
                             designation=highway_name, state=state_name
                         )
                         summary = person.getSummary()
-                        st_summaries_ok += 1
+                        unverified = (summary or "").startswith("[UNVERIFIED")
+                        if unverified:
+                            st_summaries_unverified += 1
+                            print(
+                                "           -> Summary UNVERIFIED "
+                                "(validation rejected Wikipedia page; placeholder only)"
+                            )
+                        else:
+                            st_summaries_ok += 1
+                            print(f"           -> Summary OK")
 
                         out_row['summary'] = summary or ''
                         out_row['education'] = str(person.getEducation() or [])
@@ -298,12 +337,15 @@ def run_pipeline():
                         out_row['involved_in_politics'] = person.getInvolvedInPolitics() or ''
                         out_row['involved_in_military'] = person.getInvolvedInMilitary() or ''
                         out_row['involved_in_music'] = person.getInvolvedInMusic() or ''
-                        print(f"           -> Summary OK")
+                        out_row['correct_person'] = format_correct_person_cell(
+                            person.getLlmPageCorrectPerson()
+                        )
 
                     except Exception as e:
                         st_summaries_fail += 1
                         print(f"           -> Summary FAILED: {e}")
                         out_row['validation_notes'] = f"{notes}; summarizer error: {e}"
+                        out_row['correct_person'] = ''
                 else:
                     print(f"           -> Wikipedia NOT FOUND")
 
@@ -321,11 +363,15 @@ def run_pipeline():
         global_highways += len(rows)
         global_persons += st_wiki_found
         global_summaries += st_summaries_ok
+        global_unverified += st_summaries_unverified
 
         print(f"\n  --- {state_name} complete ---")
         print(f"  Rows: {len(rows)}  |  Names extracted: {st_names_extracted}")
-        print(f"  Wikipedia found: {st_wiki_found}  |  Summaries OK: {st_summaries_ok}"
-              f"  |  Summaries failed: {st_summaries_fail}")
+        print(
+            f"  Wikipedia found: {st_wiki_found}  |  Summaries OK: {st_summaries_ok}"
+            f"  |  Unverified (validation): {st_summaries_unverified}"
+            f"  |  Summaries failed: {st_summaries_fail}"
+        )
         print(f"  Appended {len(state_rows_out)} rows  |  Elapsed: {state_elapsed:.1f}s\n")
 
     # --- Global summary ---
@@ -337,6 +383,7 @@ def run_pipeline():
     print(f"Total highways:            {global_highways}")
     print(f"Wikipedia persons found:   {global_persons}")
     print(f"Successful AI summaries:   {global_summaries}")
+    print(f"Unverified (validation):   {global_unverified}")
     print(f"Total elapsed:             {total_elapsed:.1f}s ({total_elapsed/60:.1f}m)")
     print(f"Output: {OUTPUT_FILE}")
 

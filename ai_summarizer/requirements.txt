@@ -1,5 +1,5 @@
 # Requirements for Person Summarizer Script
 crawl4ai>=0.3.74
-openrouter
+openai>=1.0.0
 aiohttp>=3.8.0
 python-dotenv>=1.0.0

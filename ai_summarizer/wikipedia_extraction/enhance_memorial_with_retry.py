@@ -46,17 +46,31 @@ from person_summarizer import PersonSummarizer
 class WikipediaResolver:
     """Resolves person names to Wikipedia URLs and extracts names from designations."""
 
+    # MediaWiki allows at most 50 titles per ?titles= batch request.
+    _MAX_TITLES_PER_QUERY = 50
+
     def __init__(self):
         self.session = requests.Session()
+        # https://meta.wikimedia.org/wiki/User-Agent_policy — identify the project; avoid generic library UA.
         self.session.headers.update({
-            'User-Agent': 'Memorial-Roadway-Wikipedia-Finder/1.0 (Educational Research)'
+            'User-Agent': (
+                'MemorialRoadwayResearch/1.0 '
+                '(https://github.com/; educational capstone; contact via project maintainer) '
+                'python-requests'
+            )
         })
         self.processed_names: Dict[str, Optional[str]] = {}
+        self._last_wikimedia_ts: Optional[float] = None
         # Allow threshold override via env var ACCEPTANCE_THRESHOLD
         try:
             self.acceptance_threshold = int(os.getenv('ACCEPTANCE_THRESHOLD', '40'))
         except Exception:
             self.acceptance_threshold = 40
+        # Minimum seconds between Wikimedia HTTP calls (helps avoid 429 when batching many states).
+        try:
+            self._wikimedia_min_interval = float(os.getenv('WIKIMEDIA_MIN_INTERVAL_SEC', '0.35'))
+        except Exception:
+            self._wikimedia_min_interval = 0.35
         # Nickname map for name similarity
         self.nickname_map = {
             'william': {'bill', 'billy', 'will', 'willy'},
@@ -73,6 +87,35 @@ class WikipediaResolver:
             'margaret': {'meg', 'maggie', 'peggy'},
             'elizabeth': {'liz', 'lizzy', 'beth', 'eliza', 'betty', 'betsy'},
         }
+
+    def _wikimedia_get(
+        self,
+        url: str,
+        *,
+        params: Optional[dict] = None,
+        timeout: float = 30,
+        _attempt: int = 0,
+    ) -> requests.Response:
+        """
+        Throttled GET to Wikipedia / Wikidata with retry on 429 / 503.
+        Without this, bulk runs often get HTTP 429 and every lookup returns no candidates.
+        """
+        if self._last_wikimedia_ts is not None:
+            gap = time.monotonic() - self._last_wikimedia_ts
+            if gap < self._wikimedia_min_interval:
+                time.sleep(self._wikimedia_min_interval - gap)
+        resp = self.session.get(url, params=params, timeout=timeout)
+        self._last_wikimedia_ts = time.monotonic()
+        if resp.status_code in (429, 503) and _attempt < 12:
+            ra = resp.headers.get('Retry-After')
+            try:
+                wait = float(ra) if ra is not None else min(2.0 ** _attempt, 120.0)
+            except ValueError:
+                wait = min(2.0 ** _attempt, 120.0)
+            wait = max(1.0, min(wait, 120.0))
+            time.sleep(wait)
+            return self._wikimedia_get(url, params=params, timeout=timeout, _attempt=_attempt + 1)
+        return resp
 
     def extract_person_names(self, designation: str) -> List[str]:
         names: List[str] = []
@@ -179,7 +222,7 @@ class WikipediaResolver:
         # Direct title attempt
         try:
             encoded = quote(name.replace(' ', '_'))
-            resp = self.session.get(f"https://en.wikipedia.org/api/rest_v1/page/title/{encoded}")
+            resp = self._wikimedia_get(f"https://en.wikipedia.org/api/rest_v1/page/title/{encoded}")
             if resp.status_code == 200:
                 add_candidate(name, -1, '')
         except Exception:
@@ -190,7 +233,7 @@ class WikipediaResolver:
                 params = {
                     'action': 'query', 'format': 'json', 'list': 'search', 'srsearch': q, 'srlimit': 20
                 }
-                resp = self.session.get("https://en.wikipedia.org/w/api.php", params=params)
+                resp = self._wikimedia_get("https://en.wikipedia.org/w/api.php", params=params)
                 if resp.status_code == 200:
                     data = resp.json()
                     for r in data.get('query', {}).get('search', []):
@@ -200,12 +243,13 @@ class WikipediaResolver:
 
         # Also pull in candidates from Wikidata (EntitySearch), then add enwiki sitelinks if present
         try:
-            wd = self.session.get(
+            wd = self._wikimedia_get(
                 "https://www.wikidata.org/w/api.php",
                 params={
                     'action': 'wbsearchentities', 'format': 'json', 'language': 'en', 'uselang': 'en',
                     'type': 'item', 'search': name, 'limit': 10
-                }, timeout=6
+                },
+                timeout=6,
             )
             if wd.status_code == 200:
                 for item in wd.json().get('search', []):
@@ -213,7 +257,7 @@ class WikipediaResolver:
                     # Fetch sitelinks to get the enwiki title if any
                     if not qid:
                         continue
-                    ent = self.session.get(
+                    ent = self._wikimedia_get(
                         f"https://www.wikidata.org/wiki/Special:EntityData/{qid}.json", timeout=6
                     )
                     if ent.status_code != 200:
@@ -230,48 +274,53 @@ class WikipediaResolver:
 
         titles = [t for t in candidates if t]
         disambig_titles: List[str] = []
+        titles_initial_set = set(titles)
         if titles:
             try:
-                params = {
-                    'action': 'query', 'format': 'json', 'prop': 'extracts|pageprops|links',
-                    'explaintext': 1, 'exintro': 1, 'pllimit': 50,
-                    'titles': '|'.join(titles)
-                }
-                resp = self.session.get("https://en.wikipedia.org/w/api.php", params=params)
-                if resp.status_code == 200:
-                    q = resp.json().get('query', {})
-                    pages = q.get('pages', {})
-                    for page in pages.values():
-                        title = page.get('title')
-                        if title in candidates:
-                            candidates[title]['extract'] = page.get('extract', '')
-                            candidates[title]['wikibase_item'] = page.get('pageprops', {}).get('wikibase_item')
-                        pageprops = page.get('pageprops', {})
-                        if 'disambiguation' in pageprops:
-                            disambig_titles.append(title)
-                            for link in page.get('links', []):
-                                linked_title = link.get('title', '')
-                                if linked_title and linked_title not in candidates:
-                                    add_candidate(linked_title, -1, f'from-disambig:{title}')
+                for si in range(0, len(titles), self._MAX_TITLES_PER_QUERY):
+                    chunk = titles[si:si + self._MAX_TITLES_PER_QUERY]
+                    params = {
+                        'action': 'query', 'format': 'json', 'prop': 'extracts|pageprops|links',
+                        'explaintext': 1, 'exintro': 1, 'pllimit': 50,
+                        'titles': '|'.join(chunk)
+                    }
+                    resp = self._wikimedia_get("https://en.wikipedia.org/w/api.php", params=params)
+                    if resp.status_code == 200:
+                        q = resp.json().get('query', {})
+                        pages = q.get('pages', {})
+                        for page in pages.values():
+                            title = page.get('title')
+                            if title in candidates:
+                                candidates[title]['extract'] = page.get('extract', '')
+                                candidates[title]['wikibase_item'] = page.get('pageprops', {}).get('wikibase_item')
+                            pageprops = page.get('pageprops', {})
+                            if 'disambiguation' in pageprops:
+                                disambig_titles.append(title)
+                                for link in page.get('links', []):
+                                    linked_title = link.get('title', '')
+                                    if linked_title and linked_title not in candidates:
+                                        add_candidate(linked_title, -1, f'from-disambig:{title}')
             except Exception:
                 pass
 
         # Re-fetch extracts for any newly added disambiguation-linked candidates
-        new_titles = [t for t in candidates if t not in titles and t]
+        new_titles = [t for t in candidates if t not in titles_initial_set and t]
         if new_titles:
             try:
-                params = {
-                    'action': 'query', 'format': 'json', 'prop': 'extracts|pageprops',
-                    'explaintext': 1, 'exintro': 1,
-                    'titles': '|'.join(new_titles)
-                }
-                resp = self.session.get("https://en.wikipedia.org/w/api.php", params=params)
-                if resp.status_code == 200:
-                    for page in resp.json().get('query', {}).get('pages', {}).values():
-                        title = page.get('title')
-                        if title in candidates:
-                            candidates[title]['extract'] = page.get('extract', '')
-                            candidates[title]['wikibase_item'] = page.get('pageprops', {}).get('wikibase_item')
+                for si in range(0, len(new_titles), self._MAX_TITLES_PER_QUERY):
+                    chunk = new_titles[si:si + self._MAX_TITLES_PER_QUERY]
+                    params = {
+                        'action': 'query', 'format': 'json', 'prop': 'extracts|pageprops',
+                        'explaintext': 1, 'exintro': 1,
+                        'titles': '|'.join(chunk)
+                    }
+                    resp = self._wikimedia_get("https://en.wikipedia.org/w/api.php", params=params)
+                    if resp.status_code == 200:
+                        for page in resp.json().get('query', {}).get('pages', {}).values():
+                            title = page.get('title')
+                            if title in candidates:
+                                candidates[title]['extract'] = page.get('extract', '')
+                                candidates[title]['wikibase_item'] = page.get('pageprops', {}).get('wikibase_item')
             except Exception:
                 pass
 
@@ -280,7 +329,7 @@ class WikipediaResolver:
             if not qid:
                 return False
             try:
-                wd = self.session.get(f"https://www.wikidata.org/wiki/Special:EntityData/{qid}.json", timeout=6)
+                wd = self._wikimedia_get(f"https://www.wikidata.org/wiki/Special:EntityData/{qid}.json", timeout=6)
                 if wd.status_code != 200:
                     return False
                 entities = wd.json().get('entities', {})

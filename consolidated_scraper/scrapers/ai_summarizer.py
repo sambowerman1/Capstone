@@ -37,7 +37,7 @@ class AISummarizer:
         Initialize the AI summarizer.
 
         Args:
-            api_key: OpenRouter API key. If not provided, will use environment variable.
+            api_key: Xiaomi MiMo API key. If not provided, will use environment variable.
             mistral_api_key: Deprecated alias for api_key, kept for backward compatibility.
         """
         self.api_key = api_key or mistral_api_key

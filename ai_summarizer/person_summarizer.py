@@ -3,7 +3,7 @@
 Person Summarizer Script
 
 This script takes Wikipedia or Find a Grave links, extracts content using crawl4ai,
-and generates 4-sentence summaries using Xiaomi MiMo v2 Flash via OpenRouter.
+and generates 4-sentence summaries using Xiaomi MiMo v2 Flash (Xiaomi OpenAI-compatible API).
 """
 
 import re
@@ -17,9 +17,12 @@ try:
     _DOTENV_AVAILABLE = True
 except Exception:
     _DOTENV_AVAILABLE = False
-from openrouter import OpenRouter
+from openai import OpenAI
 
-OPENROUTER_MODEL = "xiaomi/mimo-v2-flash"
+# Xiaomi MiMo platform (OpenAI-compatible). Override via env if Xiaomi changes endpoints.
+DEFAULT_XIAOMI_MIMO_BASE_URL = "https://api.xiaomimimo.com/v1"
+# Model id from Xiaomi MiMo API (lowercase slug; see platform docs). Override with XIAOMI_MIMO_MODEL.
+DEFAULT_XIAOMI_MIMO_MODEL = "mimo-v2-flash"
 
 
 class PersonSummarizer:
@@ -30,7 +33,7 @@ class PersonSummarizer:
         Initialize the PersonSummarizer.
         
         Args:
-            api_key: OpenRouter API key. If not provided, will look for OpenRouterAPIKey env var.
+            api_key: Xiaomi MiMo API key. If not provided, uses XiaomiAIKey or XIAOMI_MIMO_API_KEY.
             MistralAPIKey: Deprecated alias for api_key, kept for backward compatibility.
         """
         if _DOTENV_AVAILABLE:
@@ -39,11 +42,36 @@ class PersonSummarizer:
             except Exception:
                 pass
 
-        resolved_key = api_key or MistralAPIKey or os.getenv('OpenRouterAPIKey')
+        resolved_key = (
+            api_key
+            or MistralAPIKey
+            or os.getenv("XiaomiAIKey")
+            or os.getenv("XIAOMI_MIMO_API_KEY")
+        )
         if not resolved_key:
-            raise ValueError("OpenRouter API key must be provided or set as OpenRouterAPIKey environment variable")
-        
-        self._client = OpenRouter(api_key=resolved_key)
+            raise ValueError(
+                "Xiaomi MiMo API key must be provided or set as XiaomiAIKey or XIAOMI_MIMO_API_KEY "
+                "(OpenRouter keys are not accepted on Xiaomi's endpoint)"
+            )
+
+        base_url = os.getenv("XIAOMI_MIMO_BASE_URL", DEFAULT_XIAOMI_MIMO_BASE_URL).rstrip("/")
+        self._model = os.getenv("XIAOMI_MIMO_MODEL", DEFAULT_XIAOMI_MIMO_MODEL)
+        self._client = OpenAI(api_key=resolved_key, base_url=base_url)
+
+    def _mimo_chat(
+        self,
+        messages: list,
+        *,
+        max_tokens: int,
+        temperature: float,
+    ):
+        """Call Xiaomi MiMo chat completions (OpenAI-compatible)."""
+        return self._client.chat.completions.create(
+            model=self._model,
+            messages=messages,
+            max_tokens=max_tokens,
+            temperature=temperature,
+        )
     
     def _is_valid_url(self, url: str) -> bool:
         """
@@ -217,11 +245,10 @@ Requirements:
                 {"role": "user", "content": prompt}
             ]
             
-            response = self._client.chat.send(
-                model=OPENROUTER_MODEL,
-                messages=messages,
+            response = self._mimo_chat(
+                messages,
                 max_tokens=200,
-                temperature=0.3
+                temperature=0.3,
             )
             
             summary = response.choices[0].message.content.strip()
@@ -289,11 +316,10 @@ Return ONLY the JSON object, no other text.
                 {"role": "user", "content": prompt}
             ]
             
-            response = self._client.chat.send(
-                model=OPENROUTER_MODEL,
-                messages=messages,
+            response = self._mimo_chat(
+                messages,
                 max_tokens=500,
-                temperature=0.1
+                temperature=0.1,
             )
             
             json_text = response.choices[0].message.content.strip()
@@ -399,11 +425,10 @@ Return ONLY a valid JSON object:
 }}"""
 
             messages = [{"role": "user", "content": prompt}]
-            response = self._client.chat.send(
-                model=OPENROUTER_MODEL,
-                messages=messages,
+            response = self._mimo_chat(
+                messages,
                 max_tokens=200,
-                temperature=0.1
+                temperature=0.1,
             )
             json_text = response.choices[0].message.content.strip()
             if json_text.startswith("```"):
@@ -547,7 +572,7 @@ class Person:
         
         Args:
             url: Wikipedia or Find a Grave URL
-            api_key: OpenRouter API key (optional if set as environment variable)
+            api_key: Xiaomi MiMo API key (optional if set as environment variable)
             designation: Highway designation string, used for page validation
             state: State name, used for page validation
             MistralAPIKey: Deprecated alias for api_key, kept for backward compatibility
@@ -828,11 +853,29 @@ class Person:
             return self._structured_data.get("gender")
         return None
     
+    def getLlmPageCorrectPerson(self) -> Optional[bool]:
+        """
+        Whether post-fetch LLM validation accepted the Wikipedia article as the highway's honoree.
+
+        Returns:
+            True if validation passed, False if the model rejected the page (wrong person / bad content),
+            None if validation was not run (e.g. no designation) or extraction did not complete.
+        """
+        import asyncio
+
+        if not self._data_extracted:
+            asyncio.run(self._extract_all_data())
+
+        if self._validation_result is None:
+            return None
+        return bool(self._validation_result.get("is_correct_person"))
+    
     def clear_cache(self):
         """Clear the cached summary and structured data to force regeneration on next call."""
         self.summary = None
         self._structured_data = None
         self._data_extracted = False
+        self._validation_result = None
     
     def __str__(self) -> str:
         """String representation of the Person object."""
@@ -850,7 +893,7 @@ async def summarize_person_from_url(url: str, api_key: Optional[str] = None) -> 
     
     Args:
         url: Wikipedia or Find a Grave URL
-        api_key: OpenRouter API key (optional if set as environment variable)
+        api_key: Xiaomi MiMo API key (optional if set as environment variable)
         
     Returns:
         A 4-sentence summary of the person
