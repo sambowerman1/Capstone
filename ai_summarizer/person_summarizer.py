@@ -3,7 +3,7 @@
 Person Summarizer Script
 
 This script takes Wikipedia or Find a Grave links, extracts content using crawl4ai,
-and generates 4-sentence summaries using the Mistral API.
+and generates 4-sentence summaries using Xiaomi MiMo v2 Flash via OpenRouter.
 """
 
 import re
@@ -17,31 +17,33 @@ try:
     _DOTENV_AVAILABLE = True
 except Exception:
     _DOTENV_AVAILABLE = False
-from mistralai import Mistral
+from openrouter import OpenRouter
+
+OPENROUTER_MODEL = "xiaomi/mimo-v2-flash"
 
 
 class PersonSummarizer:
     """A class to handle web scraping and summarization of person profiles."""
     
-    def __init__(self, MistralAPIKey: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, MistralAPIKey: Optional[str] = None):
         """
         Initialize the PersonSummarizer.
         
         Args:
-            MistralAPIKey: Mistral API key. If not provided, will look for MistralAPIKey env var.
+            api_key: OpenRouter API key. If not provided, will look for OpenRouterAPIKey env var.
+            MistralAPIKey: Deprecated alias for api_key, kept for backward compatibility.
         """
-        # Load .env.local if present and not already loaded
         if _DOTENV_AVAILABLE:
             try:
                 load_dotenv(".env.local")
             except Exception:
                 pass
 
-        self.MistralAPIKey = MistralAPIKey or os.getenv('MistralAPIKey')
-        if not self.MistralAPIKey:
-            raise ValueError("Mistral API key must be provided or set as MistralAPIKey environment variable")
+        resolved_key = api_key or MistralAPIKey or os.getenv('OpenRouterAPIKey')
+        if not resolved_key:
+            raise ValueError("OpenRouter API key must be provided or set as OpenRouterAPIKey environment variable")
         
-        self.mistral_client = Mistral(api_key=self.MistralAPIKey)
+        self._client = OpenRouter(api_key=resolved_key)
     
     def _is_valid_url(self, url: str) -> bool:
         """
@@ -182,7 +184,7 @@ class PersonSummarizer:
     
     def _generate_summary(self, markdown_content: str) -> str:
         """
-        Generate a 4-sentence summary using Mistral API.
+        Generate a 4-sentence summary using the LLM.
         
         Args:
             markdown_content: The markdown content to summarize
@@ -200,7 +202,7 @@ Focus on the most important biographical details such as their birth/death dates
 profession, and historical significance. Each sentence should contain meaningful information.
 
 Content:
-{markdown_content[:4000]}  # Limit content to avoid token limits
+{markdown_content[:4000]}
 
 Requirements:
 - Exactly 4 sentences
@@ -215,8 +217,8 @@ Requirements:
                 {"role": "user", "content": prompt}
             ]
             
-            response = self.mistral_client.chat.complete(
-                model="mistral-medium-latest",
+            response = self._client.chat.send(
+                model=OPENROUTER_MODEL,
                 messages=messages,
                 max_tokens=200,
                 temperature=0.3
@@ -224,7 +226,6 @@ Requirements:
             
             summary = response.choices[0].message.content.strip()
             
-            # Remove any remaining markdown formatting as backup
             summary = self._clean_markdown(summary)
             return summary
             
@@ -288,11 +289,11 @@ Return ONLY the JSON object, no other text.
                 {"role": "user", "content": prompt}
             ]
             
-            response = self.mistral_client.chat.complete(
-                model="mistral-medium-latest",
+            response = self._client.chat.send(
+                model=OPENROUTER_MODEL,
                 messages=messages,
                 max_tokens=500,
-                temperature=0.1  # Lower temperature for more consistent JSON output
+                temperature=0.1
             )
             
             json_text = response.choices[0].message.content.strip()
@@ -355,12 +356,78 @@ Return ONLY the JSON object, no other text.
         except Exception as e:
             raise Exception(f"Error extracting complete data: {str(e)}")
     
-    async def summarize_person(self, url: str) -> str:
+    def _validate_page_relevance(self, markdown_content: str, person_name: str,
+                                  designation: Optional[str] = None,
+                                  state: Optional[str] = None) -> Dict[str, Any]:
+        """
+        Use the LLM to check whether a fetched Wikipedia page is actually about
+        the person the highway was named after, not a different person with the
+        same name.
+        
+        Args:
+            markdown_content: The page content (markdown)
+            person_name: The expected person name extracted from the designation
+            designation: The full highway designation string
+            state: The state the highway is in
+            
+        Returns:
+            Dict with is_correct_person (bool), confidence (float), reason (str)
+        """
+        designation_ctx = designation or "unknown"
+        state_ctx = state or "unknown"
+        try:
+            prompt = f"""You are validating whether a Wikipedia article is about the correct person.
+
+A highway or memorial road has this designation: "{designation_ctx}"
+State: {state_ctx}
+The person the highway is believed to be named after: "{person_name}"
+
+Here is the beginning of the Wikipedia article that was found for that person name:
+---
+{markdown_content[:2000]}
+---
+
+Determine whether this Wikipedia article is actually about the person this highway/memorial road was named after.
+Consider: Does the article's subject match the name? Is the person connected to the correct state? 
+Does the person's profession/background make sense for a highway memorial (e.g. law enforcement, military, politician, local figure)?
+
+Return ONLY a valid JSON object:
+{{
+    "is_correct_person": true,
+    "confidence": 0.85,
+    "reason": "Brief explanation of why this is or is not the correct person"
+}}"""
+
+            messages = [{"role": "user", "content": prompt}]
+            response = self._client.chat.send(
+                model=OPENROUTER_MODEL,
+                messages=messages,
+                max_tokens=200,
+                temperature=0.1
+            )
+            json_text = response.choices[0].message.content.strip()
+            if json_text.startswith("```"):
+                json_text = re.sub(r"^```(?:json)?\s*", "", json_text)
+                json_text = re.sub(r"\s*```$", "", json_text)
+            result = json.loads(json_text)
+            return {
+                "is_correct_person": bool(result.get("is_correct_person", False)),
+                "confidence": float(result.get("confidence", 0.0)),
+                "reason": str(result.get("reason", ""))
+            }
+        except Exception as e:
+            print(f"Warning: Page validation failed, assuming page is correct: {e}")
+            return {"is_correct_person": True, "confidence": 0.0, "reason": f"Validation error: {e}"}
+    
+    async def summarize_person(self, url: str, designation: Optional[str] = None,
+                                state: Optional[str] = None) -> str:
         """
         Main function to process a URL and return a summary.
         
         Args:
             url: Wikipedia or Find a Grave URL
+            designation: Highway designation string for page validation
+            state: State name for page validation
             
         Returns:
             A 4-sentence summary of the person
@@ -369,19 +436,25 @@ Return ONLY the JSON object, no other text.
             ValueError: If URL is not from Wikipedia or Find a Grave
             Exception: If processing fails
         """
-        # Validate URL
         if not self._is_valid_url(url):
             raise ValueError("URL must be from Wikipedia or Find a Grave")
         
         try:
-            # Extract content
             print(f"Extracting content from: {url}")
             markdown_content = await self._extract_content(url)
             
             if not markdown_content or len(markdown_content.strip()) < 100:
                 raise Exception("Insufficient content extracted from the page")
             
-            # Generate summary
+            if designation:
+                person_name = url.split('/wiki/')[-1].replace('_', ' ') if '/wiki/' in url else ""
+                validation = self._validate_page_relevance(
+                    markdown_content, person_name, designation, state
+                )
+                if not validation["is_correct_person"]:
+                    print(f"WARNING: Page validation failed - {validation['reason']}")
+                    return f"[UNVERIFIED - wrong person likely] {validation['reason']}"
+            
             print("Generating summary...")
             summary = self._generate_summary(markdown_content)
             
@@ -390,37 +463,57 @@ Return ONLY the JSON object, no other text.
         except Exception as e:
             raise Exception(f"Failed to process {url}: {str(e)}")
     
-    async def extract_person_data(self, url: str) -> Dict[str, Any]:
+    async def extract_person_data(self, url: str, designation: Optional[str] = None,
+                                   state: Optional[str] = None) -> Dict[str, Any]:
         """
         Extract both summary and structured data for a person in a single API call.
         
         Args:
             url: Wikipedia or Find a Grave URL
+            designation: Highway designation string for page validation
+            state: State name for page validation
             
         Returns:
-            Dictionary containing summary and structured biographical data
+            Dictionary containing summary, structured biographical data, and validation info
             
         Raises:
             ValueError: If URL is not from Wikipedia or Find a Grave
             Exception: If processing fails
         """
-        # Validate URL
         if not self._is_valid_url(url):
             raise ValueError("URL must be from Wikipedia or Find a Grave")
         
         try:
-            # Extract content
             print(f"Extracting content from: {url}")
             markdown_content = await self._extract_content(url)
             
             if not markdown_content or len(markdown_content.strip()) < 100:
                 raise Exception("Insufficient content extracted from the page")
             
-            # Extract all data in a single API call
+            validation = None
+            if designation:
+                person_name = url.split('/wiki/')[-1].replace('_', ' ') if '/wiki/' in url else ""
+                print("Validating Wikipedia page relevance...")
+                validation = self._validate_page_relevance(
+                    markdown_content, person_name, designation, state
+                )
+                if not validation["is_correct_person"]:
+                    print(f"WARNING: Page validation failed - {validation['reason']}")
+                    return {
+                        "summary": f"[UNVERIFIED] {validation['reason']}",
+                        "structured_data": {
+                            "education": [], "date_of_birth": None, "date_of_death": None,
+                            "place_of_birth": "not found", "place_of_death": "not found",
+                            "involved_in_sports": "no", "involved_in_politics": "no",
+                            "involved_in_military": "no", "involved_in_music": "no",
+                            "gender": "not found"
+                        },
+                        "validation": validation
+                    }
+            
             print("Extracting complete biographical data...")
             complete_data = self._extract_complete_data(markdown_content)
             
-            # Restructure to match expected format
             return {
                 "summary": complete_data["summary"],
                 "structured_data": {
@@ -434,7 +527,8 @@ Return ONLY the JSON object, no other text.
                     "involved_in_military": complete_data["involved_in_military"],
                     "involved_in_music": complete_data["involved_in_music"],
                     "gender": complete_data["gender"]
-                }
+                },
+                "validation": validation
             }
             
         except Exception as e:
@@ -445,24 +539,31 @@ Return ONLY the JSON object, no other text.
 class Person:
     """A class representing a person from Wikipedia or Find a Grave with summarization capabilities."""
     
-    def __init__(self, url: str, MistralAPIKey: Optional[str] = None):
+    def __init__(self, url: str, api_key: Optional[str] = None,
+                 designation: Optional[str] = None, state: Optional[str] = None,
+                 MistralAPIKey: Optional[str] = None):
         """
         Initialize a Person object with a URL.
         
         Args:
             url: Wikipedia or Find a Grave URL
-            MistralAPIKey: Mistral API key (optional if set as environment variable)
+            api_key: OpenRouter API key (optional if set as environment variable)
+            designation: Highway designation string, used for page validation
+            state: State name, used for page validation
+            MistralAPIKey: Deprecated alias for api_key, kept for backward compatibility
             
         Raises:
             ValueError: If URL is not from Wikipedia or Find a Grave
         """
         self.url = url
+        self.designation = designation
+        self.state = state
         self.summary = None
         self._structured_data = None
         self._data_extracted = False
-        self._summarizer = PersonSummarizer(MistralAPIKey)
+        self._validation_result = None
+        self._summarizer = PersonSummarizer(api_key=api_key, MistralAPIKey=MistralAPIKey)
         
-        # Validate URL immediately
         if not self._summarizer._is_valid_url(url):
             raise ValueError("URL must be from Wikipedia or Find a Grave")
     
@@ -472,9 +573,12 @@ class Person:
         This is called automatically when any data is requested.
         """
         if not self._data_extracted:
-            data = await self._summarizer.extract_person_data(self.url)
+            data = await self._summarizer.extract_person_data(
+                self.url, designation=self.designation, state=self.state
+            )
             self.summary = data["summary"]
             self._structured_data = data["structured_data"]
+            self._validation_result = data.get("validation")
             self._data_extracted = True
     
     async def summarize(self) -> str:
@@ -740,18 +844,18 @@ class Person:
 
 
 # Convenience function for easy usage
-async def summarize_person_from_url(url: str, MistralAPIKey: Optional[str] = None) -> str:
+async def summarize_person_from_url(url: str, api_key: Optional[str] = None) -> str:
     """
     Convenience function to summarize a person from a Wikipedia or Find a Grave URL.
     
     Args:
         url: Wikipedia or Find a Grave URL
-        MistralAPIKey: Mistral API key (optional if set as environment variable)
+        api_key: OpenRouter API key (optional if set as environment variable)
         
     Returns:
         A 4-sentence summary of the person
     """
-    summarizer = PersonSummarizer(MistralAPIKey)
+    summarizer = PersonSummarizer(api_key=api_key)
     return await summarizer.summarize_person(url)
 
 

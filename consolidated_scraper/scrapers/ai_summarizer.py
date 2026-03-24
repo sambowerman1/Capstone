@@ -32,17 +32,17 @@ class AISummarizer:
     Wrapper for the AI summarizer that extracts biographical data from Wikipedia.
     """
 
-    def __init__(self, mistral_api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, mistral_api_key: Optional[str] = None):
         """
         Initialize the AI summarizer.
 
         Args:
-            mistral_api_key: Mistral API key. If not provided, will use environment variable.
+            api_key: OpenRouter API key. If not provided, will use environment variable.
+            mistral_api_key: Deprecated alias for api_key, kept for backward compatibility.
         """
-        self.mistral_api_key = mistral_api_key
+        self.api_key = api_key or mistral_api_key
         self._summarizer = None
         
-        # Timing tracking
         self.last_extraction_time: float = 0.0
         self.extraction_times: list = []
 
@@ -56,33 +56,25 @@ class AISummarizer:
 
         if self._summarizer is None:
             try:
-                self._summarizer = PersonSummarizer(MistralAPIKey=self.mistral_api_key)
+                self._summarizer = PersonSummarizer(api_key=self.api_key)
             except Exception as e:
                 logger.error(f"Failed to initialize PersonSummarizer: {e}")
                 return None
 
         return self._summarizer
 
-    def extract_data(self, wikipedia_url: str) -> Dict[str, Any]:
+    def extract_data(self, wikipedia_url: str, designation: Optional[str] = None,
+                     state: Optional[str] = None) -> Dict[str, Any]:
         """
         Extract biographical data from a Wikipedia URL.
 
         Args:
             wikipedia_url: Wikipedia URL to process
+            designation: Highway designation string for page validation
+            state: State name for page validation
 
         Returns:
-            Dictionary with extracted data:
-            - summary: 4-sentence biography
-            - education: List of educational institutions
-            - dob: Date of birth (YYYY-MM-DD)
-            - dod: Date of death (YYYY-MM-DD)
-            - place_of_birth: Birth location
-            - place_of_death: Death location
-            - gender: male/female/not found
-            - involved_in_sports: yes/no
-            - involved_in_politics: yes/no
-            - involved_in_military: yes/no
-            - involved_in_music: yes/no
+            Dictionary with extracted data including summary, dates, places, and flags.
         """
         empty_result = self._empty_result()
 
@@ -96,14 +88,13 @@ class AISummarizer:
         start_time = time.perf_counter()
         
         try:
-            # Create Person object and extract data
             logger.info(f"[AI] Creating Person object for: {wikipedia_url}")
             person_start = time.perf_counter()
-            person = Person(wikipedia_url, MistralAPIKey=self.mistral_api_key)
+            person = Person(wikipedia_url, api_key=self.api_key,
+                            designation=designation, state=state)
             person_init_time = time.perf_counter() - person_start
             logger.info(f"[TIMING] AI Person Init: {person_init_time:.2f}s")
 
-            # This triggers data extraction (includes web crawl + Mistral API call)
             summary_start = time.perf_counter()
             summary = person.getSummary()
             summary_time = time.perf_counter() - summary_start

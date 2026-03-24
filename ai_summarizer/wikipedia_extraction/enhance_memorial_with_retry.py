@@ -54,9 +54,9 @@ class WikipediaResolver:
         self.processed_names: Dict[str, Optional[str]] = {}
         # Allow threshold override via env var ACCEPTANCE_THRESHOLD
         try:
-            self.acceptance_threshold = int(os.getenv('ACCEPTANCE_THRESHOLD', '0'))
+            self.acceptance_threshold = int(os.getenv('ACCEPTANCE_THRESHOLD', '40'))
         except Exception:
-            self.acceptance_threshold = 0
+            self.acceptance_threshold = 40
         # Nickname map for name similarity
         self.nickname_map = {
             'william': {'bill', 'billy', 'will', 'willy'},
@@ -77,10 +77,12 @@ class WikipediaResolver:
     def extract_person_names(self, designation: str) -> List[str]:
         names: List[str] = []
 
-        # Skip generic memorial types
         generic_terms = [
             'Veterans Memorial', 'Gold Star Family Memorial', 'Submarine Veterans Memorial',
-            'Hope and Healing Highway', 'County Veterans Memorial'
+            'Hope and Healing Highway', 'County Veterans Memorial',
+            'Purple Heart', 'Medal of Honor', 'Fallen Heroes',
+            'First Responders', 'POW/MIA', 'Emergency Medical',
+            'Blue Star Memorial', 'Silver Star', 'Patriot Highway',
         ]
         if any(term in designation for term in generic_terms):
             return names
@@ -132,11 +134,11 @@ class WikipediaResolver:
                         break
         return names
 
-    def resolve_best(self, name: str, designation: str, county: str) -> Dict[str, Optional[str]]:
+    def resolve_best(self, name: str, designation: str, county: str,
+                      state: str = "Florida") -> Dict[str, Optional[str]]:
         """Return best candidate with scoring, validation, and notes."""
         import difflib
 
-        # Helper: expected roles from designation
         def expected_roles(text: str) -> Dict[str, bool]:
             t = text.lower()
             return {
@@ -150,17 +152,16 @@ class WikipediaResolver:
 
         roles = expected_roles(designation)
 
-        # Build queries: base + context-boosted variants
         queries = [name]
         if county:
             queries.append(f"{name} {county}")
-        queries.append(f"{name} Florida")
+        queries.append(f"{name} {state}")
         if roles['law_enforcement']:
             queries.append(f"{name} sheriff deputy police law enforcement")
         if roles['military']:
             queries.append(f"{name} military army navy air force marine")
         if roles['politician']:
-            queries.append(f"{name} politician florida")
+            queries.append(f"{name} politician {state}")
         if roles['religious']:
             queries.append(f"{name} reverend pastor bishop")
         if roles['musician']:
@@ -227,13 +228,13 @@ class WikipediaResolver:
         except Exception:
             pass
 
-        # Fetch extracts and wikidata ids for candidates (batch by titles)
         titles = [t for t in candidates if t]
+        disambig_titles: List[str] = []
         if titles:
-            # Extracts
             try:
                 params = {
-                    'action': 'query', 'format': 'json', 'prop': 'extracts|pageprops', 'explaintext': 1, 'exintro': 1,
+                    'action': 'query', 'format': 'json', 'prop': 'extracts|pageprops|links',
+                    'explaintext': 1, 'exintro': 1, 'pllimit': 50,
                     'titles': '|'.join(titles)
                 }
                 resp = self.session.get("https://en.wikipedia.org/w/api.php", params=params)
@@ -241,6 +242,32 @@ class WikipediaResolver:
                     q = resp.json().get('query', {})
                     pages = q.get('pages', {})
                     for page in pages.values():
+                        title = page.get('title')
+                        if title in candidates:
+                            candidates[title]['extract'] = page.get('extract', '')
+                            candidates[title]['wikibase_item'] = page.get('pageprops', {}).get('wikibase_item')
+                        pageprops = page.get('pageprops', {})
+                        if 'disambiguation' in pageprops:
+                            disambig_titles.append(title)
+                            for link in page.get('links', []):
+                                linked_title = link.get('title', '')
+                                if linked_title and linked_title not in candidates:
+                                    add_candidate(linked_title, -1, f'from-disambig:{title}')
+            except Exception:
+                pass
+
+        # Re-fetch extracts for any newly added disambiguation-linked candidates
+        new_titles = [t for t in candidates if t not in titles and t]
+        if new_titles:
+            try:
+                params = {
+                    'action': 'query', 'format': 'json', 'prop': 'extracts|pageprops',
+                    'explaintext': 1, 'exintro': 1,
+                    'titles': '|'.join(new_titles)
+                }
+                resp = self.session.get("https://en.wikipedia.org/w/api.php", params=params)
+                if resp.status_code == 200:
+                    for page in resp.json().get('query', {}).get('pages', {}).values():
                         title = page.get('title')
                         if title in candidates:
                             candidates[title]['extract'] = page.get('extract', '')
@@ -329,15 +356,15 @@ class WikipediaResolver:
                 pts += 10; notes.append("ath:+10")
             return pts, notes
 
-        # Location points
         def location_points(text: str) -> (float, List[str]):
             notes = []
             tx = (text or '').lower()
+            state_lower = state.lower()
             pts = 0.0
-            if 'florida' in tx:
-                pts += 10; notes.append("fl:+10")
+            if state_lower in tx:
+                pts += 10; notes.append(f"state({state}):+10")
             else:
-                pts -= 10; notes.append("fl-miss:-10")
+                pts -= 10; notes.append(f"state-miss({state}):-10")
             if county and county.lower() in tx:
                 pts += 8; notes.append("county:+8")
             else:
@@ -443,7 +470,11 @@ class WikipediaResolver:
         words = text.split()
         if len(words) < 2:
             return False
-        generic = ['County', 'Veterans', 'Memorial', 'Family', 'Star', 'Hope', 'Healing']
+        generic = [
+            'County', 'Veterans', 'Memorial', 'Family', 'Star', 'Hope', 'Healing',
+            'Freedom', 'Liberty', 'Heritage', 'Historic', 'Scenic', 'National',
+            'International', 'Purple', 'Patriot', 'Fallen', 'Emergency',
+        ]
         if any(t in text for t in generic):
             return False
         return all(w[0].isupper() for w in words if w)
@@ -502,13 +533,17 @@ class ImprovedMemorialEnhancer:
         self.error_count = 0
         self.skipped_count = 0
     
-    def process_person_with_retry(self, wikipedia_url: str, name: str) -> Dict[str, Optional[str]]:
+    def process_person_with_retry(self, wikipedia_url: str, name: str,
+                                    designation: str = "",
+                                    state: str = "Florida") -> Dict[str, Optional[str]]:
         """
         Process a person with retry logic for rate limits and extract all biographical fields.
         
         Args:
             wikipedia_url: Wikipedia URL to process
             name: Person's name for logging
+            designation: Highway designation string for page validation
+            state: State name for page validation
             
         Returns:
             Dictionary with all biographical data
@@ -532,8 +567,8 @@ class ImprovedMemorialEnhancer:
                 # Wait before making request
                 self.rate_limiter.wait_before_request()
                 
-                # Create Person object and extract all biographical data
-                person = Person(wikipedia_url)
+                person = Person(wikipedia_url, designation=designation or None,
+                                state=state or None)
                 
                 summary = person.getSummary()
                 education = person.getEducation()
@@ -585,12 +620,13 @@ class ImprovedMemorialEnhancer:
         self.error_count += 1
         return result
     
-    def enhance_csv_with_retry(self, input_file: str, output_file: str, max_entries: Optional[int] = None):
+    def enhance_csv_with_retry(self, input_file: str, output_file: str,
+                               max_entries: Optional[int] = None,
+                               state: str = "Florida"):
         """Enhanced CSV processing with inline Wikipedia lookup and rate limit handling."""
         
         print(f"Reading {input_file}...")
         
-        # Read input CSV
         with open(input_file, 'r', encoding='utf-8') as csvfile:
             reader = csv.DictReader(csvfile)
             raw_rows = list(reader)
@@ -598,13 +634,11 @@ class ImprovedMemorialEnhancer:
 
         resolver = WikipediaResolver()
 
-        # Build person-level rows with fresh Wikipedia lookup
         person_rows: List[Dict[str, str]] = []
         review_rows: List[Dict[str, str]] = []
         for row in raw_rows:
             designation = row.get('DESIGNATIO') or row.get('original_designation') or ''
             county = row.get('COUNTY') or row.get('county') or ''
-            # Prefer explicit name if present; else extract from designation
             candidate_names: List[str] = []
             if row.get('name'):
                 candidate_names = [row['name']]
@@ -613,7 +647,7 @@ class ImprovedMemorialEnhancer:
                     candidate_names = resolver.extract_person_names(designation)
 
             for name in candidate_names:
-                resolved = resolver.resolve_best(name, designation, county)
+                resolved = resolver.resolve_best(name, designation, county, state=state)
                 person_rows.append({
                     'name': name,
                     'original_designation': designation,
@@ -671,11 +705,13 @@ class ImprovedMemorialEnhancer:
                 
                 wikipedia_url = row['wikipedia_url']
                 name = row['name']
+                designation_str = row.get('original_designation', '')
                 
                 print(f"{i}. Processing: {name}")
                 
-                # Process with retry logic
-                bio_data = self.process_person_with_retry(wikipedia_url, name)
+                bio_data = self.process_person_with_retry(
+                    wikipedia_url, name, designation=designation_str, state=state
+                )
                 
                 # Add all biographical data to enhanced row
                 enhanced_row['summary'] = bio_data['summary']

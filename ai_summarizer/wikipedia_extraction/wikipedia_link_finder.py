@@ -38,10 +38,12 @@ class WikipediaLinkFinder:
         """
         names = []
         
-        # Skip generic memorial types that don't contain person names
         generic_terms = [
             'Veterans Memorial', 'Gold Star Family Memorial', 'Submarine Veterans Memorial',
-            'Hope and Healing Highway', 'County Veterans Memorial'
+            'Hope and Healing Highway', 'County Veterans Memorial',
+            'Purple Heart', 'Medal of Honor', 'Fallen Heroes',
+            'First Responders', 'POW/MIA', 'Emergency Medical',
+            'Blue Star Memorial', 'Silver Star', 'Patriot Highway',
         ]
         
         if any(term in designation for term in generic_terms):
@@ -135,8 +137,11 @@ class WikipediaLinkFinder:
         if re.search(r'\d', text):
             return False
         
-        # Should not be generic terms
-        generic_terms = ['County', 'Veterans', 'Memorial', 'Family', 'Star', 'Hope', 'Healing']
+        generic_terms = [
+            'County', 'Veterans', 'Memorial', 'Family', 'Star', 'Hope', 'Healing',
+            'Freedom', 'Liberty', 'Heritage', 'Historic', 'Scenic', 'National',
+            'International', 'Purple', 'Patriot', 'Fallen', 'Emergency',
+        ]
         if any(term in text for term in generic_terms):
             return False
         
@@ -391,7 +396,8 @@ class WikipediaLinkFinder:
         except Exception:
             return traits
 
-    def _score_candidate(self, title: str, original_name: str, designation: str, county: str) -> Tuple[int, str]:
+    def _score_candidate(self, title: str, original_name: str, designation: str,
+                          county: str, state: str = "Florida") -> Tuple[int, str]:
         """Score a candidate page by multiple signals and return (score, notes)."""
         notes: List[str] = []
         score = 0
@@ -521,14 +527,13 @@ class WikipediaLinkFinder:
                     score -= 10
                     notes.append('middle-initial-mismatch')
 
-        # Florida / locality signals
         combined_text = extract + ' ' + description + ' ' + places_text
-        add_if('florida' in combined_text, 10, 'mentions-florida')
+        state_lower = state.lower()
+        add_if(state_lower in combined_text, 10, f'mentions-{state_lower}')
         add_if(county and county.lower() in combined_text, 8, 'mentions-county')
-        # Penalize when Florida/county context is missing (Florida dataset)
-        if 'florida' not in combined_text:
+        if state_lower not in combined_text:
             score -= 10
-            notes.append('no-florida-penalty')
+            notes.append(f'no-{state_lower}-penalty')
         if county and county.lower() not in combined_text:
             score -= 8
             notes.append('no-county-penalty')
@@ -553,22 +558,19 @@ class WikipediaLinkFinder:
 
         return score, ','.join(notes)
 
-    def search_wikipedia_with_validation(self, name: str, designation: str, county: str) -> Tuple[Optional[str], int, str, Optional[str]]:
+    def search_wikipedia_with_validation(self, name: str, designation: str, county: str,
+                                          state: str = "Florida") -> Tuple[Optional[str], int, str, Optional[str]]:
         """Search Wikipedia and validate candidates, returning best URL, confidence, and notes."""
         try:
             candidates: List[str] = []
 
-            # Try direct title
             direct_url = self.search_wikipedia(name)
             if direct_url:
                 candidates.append(direct_url)
 
-            # Also enumerate search results for broader scoring
             search_api_url = "https://en.wikipedia.org/w/api.php"
-            # Build context-aware query variants
             ctx = self._extract_context_from_designation(designation)
             query_variants: List[str] = [name]
-            # Add role/context boosters
             if ctx['expect_law_enforcement']:
                 query_variants.extend([
                     f'"{name}" deputy', f'"{name}" sheriff', f'"{name}" trooper',
@@ -578,7 +580,7 @@ class WikipediaLinkFinder:
                 query_variants.extend([f'"{name}" soldier', f'"{name}" marine', f'"{name}" army'])
             if county:
                 query_variants.append(f'"{name}" {county}')
-            query_variants.append(f'"{name}" Florida')
+            query_variants.append(f'"{name}" {state}')
 
             seen_titles_for_query: set = set()
             for q in query_variants:
@@ -614,15 +616,13 @@ class WikipediaLinkFinder:
                     continue
                 seen_titles.add(title)
 
-                score, notes = self._score_candidate(title, name, designation, county)
+                score, notes = self._score_candidate(title, name, designation, county, state)
                 if score > best_score:
                     best_score = score
                     best_notes = notes
                     best_url = url
 
-            # Raise acceptance threshold to reduce false positives
             accepted_url = best_url if best_score >= 75 else None
-            # Keep best title for review
             if best_url:
                 try:
                     best_title = best_url.split('/wiki/', 1)[1].replace('_', ' ')
@@ -668,13 +668,14 @@ class WikipediaLinkFinder:
         
         return False
     
-    def process_csv(self, input_file: str, output_file: str) -> None:
+    def process_csv(self, input_file: str, output_file: str, state: str = "Florida") -> None:
         """
         Process the memorial designations CSV and create output with Wikipedia links.
         
         Args:
             input_file: Path to input CSV file
             output_file: Path to output CSV file
+            state: State name used for contextual search queries
         """
         results = []
         processed_names = set()  # Avoid duplicate searches
@@ -707,7 +708,7 @@ class WikipediaLinkFinder:
                     
                     processed_names.add(name)
                     print(f"Searching for: {name}")
-                    wikipedia_url, conf, notes, best_title = self.search_wikipedia_with_validation(name, designation, county)
+                    wikipedia_url, conf, notes, best_title = self.search_wikipedia_with_validation(name, designation, county, state)
                     validated = 'yes' if wikipedia_url else 'no'
 
                     result = {
