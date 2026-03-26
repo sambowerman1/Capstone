@@ -108,6 +108,14 @@ def folder_to_odmp_slug(folder_name: str) -> str:
     return folder_name.replace('_', '-')
 
 
+def state_cell_to_odmp_slug(state_cell: str) -> str:
+    """
+    Convert output CSV 'state' cell (e.g. 'New Hampshire') to ODMP browse slug
+    (e.g. 'new-hampshire').
+    """
+    return "-".join((state_cell or "").strip().lower().split())
+
+
 def apply_odmp_to_row(out_row: Dict[str, str], odmp_data: Optional[Dict[str, Any]]) -> None:
     """Fill ODMP columns from scraper dict (or clear when no match)."""
     for _src, col in ODMP_ROW_KEYS:
@@ -117,6 +125,105 @@ def apply_odmp_to_row(out_row: Dict[str, str], odmp_data: Optional[Dict[str, Any
     for src, col in ODMP_ROW_KEYS:
         val = odmp_data.get(src)
         out_row[col] = '' if val is None else str(val)
+
+
+def backfill_odmp_existing_csv(*, enable_odmp: bool = True) -> None:
+    """
+    Backfill ODMP columns for existing rows in OUTPUT_FILE without rerunning the
+    AI summarizer / Wikipedia resolver.
+
+    Strategy:
+      - Read the current CSV into memory
+      - For each state, create one ODMPScraper (cached officer list per state)
+      - For each row with a person_name and missing odmp_url, run ODMP lookup
+      - Rewrite the full CSV (header included)
+    """
+    if not enable_odmp:
+        print("ODMP backfill requested but ODMP is disabled.")
+        return
+
+    from consolidated_scraper.scrapers.odmp import ODMPScraper
+    from consolidated_scraper.name_cleaner import process_name
+
+    ensure_header()
+
+    if not os.path.exists(OUTPUT_FILE) or os.path.getsize(OUTPUT_FILE) == 0:
+        print(f"ERROR: output CSV missing or empty: {OUTPUT_FILE}")
+        sys.exit(1)
+
+    with open(OUTPUT_FILE, "r", encoding="utf-8") as f:
+        reader = csv.DictReader(f)
+        rows: List[Dict[str, str]] = list(reader)
+
+    if not rows:
+        print("No rows to backfill.")
+        return
+
+    states = sorted({(r.get("state") or "").strip() for r in rows if (r.get("state") or "").strip()})
+    print(f"Backfilling ODMP for {len(states)} state(s), {len(rows)} row(s)")
+    print(f"Output: {OUTPUT_FILE}\n")
+
+    total_candidates = 0
+    total_backfilled = 0
+    total_errors = 0
+
+    for state_name in states:
+        slug = state_cell_to_odmp_slug(state_name)
+        print(f"{'='*60}")
+        print(f"ODMP BACKFILL: {state_name}  (slug: {slug})")
+        print(f"{'='*60}")
+
+        odmp_scraper = ODMPScraper(state=slug, threshold=92)
+        try:
+            state_candidates = 0
+            state_backfilled = 0
+
+            for r in rows:
+                if (r.get("state") or "").strip() != state_name:
+                    continue
+
+                person_name = (r.get("person_name") or "").strip()
+                if not person_name:
+                    continue
+
+                # Only fill when ODMP is missing (idempotent).
+                if (r.get("odmp_url") or "").strip():
+                    continue
+
+                state_candidates += 1
+                total_candidates += 1
+
+                cleaned_name, _ = process_name(person_name, "person")
+                try:
+                    odmp_data = odmp_scraper.search_officer(cleaned_name)
+                    apply_odmp_to_row(r, odmp_data)
+                    if odmp_data:
+                        state_backfilled += 1
+                        total_backfilled += 1
+                except Exception as e:
+                    apply_odmp_to_row(r, None)
+                    total_errors += 1
+                    prev = (r.get("validation_notes") or "").strip()
+                    extra = f"odmp backfill error: {e}"
+                    r["validation_notes"] = f"{prev}; {extra}" if prev else extra
+
+            print(f"\n  Candidates (missing ODMP): {state_candidates}")
+            print(f"  ODMP matches written:      {state_backfilled}\n")
+        finally:
+            odmp_scraper.close()
+
+    with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS, extrasaction="ignore")
+        writer.writeheader()
+        writer.writerows(rows)
+
+    print(f"{'='*60}")
+    print("ODMP BACKFILL COMPLETE")
+    print(f"{'='*60}")
+    print(f"Rows with person_name missing ODMP: {total_candidates}")
+    print(f"ODMP matches written:               {total_backfilled}")
+    print(f"ODMP errors:                        {total_errors}")
+    print(f"Output: {OUTPUT_FILE}")
 
 
 def read_state_rows(state_folder: str, config: dict) -> List[Dict[str, str]]:
@@ -474,6 +581,11 @@ if __name__ == '__main__':
         description='Summarize memorial highways across all state CSVs into one output file.'
     )
     parser.add_argument(
+        '--backfill-odmp',
+        action='store_true',
+        help='Backfill ODMP columns for existing rows in openclaw/all_states_summarized.csv (no AI rerun).',
+    )
+    parser.add_argument(
         '--no-odmp',
         action='store_true',
         help='Skip Officer Down Memorial Page (ODMP) lookups (no Selenium/Chrome).',
@@ -482,4 +594,7 @@ if __name__ == '__main__':
     enable_odmp = os.getenv('SKIP_ODMP', '').strip().lower() not in ('1', 'true', 'yes')
     if args.no_odmp:
         enable_odmp = False
-    run_pipeline(enable_odmp=enable_odmp)
+    if args.backfill_odmp:
+        backfill_odmp_existing_csv(enable_odmp=enable_odmp)
+    else:
+        run_pipeline(enable_odmp=enable_odmp)
