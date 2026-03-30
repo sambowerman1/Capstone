@@ -141,7 +141,20 @@ async def _centroid_fallback(row: dict) -> bool:
             )
             return True
 
-    # 5. Nothing works
+    # 5. State geographic center (very low confidence, but mappable)
+    centroid = utils.STATE_CENTROIDS.get(state)
+    if centroid:
+        db.update_row(
+            row["id"],
+            centroid_lat=centroid[0],
+            centroid_lon=centroid[1],
+            centroid_source="state_centroid",
+            status="centroid_found",
+            confidence="very_low",
+        )
+        return True
+
+    # 6. Nothing works
     db.update_row(row["id"], status="failed")
     db.append_error(row["id"], "phase4: all fallback strategies exhausted")
     return False
@@ -152,7 +165,11 @@ async def _centroid_fallback(row: dict) -> bool:
 # ---------------------------------------------------------------------------
 
 def _qa_checks(rows: list[dict]):
-    """Run sanity checks on all rows after centroid computation."""
+    """Run sanity checks on all rows after centroid computation.
+
+    QA appends warnings to error_notes but never clears coordinates or
+    downgrades status — the centroid is kept for downstream use.
+    """
     flagged = 0
 
     for row in rows:
@@ -161,7 +178,7 @@ def _qa_checks(rows: list[dict]):
         lon = row.get("centroid_lon")
         state = row.get("state", "")
 
-        # Out-of-state check
+        # Out-of-state check (flag only — keep the centroid)
         if lat is not None and lon is not None:
             bbox = utils.STATE_BBOXES.get(state)
             if bbox:
@@ -169,7 +186,7 @@ def _qa_checks(rows: list[dict]):
                 if not (min_lat <= lat <= max_lat and min_lon <= lon <= max_lon):
                     notes.append("QA: centroid outside state bbox")
 
-        # Implausible path length
+        # Implausible path length (flag only)
         length = row.get("path_length_miles")
         if length is not None:
             if length < 0.1:
@@ -177,7 +194,7 @@ def _qa_checks(rows: list[dict]):
             elif length > 500:
                 notes.append(f"QA: path too long ({length:.2f} mi)")
 
-        # Missing centroid
+        # Missing centroid — mark failed only if truly empty
         if lat is None or lon is None:
             if row.get("status") != "failed":
                 notes.append("QA: missing centroid")
@@ -188,7 +205,7 @@ def _qa_checks(rows: list[dict]):
             db.append_error(row["id"], " | ".join(notes))
 
     if flagged:
-        print(f"  QA flagged {flagged} rows.")
+        print(f"  QA flagged {flagged} rows (warnings only, coordinates preserved).")
 
 
 # ---------------------------------------------------------------------------
@@ -230,7 +247,36 @@ def run():
             done += 1
     print(f"  Computed {done} centroids from paths.")
 
-    # Step 2: Fallback for rows without a path or centroid
+    # Step 2: Promote existing endpoint coords to centroid where missing
+    all_rows = db.get_all_rows()
+    promoted = 0
+    for r in all_rows:
+        if r.get("centroid_lat") is not None:
+            continue
+        from_ok = r.get("from_lat") is not None and r.get("from_lon") is not None
+        to_ok = r.get("to_lat") is not None and r.get("to_lon") is not None
+        if from_ok and to_ok:
+            lat = (r["from_lat"] + r["to_lat"]) / 2
+            lon = (r["from_lon"] + r["to_lon"]) / 2
+            src = "endpoint_midpoint"
+        elif from_ok:
+            lat, lon, src = r["from_lat"], r["from_lon"], "from_point"
+        elif to_ok:
+            lat, lon, src = r["to_lat"], r["to_lon"], "to_point"
+        else:
+            continue
+        db.update_row(
+            r["id"],
+            centroid_lat=lat,
+            centroid_lon=lon,
+            centroid_source=src,
+            status="centroid_found",
+            confidence="medium",
+        )
+        promoted += 1
+    print(f"  Promoted {promoted} centroids from existing endpoints.")
+
+    # Step 3: Fallback for rows without a path or centroid
     all_rows = db.get_all_rows()  # re-fetch after updates
     needs_fallback = [
         r for r in all_rows
@@ -241,7 +287,7 @@ def run():
         print(f"  Running fallback for {len(needs_fallback)} rows...")
         asyncio.run(_process_fallbacks(needs_fallback))
 
-    # Step 3: QA
+    # Step 4: QA
     print("  Running QA checks...")
     all_rows = db.get_all_rows()
     _qa_checks(all_rows)

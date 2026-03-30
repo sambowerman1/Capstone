@@ -240,8 +240,8 @@ async def _process_all(rows: list[dict]):
             if not line:
                 log_parts.append("overpass: no route geometry")
 
-        # 2. Try OSM name search (Tier 6, or if Overpass failed)
-        if line is None and (tier == 6 or not has_route):
+        # 2. Try OSM name search (always, when Overpass failed or no route ref)
+        if line is None:
             line, source = await _try_osm_name_search(row)
             if not line:
                 log_parts.append("osm_name: no result")

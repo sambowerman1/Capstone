@@ -167,7 +167,7 @@ def run():
     )
 
     asyncio.run(_process_all(eligible))
-    utils.close_session()  # won't work here (different loop), but session auto-closes
+    # Session created inside asyncio.run() is auto-closed with its event loop
 
     stats = db.get_stats()
     print(f"Phase 2 complete. Status: {stats['by_status']}")
