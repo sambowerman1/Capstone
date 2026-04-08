@@ -167,6 +167,12 @@ def backfill_odmp_existing_csv(*, enable_odmp: bool = True) -> None:
     total_backfilled = 0
     total_errors = 0
 
+    def write_checkpoint() -> None:
+        with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
+            writer = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS, extrasaction="ignore")
+            writer.writeheader()
+            writer.writerows(rows)
+
     for state_name in states:
         slug = state_cell_to_odmp_slug(state_name)
         print(f"{'='*60}")
@@ -208,14 +214,15 @@ def backfill_odmp_existing_csv(*, enable_odmp: bool = True) -> None:
                     r["validation_notes"] = f"{prev}; {extra}" if prev else extra
 
             print(f"\n  Candidates (missing ODMP): {state_candidates}")
-            print(f"  ODMP matches written:      {state_backfilled}\n")
+            print(f"  ODMP matches written:      {state_backfilled}")
+
+            if state_candidates > 0:
+                write_checkpoint()
+                print(f"  CHECKPOINT SAVED: wrote updates for {state_name} to CSV\n")
+            else:
+                print(f"  CHECKPOINT SKIPPED: no ODMP candidates for {state_name}\n")
         finally:
             odmp_scraper.close()
-
-    with open(OUTPUT_FILE, "w", newline="", encoding="utf-8") as f:
-        writer = csv.DictWriter(f, fieldnames=OUTPUT_FIELDS, extrasaction="ignore")
-        writer.writeheader()
-        writer.writerows(rows)
 
     print(f"{'='*60}")
     print("ODMP BACKFILL COMPLETE")
