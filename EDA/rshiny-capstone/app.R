@@ -20,7 +20,9 @@ library(ggrepel)
 library(usmap)
 library(stringr)
 library(forcats)
+library(lubridate)
 library(DT)
+library(lubridate)
 
 # =============================================================================
 # COLOURS  (Forest theme)
@@ -96,7 +98,7 @@ fl_avg <- co_demo %>%
   summarise(across(c(Median_Age, Median_Household_Income, Unemployment_Rate,
                      Pct_Below_Poverty_Level, Pct_White_Alone, Pct_Black_Alone,
                      Pct_Hispanic, Pct_Asian_Alone, Pct_AIAN_Alone, Pct_TwoOrMore),
-                   \(x) mean(x, na.rm = TRUE))) %>%
+                   function(x) mean(x, na.rm = TRUE))) %>%
   mutate(State = "Florida")
 
 demo_cols <- c("State","Median_Age","Median_Household_Income","Unemployment_Rate",
@@ -210,6 +212,109 @@ word_freq <- hw_raw %>%
   count(words, sort=TRUE)
 
 # =============================================================================
+# ODMP DATA PREP
+# =============================================================================
+parse_tour_years <- function(x) {
+  x <- as.character(x)
+  ifelse(
+    is.na(x) | x == "Not available", NA_real_, {
+      yrs <- suppressWarnings(
+        as.numeric(sub(".*?(\\d+)\\s*year.*", "\\1", x, perl=TRUE)))
+      mos <- suppressWarnings(
+        as.numeric(sub(".*?(\\d+)\\s*month.*", "\\1", x, perl=TRUE)))
+      # sub returns the original string unchanged if pattern doesn't match
+      yrs_val <- ifelse(is.na(yrs) | yrs == as.numeric(x), 0, yrs)
+      mos_val <- ifelse(is.na(mos) | mos == as.numeric(x), 0, mos / 12)
+      # safer: use str_match which returns NA on no match
+      yrs_m <- suppressWarnings(
+        as.numeric(str_match(x, "(\\d+)\\s*year")[,2]))
+      mos_m <- suppressWarnings(
+        as.numeric(str_match(x, "(\\d+)\\s*month")[,2]))
+      yrs_val2 <- ifelse(is.na(yrs_m), 0, yrs_m)
+      mos_val2 <- ifelse(is.na(mos_m), 0, mos_m / 12)
+      result   <- yrs_val2 + mos_val2
+      ifelse(result == 0, NA_real_, round(result, 2))
+    }
+  )
+}
+
+group_cause <- function(x) {
+  x <- str_to_lower(as.character(x))
+  case_when(
+    str_detect(x, "gunfire")                          ~ "Gunfire",
+    str_detect(x, "automobile|vehicle pursuit|motorcycle") ~ "Vehicle crash",
+    str_detect(x, "vehicular assault|struck by vehicle")   ~ "Struck by vehicle",
+    str_detect(x, "aircraft")                         ~ "Aircraft",
+    str_detect(x, "assault|stab|bomb")                ~ "Assault (other)",
+    TRUE                                               ~ "Other / illness"
+  )
+}
+
+odmp <- hw_raw %>%
+  filter(!is.na(odmp_url)) %>%
+  mutate(
+    age_num    = as.numeric(ifelse(odmp_age == "Not available" | is.na(odmp_age),
+                                   NA, odmp_age)),
+    tour_years = parse_tour_years(odmp_tour),
+    eow_date   = lubridate::mdy(odmp_end_of_watch),
+    eow_year   = lubridate::year(eow_date),
+    eow_month  = lubridate::month(eow_date, label = TRUE, abbr = TRUE),
+    eow_decade = (eow_year %/% 10) * 10,
+    cause_grp  = group_cause(odmp_cause),
+    # Parse weapon from incident_details
+    weapon     = case_when(
+      str_detect(odmp_incident_details, regex("firearm|gun|shot|handgun|rifle|pistol",
+                                              ignore_case=TRUE)) ~ "Firearm",
+      str_detect(odmp_incident_details, regex("automobile|vehicle|car|truck",
+                                              ignore_case=TRUE)) ~ "Vehicle",
+      str_detect(odmp_incident_details, regex("knife|stab|blade",
+                                              ignore_case=TRUE)) ~ "Knife/blade",
+      str_detect(odmp_incident_details, regex("aircraft|plane|helicopter",
+                                              ignore_case=TRUE)) ~ "Aircraft",
+      TRUE ~ "Other/unknown"
+    ),
+    # Fuzzy score quality bin
+    match_quality = cut(odmp_fuzzy_score,
+                        breaks=c(0, 70, 80, 90, 100),
+                        labels=c("Low (<70)","Medium (70–79)",
+                                 "High (80–89)","Exact (90+)"),
+                        include.lowest=TRUE)
+  )
+
+# ODMP match rate per state (against total highways)
+odmp_state_rate <- hw_raw %>%
+  group_by(state) %>%
+  summarise(total_hw  = n(),
+            odmp_n    = sum(!is.na(odmp_url)),
+            .groups="drop") %>%
+  filter(odmp_n > 0) %>%
+  mutate(match_rate = odmp_n / total_hw,
+         avg_age    = map_dbl(state, ~mean(odmp$age_num[odmp$state==.x], na.rm=TRUE)),
+         avg_tour   = map_dbl(state, ~mean(odmp$tour_years[odmp$state==.x], na.rm=TRUE)),
+         pct_gunfire= map_dbl(state, ~mean(odmp$cause_grp[odmp$state==.x]=="Gunfire",
+                                           na.rm=TRUE)*100))
+
+# Incident details word frequency
+incident_words <- odmp %>%
+  filter(!is.na(odmp_incident_details)) %>%
+  mutate(words = str_extract_all(
+    str_to_lower(odmp_incident_details), "[a-z]+")) %>%
+  unnest(words) %>%
+  filter(!words %in% c("cause","incident","date","weapon","offender","and","the",
+                        "of","in","a","an","by","was","on","at","to","is","he","she",
+                        "his","her","while","had","been","shot","killed","not")) %>%
+  count(words, sort=TRUE)
+
+cause_colours <- c(
+  "Gunfire"          = CLR_GOP,
+  "Vehicle crash"    = CLR_AMBER,
+  "Struck by vehicle"= "#534AB7",
+  "Aircraft"         = "#1a5fa0",
+  "Assault (other)"  = "#8a3060",
+  "Other / illness"  = CLR_NEUTRAL
+)
+
+# =============================================================================
 # UI
 # =============================================================================
 sidebar_width <- 240
@@ -238,11 +343,12 @@ ui <- dashboardPage(
       menuItem("Highway Categories",  tabName = "categories",  icon = icon("tags")),
       menuItem("Economic Demo.",      tabName = "economics",   icon = icon("chart-line")),
       menuItem("Race & Ethnicity",    tabName = "race",        icon = icon("users")),
-      menuItem("Partisan Lean",       tabName = "elections",   icon = icon("flag"))
+      menuItem("Partisan Lean",       tabName = "elections",   icon = icon("flag")),
+      menuItem("ODMP — Officer Data",  tabName = "odmp",        icon = icon("shield-halved"))
     ),
     tags$div(
       style = "padding:16px 20px; border-top:1px solid rgba(255,255,255,0.1); margin-top:auto; position:absolute; bottom:0; width:100%;",
-      tags$p("5,335 highways · 34 states",
+      tags$p("5,335 highways · 34 states · 275 ODMP records",
              style = "color:rgba(255,255,255,0.5); font-size:11px; margin:0;")
     )
   ),
@@ -500,6 +606,98 @@ ui <- dashboardPage(
               plotOutput("p_partisan", height=460)),
           box(title="Highways by partisan grouping (2024)", width=4, height=520,
               plotOutput("p_party_bar", height=460))
+        )
+      ),  # end elections tabItem
+
+      # ── ODMP — OFFICER DATA ───────────────────────────────────────────────
+      tabItem("odmp",
+        fluidRow(
+          valueBoxOutput("vb_odmp_total",  width=3),
+          valueBoxOutput("vb_odmp_states", width=3),
+          valueBoxOutput("vb_odmp_age",    width=3),
+          valueBoxOutput("vb_odmp_tour",   width=3)
+        ),
+
+        # ── Row 1: Cause of death ────────────────────────────────────────
+        fluidRow(
+          box(title="Cause of death — all ODMP-matched highways", width=7, height=400,
+              plotOutput("p_odmp_cause", height=340)),
+          box(title="Cause of death by state", width=5, height=400,
+              plotOutput("p_odmp_cause_state", height=340))
+        ),
+
+        # ── Row 2: EOW timeline & monthly pattern ────────────────────────
+        fluidRow(
+          box(title="End of watch by decade", width=6, height=380,
+              plotOutput("p_odmp_eow_decade", height=320)),
+          box(title="End of watch — month of year", width=6, height=380,
+              plotOutput("p_odmp_eow_month", height=320))
+        ),
+
+        # ── Row 3: Age & tour of duty ────────────────────────────────────
+        fluidRow(
+          box(title="Officer age at time of death", width=4, height=380,
+              plotOutput("p_odmp_age_hist", height=320)),
+          box(title="Years of service (tour of duty)", width=4, height=380,
+              plotOutput("p_odmp_tour_hist", height=320)),
+          box(title="Age vs years of service", width=4, height=380,
+              plotOutput("p_odmp_age_tour", height=320))
+        ),
+
+        # ── Row 4: Mean age & service by cause ───────────────────────────
+        fluidRow(
+          box(title="Mean officer age by cause of death", width=6, height=360,
+              plotOutput("p_odmp_age_by_cause", height=300)),
+          box(title="Mean years of service by cause", width=6, height=360,
+              plotOutput("p_odmp_tour_by_cause", height=300))
+        ),
+
+        # ── Row 5: Age over time & match quality ─────────────────────────
+        fluidRow(
+          box(title="Mean officer age at death by decade", width=6, height=360,
+              plotOutput("p_odmp_age_over_time", height=300)),
+          box(title="Match quality — fuzzy score distribution", width=6, height=360,
+              plotOutput("p_odmp_fuzzy", height=300))
+        ),
+
+        # ── Row 6: State-level ODMP comparison ───────────────────────────
+        fluidRow(
+          box(title="State ODMP profile — avg age, service & gunfire rate", width=12, height=420,
+              plotOutput("p_odmp_state_profile", height=360))
+        ),
+
+        # ── Row 7: Incident details & weapon analysis ─────────────────────
+        fluidRow(
+          box(title="Top words in incident details", width=5, height=400,
+              plotOutput("p_odmp_incident_words", height=340)),
+          box(title="Weapon type from incident details", width=7, height=400,
+              plotOutput("p_odmp_weapon", height=340))
+        ),
+
+        # ── Row 8: Cause-filtered reactive plots ─────────────────────────
+        fluidRow(
+          box(title="Filter by cause of death", width=12,
+              selectInput("odmp_cause_filter", NULL,
+                          choices = c("All causes" = "all",
+                                      "Gunfire"          = "Gunfire",
+                                      "Vehicle crash"    = "Vehicle crash",
+                                      "Struck by vehicle"= "Struck by vehicle",
+                                      "Aircraft"         = "Aircraft",
+                                      "Assault (other)"  = "Assault (other)",
+                                      "Other / illness"  = "Other / illness"),
+                          selected = "all", width = "280px"))
+        ),
+        fluidRow(
+          box(title="EOW year — filtered by cause", width=6, height=400,
+              plotOutput("p_odmp_cause_year", height=340)),
+          box(title="Age distribution — filtered by cause", width=6, height=400,
+              plotOutput("p_odmp_cause_age", height=340))
+        ),
+
+        # ── Row 9: Full ODMP table ────────────────────────────────────────
+        fluidRow(
+          box(title="Full ODMP record table", width=12,
+              DTOutput("tbl_odmp"))
         )
       )
 
@@ -1098,6 +1296,360 @@ server <- function(input, output, session) {
            x="Highways", y=NULL) +
       theme_hw() +
       theme(axis.text.y=element_text(size=8))
+  }, bg=CLR_BG)
+
+  # ── ODMP VALUE BOXES ─────────────────────────────────────────────────────
+  output$vb_odmp_total  <- renderValueBox(valueBox(
+    nrow(odmp), "ODMP-matched highways", icon=icon("shield-halved"), color="green"))
+  output$vb_odmp_states <- renderValueBox(valueBox(
+    n_distinct(odmp$state), "States with ODMP data", icon=icon("map"), color="olive"))
+  output$vb_odmp_age    <- renderValueBox(valueBox(
+    paste0(round(mean(odmp$age_num, na.rm=TRUE), 1), " yrs"),
+    "Mean officer age at death", icon=icon("user"), color="yellow"))
+  output$vb_odmp_tour   <- renderValueBox(valueBox(
+    paste0(round(mean(odmp$tour_years, na.rm=TRUE), 1), " yrs"),
+    "Mean tour of duty", icon=icon("clock"), color="olive"))
+
+  # ── CAUSE OF DEATH ────────────────────────────────────────────────────────
+  output$p_odmp_cause <- renderPlot({
+    odmp %>%
+      count(cause_grp) %>%
+      mutate(cause_grp = fct_reorder(cause_grp, n)) %>%
+      ggplot(aes(n, cause_grp, fill=cause_grp)) +
+      geom_col(width=0.75, show.legend=FALSE) +
+      geom_text(aes(label=n), hjust=-0.2, size=3.5, colour=CLR_MUTED) +
+      scale_fill_manual(values=cause_colours) +
+      scale_x_continuous(expand=expansion(mult=c(0, 0.12))) +
+      labs(title="Cause of death (n=275 ODMP records)",
+           subtitle="Gunfire accounts for nearly half of all line-of-duty deaths",
+           x="Count", y=NULL) +
+      theme_hw()
+  }, bg=CLR_BG)
+
+  output$p_odmp_cause_state <- renderPlot({
+    odmp %>%
+      count(state, cause_grp) %>%
+      group_by(state) %>%
+      mutate(total=sum(n), state=fct_reorder(state, total)) %>%
+      ungroup() %>%
+      ggplot(aes(n, state, fill=cause_grp)) +
+      geom_col(width=0.75) +
+      scale_fill_manual(values=cause_colours, name=NULL) +
+      scale_x_continuous(expand=expansion(mult=c(0, 0.06))) +
+      labs(title="Cause of death by state",
+           x="Count", y=NULL) +
+      theme_hw() +
+      theme(legend.position="bottom",
+            legend.text=element_text(size=8))
+  }, bg=CLR_BG)
+
+  # ── END OF WATCH TIMELINE ────────────────────────────────────────────────
+  output$p_odmp_eow_decade <- renderPlot({
+    odmp %>%
+      filter(!is.na(eow_decade)) %>%
+      count(eow_decade) %>%
+      ggplot(aes(factor(eow_decade), n, fill=n)) +
+      geom_col(width=0.8, show.legend=FALSE) +
+      geom_text(aes(label=n), vjust=-0.4, size=3.2, colour=CLR_MUTED) +
+      scale_fill_gradient(low=CLR_NEUTRAL, high=CLR_GOP) +
+      scale_y_continuous(expand=expansion(mult=c(0, 0.12))) +
+      labs(title="End of watch — by decade",
+           subtitle="1970s peak reflects Vietnam-era highway naming; 2010s also high",
+           x="Decade", y="Officers") +
+      theme_hw() +
+      theme(axis.text.x=element_text(angle=30, hjust=1))
+  }, bg=CLR_BG)
+
+  output$p_odmp_eow_month <- renderPlot({
+    odmp %>%
+      filter(!is.na(eow_month)) %>%
+      count(eow_month) %>%
+      ggplot(aes(eow_month, n, fill=n)) +
+      geom_col(width=0.8, show.legend=FALSE) +
+      geom_text(aes(label=n), vjust=-0.4, size=3.2, colour=CLR_MUTED) +
+      scale_fill_gradient(low=CLR_NEUTRAL, high=CLR_AMBER) +
+      scale_y_continuous(expand=expansion(mult=c(0, 0.12))) +
+      labs(title="End of watch — month of year",
+           subtitle="May and August see the most line-of-duty deaths",
+           x=NULL, y="Officers") +
+      theme_hw()
+  }, bg=CLR_BG)
+
+  # ── AGE & TOUR ────────────────────────────────────────────────────────────
+  output$p_odmp_age_hist <- renderPlot({
+    odmp %>%
+      filter(!is.na(age_num)) %>%
+      ggplot(aes(age_num, fill=after_stat(count))) +
+      geom_histogram(binwidth=5, colour=CLR_BG, linewidth=0.4, show.legend=FALSE) +
+      scale_fill_gradient(low=CLR_NEUTRAL, high=CLR_GOP) +
+      scale_x_continuous(breaks=seq(20, 70, 10)) +
+      scale_y_continuous(expand=expansion(mult=c(0, 0.08))) +
+      geom_vline(xintercept=mean(odmp$age_num, na.rm=TRUE),
+                 linetype="dashed", colour=CLR_GOP, linewidth=0.8) +
+      annotate("text", x=mean(odmp$age_num, na.rm=TRUE)+1.5,
+               y=Inf, vjust=2, hjust=0, size=3,
+               label=paste0("Mean: ", round(mean(odmp$age_num, na.rm=TRUE),1)),
+               colour=CLR_GOP) +
+      labs(title="Officer age at time of death",
+           subtitle="Mean age 37 · Distribution skews young",
+           x="Age (years)", y="Count") +
+      theme_hw()
+  }, bg=CLR_BG)
+
+  output$p_odmp_tour_hist <- renderPlot({
+    odmp %>%
+      filter(!is.na(tour_years)) %>%
+      ggplot(aes(tour_years, fill=after_stat(count))) +
+      geom_histogram(binwidth=3, colour=CLR_BG, linewidth=0.4, show.legend=FALSE) +
+      scale_fill_gradient(low=CLR_NEUTRAL, high=CLR_AMBER) +
+      scale_y_continuous(expand=expansion(mult=c(0, 0.08))) +
+      geom_vline(xintercept=mean(odmp$tour_years, na.rm=TRUE),
+                 linetype="dashed", colour=CLR_AMBER, linewidth=0.8) +
+      annotate("text", x=mean(odmp$tour_years, na.rm=TRUE)+0.8,
+               y=Inf, vjust=2, hjust=0, size=3,
+               label=paste0("Mean: ", round(mean(odmp$tour_years, na.rm=TRUE),1), " yrs"),
+               colour=CLR_AMBER) +
+      labs(title="Years of service at time of death",
+           subtitle="Heavy left skew — many officers die within first 5 years",
+           x="Years of service", y="Count") +
+      theme_hw()
+  }, bg=CLR_BG)
+
+  output$p_odmp_age_tour <- renderPlot({
+    odmp %>%
+      filter(!is.na(age_num), !is.na(tour_years)) %>%
+      ggplot(aes(tour_years, age_num, colour=cause_grp)) +
+      geom_point(size=2.5, alpha=0.75) +
+      geom_smooth(method="lm", se=TRUE, colour=CLR_TEXT, linewidth=0.7,
+                  fill="#c8c4bc", alpha=0.3, show.legend=FALSE) +
+      scale_colour_manual(values=cause_colours, name="Cause") +
+      labs(title="Age vs years of service",
+           subtitle=paste0("Correlation: r = ",
+                           round(cor(odmp$age_num, odmp$tour_years, use="complete.obs"), 2),
+                           "  ·  Color = cause of death"),
+           x="Years of service", y="Age at death") +
+      theme_hw() +
+      theme(legend.position="bottom",
+            legend.text=element_text(size=8))
+  }, bg=CLR_BG)
+
+  # ── CAUSE-FILTERED REACTIVE PLOTS ─────────────────────────────────────────
+  odmp_filtered <- reactive({
+    if (input$odmp_cause_filter == "all") odmp
+    else odmp %>% filter(cause_grp == input$odmp_cause_filter)
+  })
+
+  output$p_odmp_cause_year <- renderPlot({
+    df <- odmp_filtered()
+    req(nrow(df) > 0)
+    df %>%
+      filter(!is.na(eow_year)) %>%
+      count(eow_year, cause_grp) %>%
+      ggplot(aes(eow_year, n, fill=cause_grp)) +
+      geom_col(width=0.85) +
+      scale_fill_manual(values=cause_colours, name=NULL) +
+      scale_x_continuous(breaks=seq(1890, 2030, 20)) +
+      scale_y_continuous(expand=expansion(mult=c(0, 0.08))) +
+      labs(title="End of watch year",
+           x="Year", y="Officers") +
+      theme_hw() +
+      theme(legend.position="bottom",
+            legend.text=element_text(size=8))
+  }, bg=CLR_BG)
+
+  output$p_odmp_cause_age <- renderPlot({
+    df <- odmp_filtered()
+    req(nrow(df) > 0)
+    df %>%
+      filter(!is.na(age_num)) %>%
+      ggplot(aes(age_num, fill=cause_grp)) +
+      geom_histogram(binwidth=5, colour=CLR_BG, linewidth=0.4, show.legend=FALSE) +
+      scale_fill_manual(values=cause_colours) +
+      facet_wrap(~cause_grp, scales="free_y", ncol=2) +
+      scale_y_continuous(expand=expansion(mult=c(0, 0.1))) +
+      labs(title="Age at death by cause",
+           x="Age (years)", y="Count") +
+      theme_hw() +
+      theme(strip.text=element_text(size=8))
+  }, bg=CLR_BG)
+
+  # ── ODMP TABLE ────────────────────────────────────────────────────────────
+  output$tbl_odmp <- renderDT({
+    odmp %>%
+      select(
+        State       = state,
+        `Highway`   = highway_name,
+        `Officer`   = odmp_name,
+        `Age`       = age_num,
+        `Service (yrs)` = tour_years,
+        `Cause`     = cause_grp,
+        `End of Watch` = odmp_end_of_watch,
+        `Fuzzy score`  = odmp_fuzzy_score,
+        `ODMP URL`     = odmp_url
+      ) %>%
+      mutate(`ODMP URL` = paste0('<a href="', `ODMP URL`, '" target="_blank">View</a>')) %>%
+      datatable(
+        escape       = FALSE,
+        rownames     = FALSE,
+        style        = "bootstrap",
+        options      = list(pageLength=15, dom="ftp",
+                            order=list(list(6, "desc"))),
+        filter       = "top"
+      )
+  })
+
+  # ── MEAN AGE & TOUR BY CAUSE ─────────────────────────────────────────────
+  output$p_odmp_age_by_cause <- renderPlot({
+    odmp %>%
+      filter(!is.na(age_num)) %>%
+      group_by(cause_grp) %>%
+      summarise(mean_age=mean(age_num), se=sd(age_num)/sqrt(n()),
+                n=n(), .groups="drop") %>%
+      mutate(cause_grp=fct_reorder(cause_grp, mean_age)) %>%
+      ggplot(aes(mean_age, cause_grp, fill=cause_grp)) +
+      geom_col(width=0.7, show.legend=FALSE) +
+      geom_errorbarh(aes(xmin=mean_age-se, xmax=mean_age+se),
+                     height=0.25, colour=CLR_MUTED, linewidth=0.7) +
+      geom_text(aes(label=paste0(round(mean_age,1)," yrs  (n=",n,")")),
+                hjust=-0.1, size=3, colour=CLR_MUTED) +
+      scale_fill_manual(values=cause_colours) +
+      scale_x_continuous(expand=expansion(mult=c(0,0.18)),
+                         limits=c(0, NA)) +
+      labs(title="Mean officer age at death by cause",
+           subtitle="Error bars = ±1 SE",
+           x="Mean age (years)", y=NULL) +
+      theme_hw()
+  }, bg=CLR_BG)
+
+  output$p_odmp_tour_by_cause <- renderPlot({
+    odmp %>%
+      filter(!is.na(tour_years)) %>%
+      group_by(cause_grp) %>%
+      summarise(mean_tour=mean(tour_years), se=sd(tour_years)/sqrt(n()),
+                n=n(), .groups="drop") %>%
+      mutate(cause_grp=fct_reorder(cause_grp, mean_tour)) %>%
+      ggplot(aes(mean_tour, cause_grp, fill=cause_grp)) +
+      geom_col(width=0.7, show.legend=FALSE) +
+      geom_errorbarh(aes(xmin=pmax(0,mean_tour-se), xmax=mean_tour+se),
+                     height=0.25, colour=CLR_MUTED, linewidth=0.7) +
+      geom_text(aes(label=paste0(round(mean_tour,1)," yrs  (n=",n,")")),
+                hjust=-0.1, size=3, colour=CLR_MUTED) +
+      scale_fill_manual(values=cause_colours) +
+      scale_x_continuous(expand=expansion(mult=c(0,0.18)),
+                         limits=c(0, NA)) +
+      labs(title="Mean years of service by cause of death",
+           subtitle="Error bars = ±1 SE",
+           x="Mean service years", y=NULL) +
+      theme_hw()
+  }, bg=CLR_BG)
+
+  # ── AGE OVER TIME & FUZZY SCORE ──────────────────────────────────────────
+  output$p_odmp_age_over_time <- renderPlot({
+    odmp %>%
+      filter(!is.na(age_num), !is.na(eow_decade)) %>%
+      group_by(eow_decade) %>%
+      summarise(mean_age=mean(age_num), se=sd(age_num)/sqrt(n()),
+                n=n(), .groups="drop") %>%
+      ggplot(aes(eow_decade, mean_age)) +
+      geom_ribbon(aes(ymin=mean_age-se, ymax=mean_age+se),
+                  fill=CLR_AMBER, alpha=0.25) +
+      geom_line(colour=CLR_AMBER, linewidth=1.2) +
+      geom_point(aes(size=n), colour=CLR_AMBER, fill=CLR_BG,
+                 shape=21, stroke=1.5) +
+      geom_text(aes(label=paste0(round(mean_age,1),"\n(n=",n,")")),
+                vjust=-1.1, size=2.8, colour=CLR_MUTED) +
+      scale_size_continuous(range=c(2,8), guide="none") +
+      scale_x_continuous(breaks=seq(1890, 2030, 10)) +
+      scale_y_continuous(limits=c(25, 55),
+                         breaks=seq(25, 55, 5)) +
+      labs(title="Mean officer age at death — by decade of EOW",
+           subtitle="Point size ∝ number of records  ·  Shaded band = ±1 SE",
+           x="End-of-watch decade", y="Mean age (years)") +
+      theme_hw() +
+      theme(axis.text.x=element_text(angle=30, hjust=1))
+  }, bg=CLR_BG)
+
+  output$p_odmp_fuzzy <- renderPlot({
+    odmp %>%
+      filter(!is.na(odmp_fuzzy_score)) %>%
+      ggplot(aes(odmp_fuzzy_score, fill=match_quality)) +
+      geom_histogram(binwidth=5, colour=CLR_BG, linewidth=0.4) +
+      scale_fill_manual(
+        values=c("Low (<70)"="#b8b0a4","Medium (70–79)"=CLR_AMBER,
+                 "High (80–89)"=CLR_TEAL,"Exact (90+)"=CLR_DEM),
+        name="Match quality") +
+      geom_vline(xintercept=80, linetype="dashed",
+                 colour=CLR_MUTED, linewidth=0.6) +
+      annotate("text", x=81, y=Inf, vjust=2, hjust=0, size=2.8,
+               colour=CLR_MUTED, label="80 threshold") +
+      scale_x_continuous(breaks=seq(50,100,10)) +
+      scale_y_continuous(expand=expansion(mult=c(0,0.1))) +
+      labs(title="ODMP match quality — fuzzy score distribution",
+           subtitle="Score reflects how closely highway name matched officer name",
+           x="Fuzzy match score (0–100)", y="Count") +
+      theme_hw() +
+      theme(legend.position="bottom")
+  }, bg=CLR_BG)
+
+  # ── STATE ODMP PROFILE ───────────────────────────────────────────────────
+  output$p_odmp_state_profile <- renderPlot({
+    profile_long <- odmp_state_rate %>%
+      filter(!is.na(avg_age)) %>%
+      select(state, odmp_n,
+             `Avg age\nat death`=avg_age,
+             `Avg service\n(years)`=avg_tour,
+             `% gunfire\ndeaths`=pct_gunfire) %>%
+      pivot_longer(-c(state,odmp_n), names_to="metric", values_to="value") %>%
+      mutate(state=fct_reorder(state, odmp_n, .desc=TRUE))
+
+    ggplot(profile_long, aes(state, value, fill=metric)) +
+      geom_col(width=0.75, show.legend=FALSE) +
+      facet_wrap(~metric, scales="free_y", nrow=1) +
+      scale_fill_manual(values=c(
+        "Avg age\nat death"   = CLR_GOP,
+        "Avg service\n(years)"= CLR_AMBER,
+        "% gunfire\ndeaths"   = CLR_PURPLE
+      )) +
+      labs(title="State ODMP profile — avg officer age, service length & gunfire rate",
+           subtitle="States sorted by number of ODMP-matched highways (left = most)",
+           x=NULL, y=NULL) +
+      theme_hw() +
+      theme(axis.text.x=element_text(angle=40, hjust=1, size=8),
+            strip.text=element_text(size=9, face="bold"))
+  }, bg=CLR_BG)
+
+  # ── INCIDENT DETAILS & WEAPON ────────────────────────────────────────────
+  output$p_odmp_incident_words <- renderPlot({
+    incident_words %>%
+      slice_max(n, n=20) %>%
+      mutate(words=fct_reorder(words, n)) %>%
+      ggplot(aes(n, words, fill=n)) +
+      geom_col(width=0.75, show.legend=FALSE) +
+      geom_text(aes(label=n), hjust=-0.2, size=3, colour=CLR_MUTED) +
+      scale_fill_gradient(low=CLR_NEUTRAL, high=CLR_DEM) +
+      scale_x_continuous(expand=expansion(mult=c(0,0.15))) +
+      labs(title="Top words in incident details",
+           subtitle="From odmp_incident_details field",
+           x="Frequency", y=NULL) +
+      theme_hw()
+  }, bg=CLR_BG)
+
+  output$p_odmp_weapon <- renderPlot({
+    odmp %>%
+      count(weapon, cause_grp) %>%
+      group_by(weapon) %>%
+      mutate(total=sum(n), weapon=fct_reorder(weapon, total)) %>%
+      ungroup() %>%
+      ggplot(aes(n, weapon, fill=cause_grp)) +
+      geom_col(width=0.7) +
+      scale_fill_manual(values=cause_colours, name="Cause") +
+      scale_x_continuous(expand=expansion(mult=c(0,0.06))) +
+      labs(title="Weapon type parsed from incident details",
+           subtitle="Stacked by cause of death category",
+           x="Count", y=NULL) +
+      theme_hw() +
+      theme(legend.position="bottom",
+            legend.text=element_text(size=8))
   }, bg=CLR_BG)
 
 } # end server
