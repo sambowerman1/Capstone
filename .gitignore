@@ -10,3 +10,13 @@ __pycache__/
 *.pywz
 *.pyzw
 *.pyz
+# GIS / OSM files
+*.shp
+*.shx
+*.dbf
+*.prj
+*.cpg
+*.sbn
+*.sbx
+*.osm.pbf
+*.zip
