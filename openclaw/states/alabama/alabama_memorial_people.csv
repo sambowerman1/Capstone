@@ -1,0 +1,15 @@
+possible_person,name,memorial_name_clean,route,ref,fclass,memorial_status,code,osm_id,oneway,maxspeed,layer,bridge,tunnel
+Martin Luther King Jr,Martin Luther King Drive,Martin Luther King,Martin Luther King Drive,,residential,Possible Memorial Designation,5122,6199159,B,0,0,F,F
+Miller Cemetary,Miller Memorial Cemetary Road,Miller Memorial Cemetary,Miller Memorial Cemetary Road,,residential,Possible Memorial Designation,5122,6227976,B,0,0,F,F
+Coach Jack Stewart,Coach Jack Stewart Memorial Highway,Coach Jack Stewart Memorial,AL 48,AL 48,secondary,Possible Memorial Designation,5114,6275264,B,0,0,F,F
+Frank Ledbetter,Frank Ledbetter Memorial Drive,Frank Ledbetter Memorial,Frank Ledbetter Memorial Drive,,tertiary,Possible Memorial Designation,5115,6295599,B,56,0,F,F
+Chucky Mullins,Chucky Mullins Memorial Drive,Chucky Mullins Memorial,Chucky Mullins Memorial Drive,,residential,Possible Memorial Designation,5122,7672120,B,0,0,F,F
+Henry E. Hamilton,Henry E. Hamilton Memorial Bridge,Henry E. Hamilton Memorial,US 72,US 72,trunk,Possible Memorial Designation,5112,7778415,F,96,1,T,F
+Medal Of,Medal of Honor Memorial Drive,Medal of Honor Memorial,Medal of Honor Memorial Drive,,residential,Possible Memorial Designation,5122,7926927,F,0,0,F,F
+Charlie Holifield,Charlie Holifield Memorial Drive,Charlie Holifield Memorial,Charlie Holifield Memorial Drive,,residential,Possible Memorial Designation,5122,7938239,B,0,0,F,F
+Alberta Fuller,Alberta Fuller Memorial Drive,Alberta Fuller Memorial,Alberta Fuller Memorial Drive,,residential,Possible Memorial Designation,5122,7941171,B,0,0,F,F
+Ira Hanks,Ira Hanks Memorial,Ira Hanks Memorial,Ira Hanks Memorial,,residential,Possible Memorial Designation,5122,8624091,B,0,0,F,F
+Stephen J White,Stephen J White Memorial Boulevard,Stephen J White Memorial,Stephen J White Memorial Boulevard,,residential,Possible Memorial Designation,5122,8840393,B,0,0,F,F
+Richard L. Platt,Richard L. Platt Memorial Levee Trail,Richard L. Platt Memorial,Richard L. Platt Memorial Levee Trail,,footway,Possible Memorial Designation,5153,98470820,B,0,0,F,F
+Thomas Bible,Thomas Bible Memorial Highway,Thomas Bible Memorial,AL 21,AL 21,trunk,Possible Memorial Designation,5112,107723728,B,72,0,F,F
+Victor Birch,Victor Birch Memorial Bridge,Victor Birch Memorial,AL 193,AL 193,secondary,Possible Memorial Designation,5114,117341327,B,88,1,T,F

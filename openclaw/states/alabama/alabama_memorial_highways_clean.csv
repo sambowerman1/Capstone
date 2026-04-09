@@ -1,0 +1,46 @@
+route,name,ref,fclass,code,osm_id,memorial_status,oneway,maxspeed,layer,bridge,tunnel,memorial_name_clean,possible_person
+Martin Luther King Drive,Martin Luther King Drive,,residential,5122,6199159,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+Miller Memorial Cemetary Road,Miller Memorial Cemetary Road,,residential,5122,6227976,Possible Memorial Designation,B,0,0,F,F,Miller Memorial Cemetary,Miller Cemetary
+Martin Luther King Lane,Martin Luther King Lane,,residential,5122,6236184,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+US 29 Truck,Martin Luther King Boulevard,US 29 Truck,primary,5113,6244172,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+Martin Luther King Jr Street,Martin Luther King Jr Street,,residential,5122,6269038,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+AL 48,Coach Jack Stewart Memorial Highway,AL 48,secondary,5114,6275264,Possible Memorial Designation,B,0,0,F,F,Coach Jack Stewart Memorial,Coach Jack Stewart
+Frank Ledbetter Memorial Drive,Frank Ledbetter Memorial Drive,,tertiary,5115,6295599,Possible Memorial Designation,B,56,0,F,F,Frank Ledbetter Memorial,Frank Ledbetter
+Martin Luther King Jr Road,Martin Luther King Jr Road,,residential,5122,6303954,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+Martin Luther King Jr Drive,Martin Luther King Jr Drive,,residential,5122,6314619,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+US 29;US 84,Martin Luther King Junior Expressway,US 29;US 84,trunk,5112,7467268,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Junior,Martin Luther King Jr
+Martin Luther King Street,Martin Luther King Street,,residential,5122,7476527,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+Martin Luther King Jr Avenue,Martin Luther King Jr Avenue,,residential,5122,7594391,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+"Martin Luther King, Junior Avenue","Martin Luther King, Junior Avenue",,residential,5122,7594409,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Junior,Martin Luther King Jr
+Martin Luther King Junior Drive,Martin Luther King Junior Drive,,unclassified,5121,7659168,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Junior,Martin Luther King Jr
+Martin Luther King Avenue,Martin Luther King Avenue,,residential,5122,7661571,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+Chucky Mullins Memorial Drive,Chucky Mullins Memorial Drive,,residential,5122,7672120,Possible Memorial Designation,B,0,0,F,F,Chucky Mullins Memorial,Chucky Mullins
+Martin Luther King Highway,Martin Luther King Highway,,unclassified,5121,7694056,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+Dr Martin Luther King Jr Street,Dr Martin Luther King Jr Street,,residential,5122,7738338,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+Doctor Martin Luther King Drive,Doctor Martin Luther King Drive,,tertiary,5115,7769469,Possible Memorial Designation,B,0,0,F,F,Doctor Martin Luther King,Martin Luther King Jr
+US 72,Henry E. Hamilton Memorial Bridge,US 72,trunk,5112,7778415,Possible Memorial Designation,F,96,1,T,F,Henry E. Hamilton Memorial,Henry E. Hamilton
+Martin Luther King Boulevard,Martin Luther King Boulevard,,secondary,5114,7786554,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+AL 14,Martin Luther King Drive,AL 14,primary,5113,7787497,Possible Memorial Designation,B,88,0,F,F,Martin Luther King,Martin Luther King Jr
+AL 255,"Dr Martin Luther King, Jr. Expressway",AL 255,trunk,5112,7825749,Possible Memorial Designation,F,0,0,F,F,Martin Luther King Jr.,Martin Luther King Jr
+Doctor Martin Luther King Junior Avenue,Doctor Martin Luther King Junior Avenue,,secondary,5114,7856035,Possible Memorial Designation,B,0,0,F,F,Doctor Martin Luther King Junior,Martin Luther King Jr
+Medal of Honor Memorial Drive,Medal of Honor Memorial Drive,,residential,5122,7926927,Possible Memorial Designation,F,0,0,F,F,Medal of Honor Memorial,Medal Of
+Charlie Holifield Memorial Drive,Charlie Holifield Memorial Drive,,residential,5122,7938239,Possible Memorial Designation,B,0,0,F,F,Charlie Holifield Memorial,Charlie Holifield
+Alberta Fuller Memorial Drive,Alberta Fuller Memorial Drive,,residential,5122,7941171,Possible Memorial Designation,B,0,0,F,F,Alberta Fuller Memorial,Alberta Fuller
+AL 14,Martin Luther King Parkway,AL 14,primary,5113,7941884,Possible Memorial Designation,B,56,0,F,F,Martin Luther King,Martin Luther King Jr
+Martin Luther King,Martin Luther King,,service,5141,7942769,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+Ira Hanks Memorial,Ira Hanks Memorial,,residential,5122,8624091,Possible Memorial Designation,B,0,0,F,F,Ira Hanks Memorial,Ira Hanks
+Ira Hanks Memorial Drive,Ira Hanks Memorial Drive,,residential,5122,8624346,Possible Memorial Designation,B,0,0,F,F,Ira Hanks Memorial,Ira Hanks
+Martin Luther King Jr Circle,Martin Luther King Jr Circle,,residential,5122,8828323,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+Dr Martin Luther King Avenue,Dr Martin Luther King Avenue,,residential,5122,8828569,Possible Memorial Designation,B,0,0,F,F,Martin Luther King,Martin Luther King Jr
+Stephen J White Memorial Boulevard,Stephen J White Memorial Boulevard,,residential,5122,8840393,Possible Memorial Designation,B,0,0,F,F,Stephen J White Memorial,Stephen J White
+Martin Luther King Jr Boulevard,Martin Luther King Jr Boulevard,,secondary,5114,8863362,Possible Memorial Designation,F,0,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+CR 44,Martin Luther King Jr Boulevard,CR 44,secondary,5114,8885816,Possible Memorial Designation,B,0,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+CR 47,Martin Luther King Jr Boulevard,CR 47,secondary,5114,8885826,Possible Memorial Designation,B,56,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+"Dr Martin Luther King, Jr. Expressway","Dr Martin Luther King, Jr. Expressway",,trunk,5112,36754043,Possible Memorial Designation,F,0,0,F,F,Martin Luther King Jr.,Martin Luther King Jr
+US 29;US 82,Martin Luther King Boulevard,US 29;US 82,primary,5113,51979733,Possible Memorial Designation,B,48,0,F,F,Martin Luther King,Martin Luther King Jr
+Richard L. Platt Memorial Levee Trail,Richard L. Platt Memorial Levee Trail,,footway,5153,98470820,Possible Memorial Designation,B,0,0,F,F,Richard L. Platt Memorial,Richard L. Platt
+US 11,Doctor Martin Luther King Junior Highway,US 11,primary,5113,106664460,Possible Memorial Designation,B,88,1,T,F,Doctor Martin Luther King Junior,Martin Luther King Jr
+AL 21,Thomas Bible Memorial Highway,AL 21,trunk,5112,107723728,Possible Memorial Designation,B,72,0,F,F,Thomas Bible Memorial,Thomas Bible
+AL 193,Victor Birch Memorial Bridge,AL 193,secondary,5114,117341327,Possible Memorial Designation,B,88,1,T,F,Victor Birch Memorial,Victor Birch
+US 11,Dr Martin Luther King Jr Highway,US 11,primary,5113,119882009,Possible Memorial Designation,B,88,0,F,F,Martin Luther King Jr,Martin Luther King Jr
+MLK Jr. Trail,MLK Jr. Trail,,cycleway,5152,1250630237,Possible Memorial Designation,B,0,0,F,F,MLK Jr.,Martin Luther King Jr

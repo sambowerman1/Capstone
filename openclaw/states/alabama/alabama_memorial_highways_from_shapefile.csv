@@ -1,0 +1,131 @@
+route,name,ref,fclass,code,osm_id,memorial_status,oneway,maxspeed,layer,bridge,tunnel
+Martin Luther King Drive,Martin Luther King Drive,,residential,5122,6199159,Possible Memorial Designation,B,0,0,F,F
+US 31,South Memorial Drive,US 31,primary,5113,6199493,Possible Memorial Designation,F,0,0,F,F
+US 31,North Memorial Drive,US 31,primary,5113,6201449,Possible Memorial Designation,B,0,0,F,F
+Fallen Tree Court,Fallen Tree Court,,residential,5122,6220473,Possible Memorial Designation,B,0,0,F,F
+Memorial Avenue,Memorial Avenue,,residential,5122,6221805,Possible Memorial Designation,B,0,0,F,F
+Veterans Road,Veterans Road,,residential,5122,6226677,Possible Memorial Designation,B,0,0,F,F
+Miller Memorial Cemetary Road,Miller Memorial Cemetary Road,,residential,5122,6227976,Possible Memorial Designation,B,0,0,F,F
+Veterans Drive,Veterans Drive,,tertiary,5115,6229167,Possible Memorial Designation,B,56,0,F,F
+Martin Luther King Lane,Martin Luther King Lane,,residential,5122,6236184,Possible Memorial Designation,B,0,0,F,F
+Mlk Drive,Mlk Drive,,residential,5122,6238724,Possible Memorial Designation,B,0,0,F,F
+US 29 Truck,South Martin Luther King Boulevard,US 29 Truck,primary,5113,6243898,Possible Memorial Designation,B,0,0,F,F
+US 29,Martin Luther King Boulevard North,US 29,primary,5113,6244003,Possible Memorial Designation,B,0,0,F,F
+US 29 Truck,Martin Luther King Boulevard South,US 29 Truck,primary,5113,6244037,Possible Memorial Designation,B,0,0,F,F
+US 29 Truck,Martin Luther King Boulevard,US 29 Truck,primary,5113,6244172,Possible Memorial Designation,B,0,0,F,F
+Fallen Lane,Fallen Lane,,residential,5122,6250143,Possible Memorial Designation,B,0,0,F,F
+Memorial Drive,Memorial Drive,,unclassified,5121,6258636,Possible Memorial Designation,B,0,0,F,F
+AL 50,Veterans Memorial Parkway,AL 50,secondary,5114,6259167,Possible Memorial Designation,B,0,0,F,F
+Halls Memorial Circle,Halls Memorial Circle,,residential,5122,6259641,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Jr Street,Martin Luther King Jr Street,,residential,5122,6269038,Possible Memorial Designation,B,0,0,F,F
+Memorial Park Road,Memorial Park Road,,residential,5122,6272023,Possible Memorial Designation,B,0,0,F,F
+AL 48,Coach Jack Stewart Memorial Highway,AL 48,secondary,5114,6275264,Possible Memorial Designation,B,0,0,F,F
+B J Memorial Drive,B J Memorial Drive,,residential,5122,6283982,Possible Memorial Designation,B,0,0,F,F
+Frank Ledbetter Memorial Drive,Frank Ledbetter Memorial Drive,,tertiary,5115,6295599,Possible Memorial Designation,B,56,0,F,F
+Martin Luther King Jr Road,Martin Luther King Jr Road,,residential,5122,6303954,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Jr Drive,Martin Luther King Jr Drive,,residential,5122,6314619,Possible Memorial Designation,B,0,0,F,F
+Veterans Shores,Veterans Shores,,residential,5122,6636211,Possible Memorial Designation,B,0,0,F,F
+Veterans Boulevard,Veterans Boulevard,,secondary,5114,6636503,Possible Memorial Designation,F,56,0,F,F
+Memorial Lane,Memorial Lane,,track,5142,7427535,Possible Memorial Designation,B,0,0,F,F
+North Martin Luther King Street,North Martin Luther King Street,,residential,5122,7439092,Possible Memorial Designation,B,0,0,F,F
+US 84;US 331,Veterans Memorial Parkway,US 84;US 331,trunk,5112,7454907,Possible Memorial Designation,F,0,0,F,F
+US 29;US 84,Martin Luther King Junior Expressway,US 29;US 84,trunk,5112,7467268,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Street,Martin Luther King Street,,residential,5122,7476527,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Jr Avenue,Martin Luther King Jr Avenue,,residential,5122,7594391,Possible Memorial Designation,B,0,0,F,F
+"Martin Luther King, Junior Avenue","Martin Luther King, Junior Avenue",,residential,5122,7594409,Possible Memorial Designation,B,0,0,F,F
+Vaughan Memorial Drive,Vaughan Memorial Drive,,residential,5122,7603286,Possible Memorial Designation,B,0,0,F,F
+Memorial Street,Memorial Street,,residential,5122,7643382,Possible Memorial Designation,B,0,0,F,F
+Memorial Park Circle,Memorial Park Circle,,residential,5122,7648351,Possible Memorial Designation,B,0,0,F,F
+Fallen Pines Drive,Fallen Pines Drive,,residential,5122,7656783,Possible Memorial Designation,B,0,0,F,F
+Stallworth Memorial Drive,Stallworth Memorial Drive,,residential,5122,7659070,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Junior Drive,Martin Luther King Junior Drive,,unclassified,5121,7659168,Possible Memorial Designation,B,0,0,F,F
+Bergen Memorial Cemetery Pine,Bergen Memorial Cemetery Pine,,residential,5122,7660163,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Avenue,Martin Luther King Avenue,,residential,5122,7661571,Possible Memorial Designation,B,0,0,F,F
+Chucky Mullins Memorial Drive,Chucky Mullins Memorial Drive,,residential,5122,7672120,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Highway,Martin Luther King Highway,,unclassified,5121,7694056,Possible Memorial Designation,B,0,0,F,F
+Mlk Village,Mlk Village,,tertiary,5115,7696873,Possible Memorial Designation,B,0,0,F,F
+AL 35;AL 279,Veterans Drive,AL 35;AL 279,secondary,5114,7734545,Possible Memorial Designation,F,0,0,F,F
+AL 35,Veterans Drive,AL 35,primary,5113,7734557,Possible Memorial Designation,F,88,0,F,F
+Veterans Memorial Drive,Veterans Memorial Drive,,unclassified,5121,7737783,Possible Memorial Designation,B,0,0,F,F
+Dr Martin Luther King Jr Street,Dr Martin Luther King Jr Street,,residential,5122,7738338,Possible Memorial Designation,B,0,0,F,F
+Allison-Bonnett Memorial Drive,Allison-Bonnett Memorial Drive,,secondary,5114,7742877,Possible Memorial Designation,F,0,0,F,F
+Fallen Tree Road,Fallen Tree Road,,unclassified,5121,7747257,Possible Memorial Designation,B,0,0,F,F
+Doctor Martin Luther King Drive,Doctor Martin Luther King Drive,,tertiary,5115,7769469,Possible Memorial Designation,B,0,0,F,F
+Memorial Circle,Memorial Circle,,residential,5122,7771951,Possible Memorial Designation,B,0,0,F,F
+US 72,Henry E. Hamilton Memorial Bridge,US 72,trunk,5112,7778415,Possible Memorial Designation,F,96,1,T,F
+AL 133,Veterans Drive,AL 133,primary,5113,7780534,Possible Memorial Designation,B,72,0,F,F
+AL 133,Veterans Park Drive,AL 133,primary,5113,7783458,Possible Memorial Designation,B,64,0,F,F
+Veterans Park Drive,Veterans Park Drive,,service,5141,7783462,Possible Memorial Designation,B,0,0,F,F
+Kilgore Memorial Drive,Kilgore Memorial Drive,,secondary,5114,7783539,Possible Memorial Designation,F,0,0,F,F
+Martin Luther King Boulevard,Martin Luther King Boulevard,,secondary,5114,7786554,Possible Memorial Designation,B,0,0,F,F
+AL 14,Martin Luther King Drive,AL 14,primary,5113,7787497,Possible Memorial Designation,B,88,0,F,F
+East Veterans Boulevard,East Veterans Boulevard,,tertiary,5115,7787577,Possible Memorial Designation,B,48,0,F,F
+Veterans Parkway,Veterans Parkway,,tertiary,5115,7787732,Possible Memorial Designation,B,72,0,F,F
+Fallen Oaks Court,Fallen Oaks Court,,residential,5122,7788446,Possible Memorial Designation,B,0,0,F,F
+West Veterans Boulevard,West Veterans Boulevard,,tertiary,5115,7788712,Possible Memorial Designation,F,48,0,F,F
+Memorial Park Drive,Memorial Park Drive,,service,5141,7788913,Possible Memorial Designation,B,0,0,F,F
+US 29;US 80,East Martin Luther King Highway,US 29;US 80,primary,5113,7797803,Possible Memorial Designation,B,40,0,F,F
+US 80,West Martin Luther King Highway,US 80,primary,5113,7798176,Possible Memorial Designation,F,88,0,F,F
+Memorial Parkway Southwest,Memorial Parkway Southwest,,secondary,5114,7804238,Possible Memorial Designation,F,0,0,F,F
+Memorial Parkway Northwest,Memorial Parkway Northwest,,primary,5113,7805773,Possible Memorial Designation,F,0,0,F,F
+US 231;US 431,Memorial Parkway Northwest,US 231;US 431,motorway,5111,7820152,Possible Memorial Designation,F,80,0,F,F
+US 72;US 231;US 431,Memorial Parkway Northwest,US 72;US 231;US 431,motorway,5111,7820154,Possible Memorial Designation,F,80,0,F,F
+Veterans Drive Southeast,Veterans Drive Southeast,,residential,5122,7822136,Possible Memorial Designation,B,0,0,F,F
+US 231;US 431,Memorial Parkway Southwest,US 231;US 431,motorway,5111,7823585,Possible Memorial Designation,F,80,0,F,F
+US 231,Memorial Parkway Southwest,US 231,trunk,5112,7823586,Possible Memorial Designation,F,96,0,F,F
+Memorial Pkwy Access Road Northwest,Memorial Pkwy Access Road Northwest,,residential,5122,7825428,Possible Memorial Designation,B,0,0,F,F
+AL 255,"Dr Martin Luther King, Jr. Expressway",AL 255,trunk,5112,7825749,Possible Memorial Designation,F,0,0,F,F
+Veterans Way,Veterans Way,,residential,5122,7833021,Possible Memorial Designation,B,0,0,F,F
+Doctor Martin Luther King Junior Avenue,Doctor Martin Luther King Junior Avenue,,secondary,5114,7856035,Possible Memorial Designation,B,0,0,F,F
+Springhill Memorial Place,Springhill Memorial Place,,residential,5122,7902371,Possible Memorial Designation,B,0,0,F,F
+Springhill Memorial Drive,Springhill Memorial Drive,,residential,5122,7904075,Possible Memorial Designation,B,0,0,F,F
+Veterans Avenue,Veterans Avenue,,residential,5122,7926237,Possible Memorial Designation,B,0,0,F,F
+Medal of Honor Memorial Drive,Medal of Honor Memorial Drive,,residential,5122,7926927,Possible Memorial Designation,F,0,0,F,F
+Memorial Drive Northwest,Memorial Drive Northwest,,tertiary,5115,7935164,Possible Memorial Designation,B,0,0,F,F
+CR 41,Memorial Drive Southwest,CR 41,secondary,5114,7937410,Possible Memorial Designation,B,0,0,F,F
+Charlie Holifield Memorial Drive,Charlie Holifield Memorial Drive,,residential,5122,7938239,Possible Memorial Designation,B,0,0,F,F
+Alberta Fuller Memorial Drive,Alberta Fuller Memorial Drive,,residential,5122,7941171,Possible Memorial Designation,B,0,0,F,F
+AL 14,Martin Luther King Parkway,AL 14,primary,5113,7941884,Possible Memorial Designation,B,56,0,F,F
+Stephens Memorial Church Road,Stephens Memorial Church Road,,unclassified,5121,7942230,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King,Martin Luther King,,service,5141,7942769,Possible Memorial Designation,B,0,0,F,F
+AL 14;AL 17,Memorial Pkwy Road,AL 14;AL 17,primary,5113,7947820,Possible Memorial Designation,B,48,0,F,F
+AL 17,Memorial Parkway,AL 17,primary,5113,7951539,Possible Memorial Designation,B,48,0,F,F
+Martin Luther King Jr Parkway North,Martin Luther King Jr Parkway North,,trunk,5112,7953240,Possible Memorial Designation,F,72,0,F,F
+US 431,Martin Luther King Jr Parkway North,US 431,trunk,5112,7953243,Possible Memorial Designation,F,72,0,F,F
+US 431,Martin Luther King Jr Parkway South,US 431,trunk,5112,7953310,Possible Memorial Designation,F,104,0,F,F
+Veteran Road,Veteran Road,,service,5141,8607354,Possible Memorial Designation,B,0,0,F,F
+Ira Hanks Memorial,Ira Hanks Memorial,,residential,5122,8624091,Possible Memorial Designation,B,0,0,F,F
+Ira Hanks Memorial Drive,Ira Hanks Memorial Drive,,residential,5122,8624346,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Jr Circle,Martin Luther King Jr Circle,,residential,5122,8828323,Possible Memorial Designation,B,0,0,F,F
+Dr Martin Luther King Avenue,Dr Martin Luther King Avenue,,residential,5122,8828569,Possible Memorial Designation,B,0,0,F,F
+Stephen J White Memorial Boulevard,Stephen J White Memorial Boulevard,,residential,5122,8840393,Possible Memorial Designation,B,0,0,F,F
+Mlk,Mlk,,residential,5122,8843397,Possible Memorial Designation,B,0,0,F,F
+Mlk Boulevard,Mlk Boulevard,,residential,5122,8860797,Possible Memorial Designation,B,0,0,F,F
+Martin Luther King Jr Boulevard,Martin Luther King Jr Boulevard,,secondary,5114,8863362,Possible Memorial Designation,F,0,0,F,F
+AL 215,Veterans Memorial Parkway,AL 215,primary,5113,8866528,Possible Memorial Designation,F,72,0,F,F
+CR 44,Martin Luther King Jr Boulevard,CR 44,secondary,5114,8885816,Possible Memorial Designation,B,0,0,F,F
+CR 47,Martin Luther King Jr Boulevard,CR 47,secondary,5114,8885826,Possible Memorial Designation,B,56,0,F,F
+"Dr Martin Luther King, Jr. Expressway","Dr Martin Luther King, Jr. Expressway",,trunk,5112,36754043,Possible Memorial Designation,F,0,0,F,F
+I 85,Pearl Harbor Memorial Highway,I 85,motorway,5111,38675403,Possible Memorial Designation,F,112,1,T,F
+US 29;US 82,Martin Luther King Boulevard,US 29;US 82,primary,5113,51979733,Possible Memorial Designation,B,48,0,F,F
+Veteran's Park Greenway,Veteran's Park Greenway,,cycleway,5152,59588986,Possible Memorial Designation,B,0,0,F,F
+US 31,Memorial Drive,US 31,primary,5113,89633166,Possible Memorial Designation,F,88,0,F,F
+Richard L. Platt Memorial Levee Trail,Richard L. Platt Memorial Levee Trail,,footway,5153,98470820,Possible Memorial Designation,B,0,0,F,F
+US 11,Doctor Martin Luther King Junior Highway,US 11,primary,5113,106664460,Possible Memorial Designation,B,88,1,T,F
+US 431,Veterans Memorial Parkway,US 431,trunk,5112,107605424,Possible Memorial Designation,F,104,0,F,F
+AL 14;AL 17,Memorial Parkway,AL 14;AL 17,primary,5113,107701782,Possible Memorial Designation,B,48,0,F,F
+AL 21,Thomas Bible Memorial Highway,AL 21,trunk,5112,107723728,Possible Memorial Designation,B,72,0,F,F
+AL 193,Victor Birch Memorial Bridge,AL 193,secondary,5114,117341327,Possible Memorial Designation,B,88,1,T,F
+US 11,Dr Martin Luther King Jr Highway,US 11,primary,5113,119882009,Possible Memorial Designation,B,88,0,F,F
+Memorial Parkway Southwest North Frontage Road,Memorial Parkway Southwest North Frontage Road,,secondary,5114,164938275,Possible Memorial Designation,F,64,0,F,F
+Memorial Parkway Southwest South Frontage Road,Memorial Parkway Southwest South Frontage Road,,secondary,5114,164938276,Possible Memorial Designation,F,64,0,F,F
+Veterans Circle,Veterans Circle,,unclassified,5121,204418624,Possible Memorial Designation,B,0,0,F,F
+Memorial Hospital Drive,Memorial Hospital Drive,,service,5141,220077319,Possible Memorial Designation,B,0,0,F,F
+AL 188,Rabby Memorial Bridge,AL 188,secondary,5114,230071928,Possible Memorial Designation,B,0,1,T,F
+Fallen Leaf Drive,Fallen Leaf Drive,,residential,5122,241714069,Possible Memorial Designation,B,0,0,F,F
+Veterans Park Trail,Veterans Park Trail,,footway,5153,356356000,Possible Memorial Designation,B,0,0,F,F
+Veterans Court,Veterans Court,,residential,5122,396511512,Possible Memorial Designation,B,0,0,F,F
+Alabama Koream War Memorial,Alabama Koream War Memorial,,pedestrian,5124,547446082,Possible Memorial Designation,B,0,0,F,F
+MLK Jr. Trail,MLK Jr. Trail,,cycleway,5152,1250630237,Possible Memorial Designation,B,0,0,F,F
+Memorial Trail,Memorial Trail,,footway,5153,1256743462,Possible Memorial Designation,B,0,0,F,F
+Fallen Oak Trail,Fallen Oak Trail,,path,5154,1367956863,Possible Memorial Designation,B,0,0,F,F
